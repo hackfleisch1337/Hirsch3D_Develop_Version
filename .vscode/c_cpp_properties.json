@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "D:/Emanuel/Hirsch3D",
+                "D:/SDL2-devel-2.0.12-VC/SDL2-2.0.12/include",
+                "D:/glew-2.1.0/include",
+                "D:/SDL2-devel-2.0.12-VC/SDL2-2.0.12/lib/x86",
+                "D:/glew-2.1.0/lib/Release/Win32"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "gcc-x86"
+        }
+    ],
+    "version": 4
+}
