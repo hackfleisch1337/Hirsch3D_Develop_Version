@@ -7,10 +7,15 @@ namespace h3d
 {
     class Object {
     public:
-        Object(std::string path);
+        
+        virtual ~Object();
         void load(void* vertices, uint32_t amountOfVertices);
+        void loadByPath();
+        VertexBuffer* getVertexBuffer() const {
+            return this->vertices;
+        }
     private:
-        h3d::VertexBuffer vertices;
+        h3d::VertexBuffer* vertices;
         std::string objPath;
         uint32_t amountOfVertices;
         /*

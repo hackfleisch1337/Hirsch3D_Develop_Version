@@ -24,9 +24,7 @@ namespace h3d {
 
     class Renderer3D {
     public:
-        void renderObject(h3d::Object o) {
-            
-        }
+        void renderObject(const h3d::Object* o) const;
 
     };
     class Renderer2D {};
@@ -63,7 +61,6 @@ namespace h3d {
         std::string title;
         uint16_t width;
         uint16_t height;
-        Renderer3D r3d;
     };
 }
 

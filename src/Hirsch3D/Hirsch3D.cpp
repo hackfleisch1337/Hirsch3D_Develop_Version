@@ -53,30 +53,24 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     } else std::cout << "\033[1;32m[OK] Initialized Glew succesful!\033[0m" << std::endl;
     std::cout << "OpenGl Driver Version: " << YELLOW << glGetString(GL_VERSION) << RESET_CLR << std::endl;
     
-
+    std::cout << GREEN << "[OK] Initialized " << RESET_CLR << std::endl;
 
 }
 
 bool h3d::Hirsch3D::load() {
     this->setup(this->objLoader);
+    std::cout << GREEN << "[OK] Setup complete " << RESET_CLR << std::endl;
 }
 
 bool h3d::Hirsch3D::start() {
 
     // Start Mainloop
-
+    std::cout << YELLOW << "[IN_PROCESS] Mainloop" << RESET_CLR << std::endl;
     bool close = false;
-
-    Vertex3 v_array637[3] = {
-        Vertex3{-0.5f, -0.5f, 0.0f},
-        Vertex3{0.0f, 0.5f, 0.0f},
-        Vertex3{0.5f, -0.5f, 0.0f}
-    };
-    h3d::VertexBuffer buffer(v_array637, 3);
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     //glEnable(GL_CULL_FACE);
-    //glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST)
     // Mainloop
     while(!close) {
             
@@ -85,12 +79,12 @@ bool h3d::Hirsch3D::start() {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
             
-
+            /*############ GL DRAW ##################
             buffer.bind();
             glDrawArrays(GL_TRIANGLES, 0, buffer.getAmountOfVertices());
             buffer.unbind();
 
-            /*############ GL DRAW ##################
+            
             glBegin(GL_TRIANGLES);
 
 
@@ -101,13 +95,15 @@ bool h3d::Hirsch3D::start() {
             glEnd();
             /*############ GL END ###############################*/
 
+            this->render(this->renderer2D, this->renderer3D);
 
             SDL_GL_SwapWindow(window);
             SDL_Event event;
             while(SDL_PollEvent(&event)) {
                 if(event.type == SDL_QUIT) {
                     close = true;
-                    
+                    std::cout << GREEN << "[OK] Exited Mainloop" << RESET_CLR << std::endl;
+                    this->onClose();
                 } 
             }
             SDL_Delay(1000/60);
@@ -119,5 +115,12 @@ h3d::Hirsch3D::~Hirsch3D() {
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
     SDL_Quit();
-    std::cout << "[Terminated]" << std::endl;
+    std::cout << GREEN << "[Terminated]" << RESET_CLR << std::endl;
+}
+
+
+void h3d::Renderer3D::renderObject(const h3d::Object* o) const{
+    o->getVertexBuffer()->bind();
+    glDrawArrays(GL_TRIANGLES, 0, o->getVertexBuffer()->getAmountOfVertices());
+    o->getVertexBuffer()->unbind();
 }
