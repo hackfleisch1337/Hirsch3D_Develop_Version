@@ -24,13 +24,13 @@ private:
             h3d::Vertex3{1.5f, 0.5f, 0.0f}
         };
 
-        triangle.load(v_array637, 3);
-        rectangle.load(v2, 6);
+        triangle.load(v_array637, 3, "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert", "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag");
+        rectangle.load(v2, 6, "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert", "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag");
         
     }
 
-    void render(const h3d::Renderer2D &r2d, const h3d::Renderer3D &r3d) override {
-        
+    void render(const h3d::Renderer &r) override {
+        r.renderObject(&triangle);
     }
 
     void onClose() override {

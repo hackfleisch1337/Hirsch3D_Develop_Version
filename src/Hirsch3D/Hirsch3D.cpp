@@ -4,10 +4,12 @@
 
 void h3d::Hirsch3D::setTitle(std::string title) {
     this->title = title;
+    SDL_SetWindowTitle(this->window, this->title.data());
 }
 void h3d::Hirsch3D::setSize(uint16_t width, uint16_t height) {
     this->width = width;
     this->height = height;
+    SDL_SetWindowSize(this->window, this->width, this->height);
 }
 bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uint8_t flags) {
     
@@ -44,7 +46,6 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 
     this->window = SDL_CreateWindow(this->title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, sdl_flags);
     this->glContext = SDL_GL_CreateContext(window);
-
     // Glew init
     GLenum err = glewInit();
     if(err != GLEW_OK) {
@@ -95,7 +96,7 @@ bool h3d::Hirsch3D::start() {
             glEnd();
             /*############ GL END ###############################*/
 
-            this->render(this->renderer2D, this->renderer3D);
+            this->render(this->renderer);
 
             SDL_GL_SwapWindow(window);
             SDL_Event event;
@@ -106,7 +107,7 @@ bool h3d::Hirsch3D::start() {
                     this->onClose();
                 } 
             }
-            SDL_Delay(1000/60);
+            SDL_Delay(1000/this->fps);
     }
 
 }
@@ -119,8 +120,13 @@ h3d::Hirsch3D::~Hirsch3D() {
 }
 
 
-void h3d::Renderer3D::renderObject(const h3d::Object* o) const{
+
+// Renderer
+
+void h3d::Renderer::renderObject(const h3d::Object* o) const{
+    o->getShader()->bind();
     o->getVertexBuffer()->bind();
     glDrawArrays(GL_TRIANGLES, 0, o->getVertexBuffer()->getAmountOfVertices());
     o->getVertexBuffer()->unbind();
+    o->getShader()->unbind();   
 }

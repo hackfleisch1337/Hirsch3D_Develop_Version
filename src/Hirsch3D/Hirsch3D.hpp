@@ -22,19 +22,18 @@ namespace h3d {
 
     
 
-    class Renderer3D {
+    class Renderer {
     public:
         void renderObject(const h3d::Object* o) const;
 
     };
-    class Renderer2D {};
     class OBJLoader {};
 
     class Hirsch3D {
 
     protected:
 
-        virtual void render(const h3d::Renderer2D&, const h3d::Renderer3D&) = 0;
+        virtual void render(const h3d::Renderer&) = 0;
         virtual void setup(const h3d::OBJLoader &objLoader) = 0;
         virtual void onClose() = 0;
         void setTitle(std::string);
@@ -50,17 +49,22 @@ namespace h3d {
         bool load();
 
         virtual ~Hirsch3D();
+        void setFps(uint16_t fps) {
+            if(fps > 0) {
+                this->fps = fps;
+            }
+        }
 
     private:
 
         SDL_Window* window;
         SDL_GLContext glContext;
         OBJLoader objLoader;
-        Renderer2D renderer2D;
-        Renderer3D renderer3D;
+        Renderer renderer;
         std::string title;
         uint16_t width;
         uint16_t height;
+        uint16_t fps = 60;
     };
 }
 
