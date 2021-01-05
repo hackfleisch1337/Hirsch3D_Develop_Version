@@ -51,7 +51,7 @@
 #include "VertexBuffer.hpp"
 #include "Object.hpp"
 
-
+#include <ctime>
 
 #include "Scene.hpp"
 
@@ -94,7 +94,7 @@ namespace h3d {
             }
         }
 
-        
+        uint32_t getCurrentTimeMillies();
 
     private:
         SDL_Window* window;
@@ -106,6 +106,10 @@ namespace h3d {
         uint16_t height;
         uint16_t fps = 60;
         GLuint tBuffer;
+        h3d::Shader hirschShader;
+        h3d::Object titleScreen;
+        clock_t startTime;
+        bool showTitle = true;
     };
 }
 

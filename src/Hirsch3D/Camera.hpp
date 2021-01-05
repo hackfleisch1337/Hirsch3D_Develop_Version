@@ -1,0 +1,7 @@
+#ifndef HIRSCH3D_CAMERA_HPP
+#define HIRSCH3D_CAMERA_HPP
+
+
+
+
+#endif

@@ -10,6 +10,9 @@ namespace h3d
         float y;
         float z;
 
+        float u;
+        float v;
+
     };
 } // namespace h3d
 

@@ -12,8 +12,15 @@ void h3d::Hirsch3D::setSize(uint16_t width, uint16_t height) {
     this->height = height;
     SDL_SetWindowSize(this->window, this->width, this->height);
 }
+
+uint32_t h3d::Hirsch3D::getCurrentTimeMillies() {
+    return (float)(clock() - startTime) / CLOCKS_PER_SEC;
+}
+
 bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uint8_t flags) {
     
+    this->startTime = clock();
+
     std::cout << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
               << "**************************************" << std::endl
               << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" << std::endl;
@@ -92,6 +99,30 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
         stbi_image_free(textureBuffer);
     }
 
+    
+
+    hirschShader.load("D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.vert", "D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.frag");
+
+    Vertex3 t_vertices[] = {
+        {-1.0, -1.0, 0.0, 0.0, 0.0},
+        {1.0, -1.0,  0.0, 1.0, 0.0},
+        {1.0,  1.0,  0.0, 1.0,  1.0},
+        {-1.0,  1.0,  0.0, 0.0,  1.0}
+    };
+
+    uint32_t t_indices[] = {
+        0,1,2,
+        0,2,3
+    };
+
+    titleScreen.load(t_vertices, 4, t_indices, 6, glm::vec4(1,1,1,1));
+    int textureUniformLocation = glGetUniformLocation(hirschShader.getShaderId(), "u_texture");
+	if(!textureUniformLocation != -1) {
+		glUniform1i(textureUniformLocation, 0);
+	}
+
+    ////
+
     std::cout << GREEN << "[OK] Initialized " << RESET_CLR << std::endl;
 
 }
@@ -119,6 +150,7 @@ bool h3d::Hirsch3D::start() {
             
             
             
+
             /*############ GL DRAW ##################
             buffer.bind();
             glDrawArrays(GL_TRIANGLES, 0, buffer.getAmountOfVertices());
@@ -136,8 +168,24 @@ bool h3d::Hirsch3D::start() {
             /*############ GL END ###############################*/
 
             
+            if(!this->showTitle) {
+                this->render(this->renderer);
+            }
+            
+            if(this->showTitle && this->getCurrentTimeMillies() > 2) {
+                this->showTitle = false;
+            }
 
-            this->render(this->renderer);
+            if(this->showTitle) {
+                this->hirschShader.bind();
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, this->tBuffer);
+                this->renderer.renderObject(&this->titleScreen);
+                glBindTexture(GL_TEXTURE_2D, 0);
+                this->hirschShader.unbind();
+            }
+            
+
 
             SDL_GL_SwapWindow(window);
             SDL_Event event;

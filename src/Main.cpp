@@ -10,14 +10,14 @@ private:
     
     void setup(const h3d::OBJLoader &objLoader) override {
         h3d::Vertex3 v_array637[] = {
-            {-0.5, -0.5, 0.5},
-            {0.5, -0.5,  0.5},
-            {0.5,  0.5,  0.5},
-            {-0.5,  0.5,  0.5},
-            {-0.5, -0.5, -0.5},
-            {0.5, -0.5, -0.5},
-            {0.5,  0.5, -0.5},
-            {-0.5,  0.5, -0.5}
+            {-0.5, -0.5, 0.5, 0.0f, 0.0f},
+            {0.5, -0.5,  0.5, 0.0f, 0.0f},
+            {0.5,  0.5,  0.5, 0.0f, 0.0f},
+            {-0.5,  0.5,  0.5, 0.0f, 0.0f},
+            {-0.5, -0.5, -0.5, 0.0f, 0.0f},
+            {0.5, -0.5, -0.5, 0.0f, 0.0f},
+            {0.5,  0.5, -0.5, 0.0f, 0.0f},
+            {-0.5,  0.5, -0.5, 0.0f, 0.0f}
         };
         uint32_t indices1[] = {
         0, 1, 2,
@@ -58,9 +58,7 @@ public:
 };
 
 
-
 int main(int argc, char** argv) {
-
     Game game;
     game.init("Mega Tolles 3D Spiel mit OpenGL. Hehe C++", 1280, 720, HIRSCH3D_NOFLAG);
     game.load();
