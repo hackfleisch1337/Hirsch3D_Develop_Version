@@ -16,6 +16,8 @@
 #include "Object.hpp"
 
 
+#include "Scene.hpp"
+
 
 
 namespace h3d {
@@ -55,8 +57,9 @@ namespace h3d {
             }
         }
 
-    private:
+        
 
+    private:
         SDL_Window* window;
         SDL_GLContext glContext;
         OBJLoader objLoader;

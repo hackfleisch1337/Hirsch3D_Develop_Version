@@ -21,7 +21,7 @@ h3d::VertexBuffer::VertexBuffer(void* data, uint32_t amountOfVertices) {
 
 h3d::VertexBuffer::~VertexBuffer() {
     glDeleteBuffers(1, &this->bufferId);
-    std::cout << GREEN << "[Ok] Deleted Bufferdata from VRAM" << RESET_CLR << std::endl;
+    std::cout << GREEN << "[Ok] Deleted Vertex Bufferdata from VRAM" << RESET_CLR << std::endl;
 }
 
 void h3d::VertexBuffer::bind() {
