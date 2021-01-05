@@ -52,6 +52,7 @@
 #include "Object.hpp"
 
 
+
 #include "Scene.hpp"
 
 
@@ -104,6 +105,7 @@ namespace h3d {
         uint16_t width;
         uint16_t height;
         uint16_t fps = 60;
+        GLuint tBuffer;
     };
 }
 

@@ -1,6 +1,7 @@
 #include "Hirsch3D.hpp"
 #include <iostream>
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "tools/stb/stb_image.h"
 
 void h3d::Hirsch3D::setTitle(std::string title) {
     this->title = title;
@@ -24,7 +25,8 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     #elif defined HIRSCH_RELEASE
         std::cout << "Launching Hirsch3D in Release Mode" << std::endl;
     #endif
-    
+
+
     // Basic init
     this->title = title;
     this->height = height;
@@ -66,6 +68,30 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     } else std::cout << "\033[1;32m[OK] Initialized Glew succesful!\033[0m" << std::endl;
     std::cout << "OpenGl Driver Version: " << YELLOW << glGetString(GL_VERSION) << RESET_CLR << std::endl;
     
+
+
+    // Hirsch3D Texture
+    int textureWidth = 1920;
+    int textureHeight = 720;
+    int bitsPerPixel = 0;
+    stbi_set_flip_vertically_on_load(true);
+    auto textureBuffer = stbi_load("D:/Emanuel/Hirsch3D/Hirsch3D.png", &textureWidth, &textureHeight, &bitsPerPixel, 4);
+
+    glGenTextures(1, &this->tBuffer);
+    glBindTexture(GL_TEXTURE_2D, this->tBuffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureBuffer);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+
+    if(textureBuffer) {
+        stbi_image_free(textureBuffer);
+    }
+
     std::cout << GREEN << "[OK] Initialized " << RESET_CLR << std::endl;
 
 }
@@ -90,6 +116,7 @@ bool h3d::Hirsch3D::start() {
             
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
             
             
             /*############ GL DRAW ##################
@@ -127,6 +154,7 @@ bool h3d::Hirsch3D::start() {
 }
 
 h3d::Hirsch3D::~Hirsch3D() {
+    glDeleteTextures(1, &this->tBuffer);
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
     SDL_Quit();
