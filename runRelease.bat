@@ -1,2 +1,2 @@
-g++ src/*.cpp -ID:\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include -ID:\glew-2.1.0\include -LD:\SDL2-devel-2.0.12-VC\SDL2-2.0.12\lib\x86 -LD:\glew-2.1.0\lib\Release\Win32 -lSDL2 -lglew32 -lSDL2main -lopengl32 -D HIRSCH_RELEASE -oRelease
+g++ src/*.cpp src/Hirsch3D/*.cpp -ID:\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include -ID:\glew-2.1.0\include -LD:\SDL2-devel-2.0.12-VC\SDL2-2.0.12\lib\x86 -LD:\glew-2.1.0\lib\Release\Win32 -lSDL2 -lglew32 -lSDL2main -lopengl32 -D HIRSCH_RELEASE -oRelease
 Release

@@ -13,6 +13,18 @@ void h3d::Hirsch3D::setSize(uint16_t width, uint16_t height) {
 }
 bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uint8_t flags) {
     
+    std::cout << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
+              << "**************************************" << std::endl
+              << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" << std::endl;
+
+
+    #ifdef HIRSCH_DEBUG
+        std::cout << "Launching Hirsch3D in Debug Mode" << std::endl;
+
+    #elif defined HIRSCH_RELEASE
+        std::cout << "Launching Hirsch3D in Release Mode" << std::endl;
+    #endif
+    
     // Basic init
     this->title = title;
     this->height = height;
@@ -45,6 +57,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 
     this->window = SDL_CreateWindow(this->title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, sdl_flags);
     this->glContext = SDL_GL_CreateContext(window);
+    std::cout << GREEN << "[OK] Created window (" << width << "x" << height << ")" << RESET_CLR << std::endl;
     // Glew init
     GLenum err = glewInit();
     if(err != GLEW_OK) {

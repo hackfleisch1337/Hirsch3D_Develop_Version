@@ -14,7 +14,7 @@ namespace h3d
     public:
         
         virtual ~Object();
-        void load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices);
+        void load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color);
         void loadByPath(std::string);
         VertexBuffer* getVertexBuffer() const {
             return this->vertices;
@@ -24,8 +24,10 @@ namespace h3d
         }
         glm::mat4 getMatrix() {return modelMatrix;}
         void rotateClockWise(float degree, glm::vec3 direction);
+        glm::vec4 color;
     private:
         glm::mat4 modelMatrix;
+        
         h3d::VertexBuffer* vertices;
         std::string objPath;
         uint32_t amountOfVertices;

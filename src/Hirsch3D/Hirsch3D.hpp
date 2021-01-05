@@ -1,6 +1,42 @@
+/**
+ * @file Hirsch3D/Hirsch3D.hpp
+ * @ref Hirsch3d/core
+ * 
+ * @author Emanuel Zache
+ * @version 0.3.7
+ * @copyright (C) 2021 Emanuel Zache
+ * 
+ * @brief Hirsch3D is a 3D Renderengine based on OpenGl
+ * Basic Setup:
+ * { @code 
+ *  #include <Hirsch3D/Hisch3D.hpp>
+ *  class Game: public h3d::Hirsch3D {
+ *  private:
+ *      void setup() override {}
+ *      void render(const h3d::Renderer &renderer) override {}
+ *      void onClose() override {};  
+ *  };
+ *  
+ *  int main(int argc, char** argv) {
+ *      Game g;
+ *      g.init("Title", 1920, 1080, HIRSCH3D_FULLSCREEN | HIRSCH3D_BORDERLESS);
+ *      g.setFps(60);
+ *      g.load();
+ *      g.start();
+ *      return 0;
+ *  }
+ * }
+ * 
+ * 
+ * 
+ * 
+ */
+
+
 #ifndef HIRSCH3D_HPP
 #define HIRSCH3D_HPP
 
+#define HIRSCH3D_VERSION "0.3.7"
 #define YELLOW "\033[93m"
 #define RED "\033[91m"
 #define GREEN "\033[92m"

@@ -14,12 +14,13 @@ h3d::Object::~Object() {
     }
 }
 
-void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices) {
+void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color) {
     this->amountOfVertices = amountOfVertices;
     this->vertices = new h3d::VertexBuffer(vertices, amountOfVertices);
     this->indices = new h3d::IndexBuffer(indices, amountOfIndices);
     this->hasLoaded = true;
     this->modelMatrix = glm::mat4(1.0f);
+    this->color = color;
 }
 
 void h3d::Object::loadByPath(std::string path) {
