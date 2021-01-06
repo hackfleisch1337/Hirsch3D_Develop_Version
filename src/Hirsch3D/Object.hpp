@@ -6,6 +6,7 @@
 #include "Shader.hpp"
 #include "glm/glm/glm.hpp"
 #include "glm/glm/ext/matrix_transform.hpp"
+#include "glm/glm/gtc/matrix_transform.hpp"
 // #include "tools/OBJ_Loader.h"
 
 namespace h3d

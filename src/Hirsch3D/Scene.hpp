@@ -3,7 +3,7 @@
 #include <vector>
 #include "Object.hpp"
 #include "Hirsch3D.hpp"
-
+#include "Camera.hpp"
 
 
 namespace h3d
@@ -11,7 +11,7 @@ namespace h3d
     class Renderer;
     class Scene {
     public:
-        void load(std::string vertexShaderSrc, std::string fragmentShaderSrc);
+        void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera);
 
         void addObject(h3d::Object* o);
         // void addLight(h3d::PointLight &p);
@@ -21,6 +21,7 @@ namespace h3d
     private:
         h3d::Shader shader;
         std::vector<h3d::Object*> objects;
+        h3d::Camera* camera;
     };
 } // namespace h3d
 

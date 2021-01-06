@@ -140,7 +140,7 @@ bool h3d::Hirsch3D::start() {
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     //glEnable(GL_CULL_FACE);
-    //glEnable(GL_DEPTH_TEST)
+    //glEnable(GL_DEPTH_TEST);
     // Mainloop
     while(!close) {
             

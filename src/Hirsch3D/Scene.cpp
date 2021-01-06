@@ -1,7 +1,8 @@
 #include "Scene.hpp"
 
-void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc) {
+void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera) {
     this->shader.load(vertexShaderSrc, fragmentShaderSrc);
+    this->camera = camera;
 }
 
 void h3d::Scene::addObject(h3d::Object* o) {
@@ -13,7 +14,7 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     for(int i = 0; i < this->objects.size(); i++) {
         // TODO setModelMatrixUniform
         int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_model");
-        glm::mat4 m = this->objects.at(i)->getMatrix();
+        glm::mat4 m = this->camera->getViewProj() * this->objects.at(i)->getMatrix();
         int u_colorUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_color");
         glm::vec4 c = this->objects.at(i)->color;
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);

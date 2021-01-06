@@ -7,46 +7,65 @@ class Game: public h3d::Hirsch3D {
 
 private:
     h3d::Object cube;
+    h3d::Camera camera;
     
     void setup(const h3d::OBJLoader &objLoader) override {
-        h3d::Vertex3 v_array637[] = {
-            {-0.5, -0.5, 0.5, 0.0f, 0.0f},
-            {0.5, -0.5,  0.5, 0.0f, 0.0f},
-            {0.5,  0.5,  0.5, 0.0f, 0.0f},
-            {-0.5,  0.5,  0.5, 0.0f, 0.0f},
-            {-0.5, -0.5, -0.5, 0.0f, 0.0f},
-            {0.5, -0.5, -0.5, 0.0f, 0.0f},
-            {0.5,  0.5, -0.5, 0.0f, 0.0f},
-            {-0.5,  0.5, -0.5, 0.0f, 0.0f}
+
+        // Cube vertices
+        h3d::Vertex3 v_array[] = {
+            h3d::Vertex3{-0.5, -0.5, -0.5,   0,0},  // 0
+
+            h3d::Vertex3{0.5, -0.5, -0.5,   0,0},   // 1
+            
+            h3d::Vertex3{-0.5, 0.5, -0.5,   0,0},   // 2
+
+            h3d::Vertex3{0.5, 0.5, -0.5,     0,0},  // 3
+
+
+            h3d::Vertex3{-0.5, -0.5, 0.5,   0,0},   // 4
+
+            h3d::Vertex3{0.5, -0.5, 0.5,   0,0},    // 5
+            
+            h3d::Vertex3{-0.5, 0.5, 0.5,   0,0},    // 6
+
+            h3d::Vertex3{0.5, 0.5, 0.5,     0,0}    // 7
+
         };
+        // Cube indices
         uint32_t indices1[] = {
-        0, 1, 2,
-		2, 3, 0,
-		// right
-		1, 5, 6,
-		6, 2, 1,
-		// back
-		7, 6, 5,
-		5, 4, 7,
-		// left
-		4, 0, 3,
-		3, 7, 4,
-		// bottom
-		4, 5, 1,
-		1, 0, 4,
-		// top
-		3, 2, 6,
-		6, 7, 3};
+                                // Vorne
+                                0,1,2,
+                                1,2,3,
+                                // Hinten
+                                4,5,6,
+                                5,6,7,
+                                // Unten
+                                0,1,4,
+                                5,4,1,
+                                // Oben
+                                2,3,6,
+                                6,7,3,
+                                // Rechts
+                                1,3,5,
+                                5,3,7,
+                                // Links
+                                0,2,4,
+                                2,4,6
+                                };
+
+        cube.load(v_array, 8, indices1, 36, glm::vec4(0.6f, 0.8f, 0.7f, 1.0f));
         
-        cube.load(v_array637, 8, indices1, 36, glm::vec4(0.6f, 0.6f, 0.7f, 1.0f));
-        
-        scene1.load("D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert", "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag");
+        this->camera.init(100, 1280, 720);
+        camera.translate({0,0,10});
+        camera.update();
+        scene1.load("D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert", "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag", &camera);
         scene1.addObject(&cube);
+        cube.rotateClockWise(0.001, glm::vec3(90,90,0.f));
     }
     h3d::Scene scene1;
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
-        cube.rotateClockWise(0.001, glm::vec3(0.2f, 0.5f, 0.3f));
+        cube.rotateClockWise(0.001, glm::vec3(0.1f, 0.1f, 0.1f));
     }
 
     void onClose() override {
@@ -54,8 +73,9 @@ private:
     }
 
 public:
-
+    
 };
+
 
 
 int main(int argc, char** argv) {
