@@ -64,6 +64,7 @@ namespace h3d {
     class Renderer {
     public:
         void renderObject(const h3d::Object* o) const;
+        
     };
     class OBJLoader {};
 
@@ -110,6 +111,17 @@ namespace h3d {
         clock_t startTime;
         bool showTitle = true;
     };
+
+    namespace color {
+        const glm::vec4 red(1.0f, 0.0f, 0.0f, 1.0f);
+        const glm::vec4 green(0.0f, 1.0f, 0.0f, 1.0f);
+        const glm::vec4 blue(0.0f, 0.0f, 1.0f, 1.0f);
+        const glm::vec4 black(0.0f, 0.0f, 0.0f, 1.0f);
+        const glm::vec4 white(1.0f, 1.0f, 1.0f, 1.0f);
+        const glm::vec4 yellow(1.0f, 1.0f, 0.0f, 1.0f);
+    };
+    
+
 }
 
 

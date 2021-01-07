@@ -6,6 +6,10 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
 }
 
 void h3d::Scene::addObject(h3d::Object* o) {
+    if(!o->loaded()) {
+        std::cout << RED << "[FAILED] Could not add object to scene (Object is not inititalized)" << RESET_CLR << std::endl;
+        return;
+    }
     this->objects.push_back(o);
 }
 

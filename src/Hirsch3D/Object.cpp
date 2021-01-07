@@ -4,6 +4,7 @@
 #ifndef GREEN
 #define GREEN "\033[92m"
 #define RESET_CLR "\x1B[0m"
+#define RED "\033[91m"
 #endif
 
 h3d::Object::~Object() {
@@ -23,10 +24,9 @@ void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indi
     this->color = color;
 }
 
-void h3d::Object::loadByPath(std::string path) {
-    // TODO
+void h3d::Object::loadByPath(std::string path, glm::vec4 color) {
 }
 
-void h3d::Object::rotateClockWise(float degree, glm::vec3 direction) {
+void h3d::Object::rotate(float degree, glm::vec3 direction) {
     this->modelMatrix = glm::rotate(this->modelMatrix, glm::degrees(degree), direction);
 }

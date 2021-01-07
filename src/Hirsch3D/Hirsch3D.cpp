@@ -214,6 +214,11 @@ h3d::Hirsch3D::~Hirsch3D() {
 
 void h3d::Renderer::renderObject(const h3d::Object* o) const{
     
+    if(!o->loaded()) {
+        std::cout << RED << "[FAILED] Unable to render uninitialized object" << RESET_CLR << std::endl;
+        return;
+    }
+
     o->getVertexBuffer()->bind();
     o->getIndexBuffer()->bind();
     //glDrawArrays(GL_TRIANGLE_STRIP, 0, o->getVertexBuffer()->getAmountOfVertices());

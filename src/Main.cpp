@@ -8,7 +8,7 @@ class Game: public h3d::Hirsch3D {
 private:
     h3d::Object cube;
     h3d::Camera camera;
-    
+    h3d::Scene scene1;
     void setup(const h3d::OBJLoader &objLoader) override {
 
         // Cube vertices
@@ -53,19 +53,18 @@ private:
                                 2,4,6
                                 };
 
-        cube.load(v_array, 8, indices1, 36, glm::vec4(0.6f, 0.8f, 0.7f, 1.0f));
+        cube.load(v_array, 8, indices1, 36, h3d::color::yellow);
         
-        this->camera.init(100, 1280, 720);
+        camera.init(100, 1280, 720);
         camera.translate({0,0,10});
         camera.update();
         scene1.load("D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert", "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag", &camera);
         scene1.addObject(&cube);
-        cube.rotateClockWise(0.001, glm::vec3(90,90,0.f));
     }
-    h3d::Scene scene1;
+    
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
-        cube.rotateClockWise(0.001, glm::vec3(0.1f, 0.1f, 0.1f));
+        cube.rotate(0.0005, glm::vec3(0.1f, 0.1f, 0.1f));
     }
 
     void onClose() override {
