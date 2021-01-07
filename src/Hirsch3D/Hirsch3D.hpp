@@ -36,7 +36,7 @@
 #ifndef HIRSCH3D_HPP
 #define HIRSCH3D_HPP
 
-#define HIRSCH3D_VERSION "0.3.7"
+#define HIRSCH3D_VERSION "0.5.8"
 #define YELLOW "\033[93m"
 #define RED "\033[91m"
 #define GREEN "\033[92m"

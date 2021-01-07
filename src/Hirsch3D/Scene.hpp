@@ -15,14 +15,23 @@ namespace h3d
 
         void addObject(h3d::Object* o);
         // void addLight(h3d::PointLight &p);
-        void render(const h3d::Renderer &r);
+        virtual void render(const h3d::Renderer &r);
         
 
-    private:
+    protected:
         h3d::Shader shader;
         std::vector<h3d::Object*> objects;
         h3d::Camera* camera;
     };
+
+    class Scene2D: public Scene {
+    public:
+        void load2D();
+        void render(const h3d::Renderer &r) override;
+    private:
+        h3d::Camera c2d;
+    };
+
 } // namespace h3d
 
 

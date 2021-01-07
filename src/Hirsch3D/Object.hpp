@@ -40,7 +40,6 @@ namespace h3d
         bool hasLoaded = false;
         h3d::IndexBuffer* indices;
         uint32_t amountOfIndices;
-        
     };
 } // namespace h3d
 

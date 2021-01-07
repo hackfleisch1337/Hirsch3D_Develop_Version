@@ -27,3 +27,24 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     }
     this->shader.unbind();
 }
+
+void h3d::Scene2D::load2D() {
+    this->c2d.init();
+    c2d.translate({0,0,5});
+    this->load("src/Hirsch3D/shader/2d.vert", "src/Hirsch3D/shader/2d.frag", &c2d);
+}
+
+void h3d::Scene2D::render(const h3d::Renderer &r) {
+    this->shader.bind();
+    for(int i = 0; i < this->objects.size(); i++) {
+        // TODO setModelMatrixUniform
+        int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_model");
+        glm::mat4 m = this->objects.at(i)->getMatrix();
+        int u_colorUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_color");
+        glm::vec4 c = this->objects.at(i)->color;
+        glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
+        glUniformMatrix4fv(u_modelUniformLocation, 1, GL_FALSE, &m[0][0]);
+        r.renderObject(this->objects.at(i));
+    }
+    this->shader.unbind();
+}

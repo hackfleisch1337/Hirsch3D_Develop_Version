@@ -59,6 +59,7 @@ private:
         camera.translate({0,0,10});
         camera.update();
         scene1.load("D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert", "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag", &camera);
+        
         scene1.addObject(&cube);
     }
     

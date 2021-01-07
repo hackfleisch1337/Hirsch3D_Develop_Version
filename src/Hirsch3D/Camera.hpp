@@ -16,6 +16,14 @@ namespace h3d
             update();
         }
 
+        // Orthographic
+        void init() {
+            projection = glm::ortho(-2.0f, 2.0f, 2.0f, 2.0f);
+            view = glm::mat4(1.0f);
+            pos = glm::vec3(0.0f);
+            update();
+        }
+
         glm::mat4 getViewProj() {
             return this->viewProj;
         }
