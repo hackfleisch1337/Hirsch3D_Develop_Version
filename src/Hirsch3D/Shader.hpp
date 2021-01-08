@@ -11,6 +11,7 @@ namespace h3d
         void unbind() const;
         virtual ~Shader();
         GLuint getShaderId() {return shaderId;}
+        bool loaded() {return this->hasLoaded;}
     private:
         bool hasLoaded = false;
         GLuint compile(std::string shaderSrc, GLenum type);

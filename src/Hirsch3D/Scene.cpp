@@ -23,7 +23,27 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::vec4 c = this->objects.at(i)->color;
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
         glUniformMatrix4fv(u_modelUniformLocation, 1, GL_FALSE, &m[0][0]);
+        if(this->objects.at(i)->getTexture() != nullptr)
+            this->objects.at(i)->getTexture()->bind();
+        if(this->objects.at(i)->getTexture() != nullptr) {
+            //std::cout << "Texture" << std::endl;
+            int textureUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_texture");
+            
+            glUniform1i(textureUniformLocation, 0);
+            
+            
+            int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
+            glUniform1i(isSamplerSetUniformLocation, 1);
+        } else {
+            //std::cout << "Texture2" << std::endl;
+            int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
+            glUniform1i(isSamplerSetUniformLocation, 0);
+            
+        }
+        
         r.renderObject(this->objects.at(i));
+        if(this->objects.at(i)->getTexture() != nullptr)
+            this->objects.at(i)->getTexture()->unbind();
     }
     this->shader.unbind();
 }
@@ -38,12 +58,30 @@ void h3d::Scene2D::render(const h3d::Renderer &r) {
     this->shader.bind();
     for(int i = 0; i < this->objects.size(); i++) {
         // TODO setModelMatrixUniform
+        
         int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_model");
         glm::mat4 m = this->objects.at(i)->getMatrix();
         int u_colorUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_color");
         glm::vec4 c = this->objects.at(i)->color;
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
         glUniformMatrix4fv(u_modelUniformLocation, 1, GL_FALSE, &m[0][0]);
+
+        if(this->objects.at(i)->getTexture() != nullptr) {
+            //std::cout << "Texture" << std::endl;
+            int textureUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_texture");
+            this->objects.at(i)->getTexture()->bind();
+            glUniform1i(textureUniformLocation, 0);
+            this->objects.at(i)->getTexture()->unbind();
+            
+            int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
+            glUniform1i(isSamplerSetUniformLocation, 1);
+        } else {//std::cout << "Texture2" << std::endl;
+            int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
+            glUniform1i(isSamplerSetUniformLocation, 0);
+            
+        }
+        
+
         r.renderObject(this->objects.at(i));
     }
     this->shader.unbind();

@@ -49,6 +49,7 @@
 #include <SDL.h>
 #include "Vertex.hpp" 
 #include "VertexBuffer.hpp"
+#include "Texture.hpp"
 #include "Object.hpp"
 
 #include <ctime>
@@ -56,6 +57,8 @@
 #include "Scene.hpp"
 
 #include "Camera.hpp"
+#include "Text.hpp"
+
 
 namespace h3d {
 
@@ -64,7 +67,6 @@ namespace h3d {
     class Renderer {
     public:
         void renderObject(const h3d::Object* o) const;
-        
     };
     class OBJLoader {};
 

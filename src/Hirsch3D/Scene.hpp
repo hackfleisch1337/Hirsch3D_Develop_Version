@@ -29,6 +29,7 @@ namespace h3d
         void load2D();
         void render(const h3d::Renderer &r) override;
     private:
+        
         h3d::Camera c2d;
     };
 

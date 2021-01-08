@@ -37,6 +37,10 @@ namespace h3d
             view = glm::translate(view, v * -1.0f);
         }
 
+        void rotate(float degreeX, float degreeY) {
+
+        }
+
         glm::mat4 getView() {
             return view;
         }

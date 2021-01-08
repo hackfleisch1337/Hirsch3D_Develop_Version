@@ -8,6 +8,7 @@
 
 bool h3d::Shader::load(std::string vertexSrc, std::string fragmentSrc) {
     this->shaderId = createShader(vertexSrc.data(), fragmentSrc.data());
+    this->hasLoaded = true;
     return true;
 }
 

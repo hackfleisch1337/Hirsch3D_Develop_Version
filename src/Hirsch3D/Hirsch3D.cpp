@@ -102,6 +102,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     
 
     hirschShader.load("D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.vert", "D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.frag");
+    
 
     Vertex3 t_vertices[] = {
         {-1.0, -1.0, 0.0, 0.0, 0.0},
@@ -115,7 +116,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
         0,2,3
     };
 
-    titleScreen.load(t_vertices, 4, t_indices, 6, glm::vec4(1,1,1,1));
+    titleScreen.load(t_vertices, 4, t_indices, 6, glm::vec4(1,1,1,1), nullptr);
     int textureUniformLocation = glGetUniformLocation(hirschShader.getShaderId(), "u_texture");
 	if(!textureUniformLocation != -1) {
 		glUniform1i(textureUniformLocation, 0);
@@ -225,5 +226,4 @@ void h3d::Renderer::renderObject(const h3d::Object* o) const{
     glDrawElements(GL_TRIANGLES, o->getIndexBuffer()->getAmountOfIndices(), GL_UNSIGNED_INT, 0);
     o->getIndexBuffer()->unbind();
     o->getVertexBuffer()->unbind();
-    
 }
