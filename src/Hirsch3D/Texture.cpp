@@ -1,6 +1,6 @@
 #include "Texture.hpp"
 #include "tools/stb/stb_image.h"
-#include <iostream>
+
 void h3d::Texture::load(std::string path) {
     stbi_set_flip_vertically_on_load(true);
     this->path = path;

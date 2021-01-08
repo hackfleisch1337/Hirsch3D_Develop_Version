@@ -10,7 +10,7 @@
 #define GREEN "\033[92m"
 #define RESET_CLR "\x1B[0m"
 #endif
-
+#include <iostream>
 namespace h3d
 {
     
@@ -20,6 +20,7 @@ namespace h3d
         void bind();
         void unbind();
         virtual ~Texture(){
+            std::cout << GREEN << "[OK] Deleted Texture Buffer Data" << RESET_CLR << std::endl;
             glDeleteTextures(1, &buffer);
         }
     private:
