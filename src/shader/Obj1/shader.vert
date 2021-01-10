@@ -10,14 +10,16 @@ out vec2 v_uv;
 
 void main() {
 
-
+    /*
     vec3 absolutePosition = position + u_position;
 
     vec4 rotated = u_model * vec4(position, 1.0f);
 
     vec4 result = rotated + vec4(u_position, 1.0f);
-    
-    gl_Position = result;
+    */
+
+
+    gl_Position = u_model * vec4(position, 1.0f);
 
     /*
     vec4 rotation = vec4( u_model * vec4(position + u_position, 1.0f) );

@@ -32,6 +32,7 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color) {
 }
 
 void h3d::Object::move(glm::vec3 d) {
+    this->modelMatrix = glm::translate(this->modelMatrix, d);
     this->position += d;
 }
 

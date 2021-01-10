@@ -68,15 +68,16 @@ private:
         scene1.load(vertexShader, fragmentShader, &camera);
         scene1.addObject(&cube);
         
-        cube.rotate(0.5, {0.1, 0.1, 0.1});
-    	cube.move({0.001f,0.001f, 0.f}); // 1.0018
+        //cube.rotate(0.5, {0.1, 0.1, 0.1});
+    	cube.move({0.5f,0.5f, -5.f}); // 1.0018
     }
     
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
         cube.rotate(0.0005, glm::vec3(0.1f, 0.1f, 0.1f));
-        camera.translate({0,0,0.0});
-        camera.update();
+        //camera.translate({0,0,0.1});
+        //camera.update();
+        //cube.move({0.05,0.05,-0.1});
         std::cout << "Z:" << cube.position.z << std::endl;
     }
 
