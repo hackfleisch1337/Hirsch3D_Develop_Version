@@ -23,6 +23,8 @@ namespace h3d
             std::cout << GREEN << "[OK] Deleted Texture Buffer Data" << RESET_CLR << std::endl;
             glDeleteTextures(1, &buffer);
         }
+        int32_t getWidth() {return width;}
+        int32_t getHeight() {return height;}
     private:
         std::string path;
         int32_t width;

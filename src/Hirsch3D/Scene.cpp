@@ -40,7 +40,11 @@ void h3d::Scene::render(const h3d::Renderer &r) {
             glUniform1i(isSamplerSetUniformLocation, 0);
             
         }
-        
+
+        int u_positionUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_position");
+        glm::vec3 p = this->objects.at(i)->position;
+        glUniform3f(u_positionUniformLocation, p.x, p.y, p.z);
+
         r.renderObject(this->objects.at(i));
         if(this->objects.at(i)->getTexture() != nullptr)
             this->objects.at(i)->getTexture()->unbind();
@@ -71,7 +75,7 @@ void h3d::Scene2D::render(const h3d::Renderer &r) {
             int textureUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_texture");
             this->objects.at(i)->getTexture()->bind();
             glUniform1i(textureUniformLocation, 0);
-            this->objects.at(i)->getTexture()->unbind();
+            
             
             int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
             glUniform1i(isSamplerSetUniformLocation, 1);
@@ -80,9 +84,10 @@ void h3d::Scene2D::render(const h3d::Renderer &r) {
             glUniform1i(isSamplerSetUniformLocation, 0);
             
         }
-        
-
         r.renderObject(this->objects.at(i));
+        if(this->objects.at(i)->getTexture() != nullptr)
+        this->objects.at(i)->getTexture()->unbind();
+        
     }
     this->shader.unbind();
 }

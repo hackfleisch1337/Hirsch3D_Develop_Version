@@ -121,7 +121,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 	if(!textureUniformLocation != -1) {
 		glUniform1i(textureUniformLocation, 0);
 	}
-
+    
     ////
 
     std::cout << GREEN << "[OK] Initialized " << RESET_CLR << std::endl;
@@ -141,7 +141,7 @@ bool h3d::Hirsch3D::start() {
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     //glEnable(GL_CULL_FACE);
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     // Mainloop
     while(!close) {
             

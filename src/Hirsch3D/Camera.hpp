@@ -10,7 +10,7 @@ namespace h3d
     class Camera {
     public:
         void init(float fov, float width, float height) {
-            projection = glm::perspective((float) glm::radians(fov)/2.0f, width/height, 0.1f, 100.0f);
+            projection = glm::perspective((float) glm::radians(fov)/2.0f, width/height, 0.001f, 500.0f);
             view = glm::mat4(1.0f);
             pos = glm::vec3(0.0f);
             update();

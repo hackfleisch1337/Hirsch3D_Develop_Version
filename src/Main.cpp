@@ -3,6 +3,9 @@
 #include <vector>
 #include "Hirsch3D/Hirsch3D.hpp"
 
+
+// Es war die Z-Achse!
+
 class Game: public h3d::Hirsch3D {
 
 private:
@@ -10,6 +13,7 @@ private:
     h3d::Camera camera;
     h3d::Scene scene1;
     h3d::Texture t;
+
     void setup(const h3d::OBJLoader &objLoader) override {
 
         // Cube vertices
@@ -53,24 +57,27 @@ private:
                                 0,2,4,
                                 2,4,6
                                 };
-        t.load("D:/Emanuel/Hirsch3D/cube.png");
-        cube.load(v_array, 8, indices1, 36, h3d::color::yellow, nullptr);
-
-
+        
+        t.load("cube.png");
+        cube.load(v_array, 8, indices1, 36, h3d::color::blue, nullptr);
+        std::string vertexShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert";
+        std::string fragmentShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag";
         camera.init(100, 1280, 720);
         camera.translate({0,0,10});
         camera.update();
-        scene1.load("D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert", "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag", &camera);
-        //scene1.load2D();
+        scene1.load(vertexShader, fragmentShader, &camera);
         scene1.addObject(&cube);
         
-    	
+        cube.rotate(0.5, {0.1, 0.1, 0.1});
+    	cube.move({0.001f,0.001f, 0.f}); // 1.0018
     }
     
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
         cube.rotate(0.0005, glm::vec3(0.1f, 0.1f, 0.1f));
-        
+        camera.translate({0,0,0.0});
+        camera.update();
+        std::cout << "Z:" << cube.position.z << std::endl;
     }
 
     void onClose() override {

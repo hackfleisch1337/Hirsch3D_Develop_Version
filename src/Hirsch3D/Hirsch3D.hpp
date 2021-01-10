@@ -57,7 +57,6 @@
 #include "Scene.hpp"
 
 #include "Camera.hpp"
-#include "Text.hpp"
 
 
 namespace h3d {
