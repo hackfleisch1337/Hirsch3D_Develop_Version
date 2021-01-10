@@ -114,12 +114,26 @@ namespace h3d {
     };
 
     namespace color {
+        #define RGB_TO_OPENGL(r,g,b) glm::vec4(r/256, g/256, b/256, 1)
         const glm::vec4 red(1.0f, 0.0f, 0.0f, 1.0f);
         const glm::vec4 green(0.0f, 1.0f, 0.0f, 1.0f);
         const glm::vec4 blue(0.0f, 0.0f, 1.0f, 1.0f);
         const glm::vec4 black(0.0f, 0.0f, 0.0f, 1.0f);
         const glm::vec4 white(1.0f, 1.0f, 1.0f, 1.0f);
         const glm::vec4 yellow(1.0f, 1.0f, 0.0f, 1.0f);
+        const glm::vec4 snow = RGB_TO_OPENGL(255, 250, 250);
+        const glm::vec4 spring_green = RGB_TO_OPENGL(94, 252, 141);
+        const glm::vec4 midnight_blue = RGB_TO_OPENGL(7, 0, 77);
+        const glm::vec4 outrageous_orange = RGB_TO_OPENGL(252, 119, 83);
+        const glm::vec4 dim_gray = RGB_TO_OPENGL(113, 105, 105);
+        const glm::vec4 celadon_green = RGB_TO_OPENGL(54, 130, 127);
+        const glm::vec4 english_violet = RGB_TO_OPENGL(89, 63, 98);
+        const glm::vec4 magic_mint = RGB_TO_OPENGL(174, 255, 216);
+        const glm::vec4 english_red = RGB_TO_OPENGL(159, 74, 84);
+        const glm::vec4 dark_purple = RGB_TO_OPENGL(28, 1, 24);
+        const glm::vec4 bone = RGB_TO_OPENGL(217, 207, 193);
+        const glm::vec4 army_green = RGB_TO_OPENGL(65, 82, 31);
+        const glm::vec4 cobalt_blue = RGB_TO_OPENGL(0, 75, 168);
     };
     
 

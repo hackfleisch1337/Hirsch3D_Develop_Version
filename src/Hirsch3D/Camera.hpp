@@ -38,7 +38,7 @@ namespace h3d
         }
 
         void rotate(float degreeX, float degreeY) {
-
+            
         }
 
         glm::mat4 getView() {

@@ -14,7 +14,7 @@ void h3d::Hirsch3D::setSize(uint16_t width, uint16_t height) {
 }
 
 uint32_t h3d::Hirsch3D::getCurrentTimeMillies() {
-    return (float)(clock() - startTime) / CLOCKS_PER_SEC;
+    return (float)(clock() - startTime) / ((clock_t) 1);
 }
 
 bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uint8_t flags) {
@@ -173,7 +173,7 @@ bool h3d::Hirsch3D::start() {
                 this->render(this->renderer);
             }
             
-            if(this->showTitle && this->getCurrentTimeMillies() > 2) {
+            if(this->showTitle && this->getCurrentTimeMillies() > 2000) {
                 this->showTitle = false;
             }
 

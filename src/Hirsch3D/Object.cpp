@@ -26,12 +26,31 @@ void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indi
     this->position.y = 0;
     this->position.z = 0;
     this->texture = t;
+    this->rotationVector = glm::vec3(0.0f,0.0f,0.0f);
 }
 
 void h3d::Object::loadByPath(std::string path, glm::vec4 color) {
+
 }
 
 void h3d::Object::move(glm::vec3 d) {
+
+    glm::vec3 r = rotationVector;
+    glm::vec3 dnorm = glm::normalize(d);
+    glm::vec3 dabs = glm::abs(d);
+    
+    glm::vec3 rnorm = glm::normalize(r);
+    
+    
+    float angle = dnorm.x * rnorm.x + dnorm.y * rnorm.y + dnorm.z * rnorm.z;
+    
+    glm::vec4 d2 = glm::rotate(glm::mat4(1.0f), angle, glm::cross(rnorm, dnorm)) * glm::vec4(d, 1.0f);
+    
+    this->modelMatrix = glm::translate(this->modelMatrix, {d2.x, d2.y, d2.z});
+    this->position += d;
+}
+
+void h3d::Object::moveInLineOfSight(glm::vec3 d) {
     this->modelMatrix = glm::translate(this->modelMatrix, d);
     this->position += d;
 }
@@ -41,5 +60,6 @@ glm::vec3 h3d::Object::getPosition() {
 }
 
 void h3d::Object::rotate(float degree, glm::vec3 direction) {
-    this->modelMatrix = glm::rotate(this->modelMatrix, glm::degrees(degree), direction);
+    this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(degree), direction);
+    this->rotationVector += glm::normalize(direction) * degree;
 }

@@ -69,16 +69,19 @@ private:
         scene1.addObject(&cube);
         
         //cube.rotate(0.5, {0.1, 0.1, 0.1});
-    	cube.move({0.5f,0.5f, -5.f}); // 1.0018
+    	//cube.move({0.5f,0.5f, -5.f}); // 1.0018
     }
-    
+
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
-        cube.rotate(0.0005, glm::vec3(0.1f, 0.1f, 0.1f));
+
+
         //camera.translate({0,0,0.1});
         //camera.update();
-        //cube.move({0.05,0.05,-0.1});
-        std::cout << "Z:" << cube.position.z << std::endl;
+        cube.moveInLineOfSight({0.005,0.005,-0.01});
+        //std::cout << "Rx:" << cube.getRotation().x << std::endl;
+        //std::cout << "Ry:" << cube.getRotation().y << std::endl;
+        //std::cout << "Rz:" << cube.getRotation().z << std::endl << std::endl;
     }
 
     void onClose() override {

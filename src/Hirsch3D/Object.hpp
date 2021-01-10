@@ -31,12 +31,14 @@ namespace h3d
         glm::vec4 color;
         bool loaded() const {return hasLoaded;}
         void move(glm::vec3 d);
+        void moveInLineOfSight(glm::vec3 d);
         glm::vec3 getPosition();
         glm::vec3 position;
         h3d::Texture* getTexture() {return texture;}
+        glm::vec3 getRotation() {return this->rotationVector;}
     private:
         glm::mat4 modelMatrix;
-        
+        glm::vec3 rotationVector;
         h3d::VertexBuffer* vertices;
         std::string objPath;
         uint32_t amountOfVertices;
