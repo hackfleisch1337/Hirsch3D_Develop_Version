@@ -9,6 +9,7 @@
 #include "glm/glm/gtc/matrix_transform.hpp"
 
 #include "Texture.hpp"
+//#include "tools/OBJ_Loader.h"
 
 // #include "tools/OBJ_Loader.h"
 
@@ -19,7 +20,7 @@ namespace h3d
         
         virtual ~Object();
         void load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color, h3d::Texture *t);
-        void loadByPath(std::string, glm::vec4);
+        void loadByPath(std::string, glm::vec4, h3d::Texture*);
         VertexBuffer* getVertexBuffer() const {
             return this->vertices;
         }

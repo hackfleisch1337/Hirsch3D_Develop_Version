@@ -18,9 +18,9 @@ uint32_t h3d::Hirsch3D::getCurrentTimeMillies() {
 }
 
 bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uint8_t flags) {
-    
-    this->startTime = clock();
 
+    this->startTime = clock();
+ 
     std::cout << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
               << "**************************************" << std::endl
               << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" << std::endl;
@@ -50,7 +50,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     SDL_GL_SetSwapInterval(-1);
     SDL_SetRelativeMouseMode(SDL_TRUE);
     uint32_t sdl_flags = SDL_WINDOW_OPENGL;
-    
+
     if (flags != 0x00) {
         if((~HIRSCH3D_FULLSCREEN ) | flags == 0xFF) {
             sdl_flags = sdl_flags | SDL_WINDOW_FULLSCREEN;
@@ -74,7 +74,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
         return false;
     } else std::cout << "\033[1;32m[OK] Initialized Glew succesful!\033[0m" << std::endl;
     std::cout << "OpenGl Driver Version: " << YELLOW << glGetString(GL_VERSION) << RESET_CLR << std::endl;
-    
+
 
 
     // Hirsch3D Texture
@@ -99,29 +99,26 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
         stbi_image_free(textureBuffer);
     }
 
-    
+
 
     hirschShader.load("D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.vert", "D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.frag");
-    
+
 
     Vertex3 t_vertices[] = {
+    /*     x    y      z    u   v   */
         {-1.0, -1.0, 0.0, 0.0, 0.0},
         {1.0, -1.0,  0.0, 1.0, 0.0},
         {1.0,  1.0,  0.0, 1.0,  1.0},
         {-1.0,  1.0,  0.0, 0.0,  1.0}
     };
-
-    uint32_t t_indices[] = {
-        0,1,2,
-        0,2,3
-    };
+    uint32_t t_indices[] = {0, 1, 2, 0, 2, 3};
 
     titleScreen.load(t_vertices, 4, t_indices, 6, glm::vec4(1,1,1,1), nullptr);
     int textureUniformLocation = glGetUniformLocation(hirschShader.getShaderId(), "u_texture");
 	if(!textureUniformLocation != -1) {
 		glUniform1i(textureUniformLocation, 0);
 	}
-    
+
     ////
 
     std::cout << GREEN << "[OK] Initialized " << RESET_CLR << std::endl;
@@ -138,26 +135,26 @@ bool h3d::Hirsch3D::start() {
     // Start Mainloop
     std::cout << YELLOW << "[IN_PROCESS] Mainloop" << RESET_CLR << std::endl;
     bool close = false;
-    
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     //glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     // Mainloop
     while(!close) {
-            
-            
+
+
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
-            
-            
+
+
+
 
             /*############ GL DRAW ##################
             buffer.bind();
             glDrawArrays(GL_TRIANGLES, 0, buffer.getAmountOfVertices());
             buffer.unbind();
 
-            
+
             glBegin(GL_TRIANGLES);
 
 
@@ -168,11 +165,11 @@ bool h3d::Hirsch3D::start() {
             glEnd();
             /*############ GL END ###############################*/
 
-            
+
             if(!this->showTitle) {
                 this->render(this->renderer);
             }
-            
+
             if(this->showTitle && this->getCurrentTimeMillies() > 2000) {
                 this->showTitle = false;
             }
@@ -185,7 +182,7 @@ bool h3d::Hirsch3D::start() {
                 glBindTexture(GL_TEXTURE_2D, 0);
                 this->hirschShader.unbind();
             }
-            
+
 
 
             SDL_GL_SwapWindow(window);
@@ -195,7 +192,7 @@ bool h3d::Hirsch3D::start() {
                     close = true;
                     std::cout << GREEN << "[OK] Exited Mainloop" << RESET_CLR << std::endl;
                     this->onClose();
-                } 
+                }
             }
             SDL_Delay(1000/this->fps);
     }
@@ -214,7 +211,7 @@ h3d::Hirsch3D::~Hirsch3D() {
 // Renderer
 
 void h3d::Renderer::renderObject(const h3d::Object* o) const{
-    
+
     if(!o->loaded()) {
         std::cout << RED << "[FAILED] Unable to render uninitialized object" << RESET_CLR << std::endl;
         return;

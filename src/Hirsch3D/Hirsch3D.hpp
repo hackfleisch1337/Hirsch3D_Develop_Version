@@ -1,22 +1,22 @@
 /**
  * @file Hirsch3D/Hirsch3D.hpp
  * @ref Hirsch3d/core
- * 
+ *
  * @author Emanuel Zache
  * @version 0.3.7
  * @copyright (C) 2021 Emanuel Zache
- * 
+ *
  * @brief Hirsch3D is a 3D Renderengine based on OpenGl
  * Basic Setup:
- * { @code 
+ * { @code
  *  #include <Hirsch3D/Hisch3D.hpp>
  *  class Game: public h3d::Hirsch3D {
  *  private:
  *      void setup() override {}
  *      void render(const h3d::Renderer &renderer) override {}
- *      void onClose() override {};  
+ *      void onClose() override {};
  *  };
- *  
+ *
  *  int main(int argc, char** argv) {
  *      Game g;
  *      g.init("Title", 1920, 1080, HIRSCH3D_FULLSCREEN | HIRSCH3D_BORDERLESS);
@@ -26,10 +26,10 @@
  *      return 0;
  *  }
  * }
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  */
 
 
@@ -47,7 +47,7 @@
 #include <GL/glew.h>
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
-#include "Vertex.hpp" 
+#include "Vertex.hpp"
 #include "VertexBuffer.hpp"
 #include "Texture.hpp"
 #include "Object.hpp"
@@ -61,7 +61,7 @@
 
 namespace h3d {
 
-    
+
 
     class Renderer {
     public:
@@ -121,21 +121,23 @@ namespace h3d {
         const glm::vec4 black(0.0f, 0.0f, 0.0f, 1.0f);
         const glm::vec4 white(1.0f, 1.0f, 1.0f, 1.0f);
         const glm::vec4 yellow(1.0f, 1.0f, 0.0f, 1.0f);
-        const glm::vec4 snow = RGB_TO_OPENGL(255, 250, 250);
-        const glm::vec4 spring_green = RGB_TO_OPENGL(94, 252, 141);
-        const glm::vec4 midnight_blue = RGB_TO_OPENGL(7, 0, 77);
-        const glm::vec4 outrageous_orange = RGB_TO_OPENGL(252, 119, 83);
-        const glm::vec4 dim_gray = RGB_TO_OPENGL(113, 105, 105);
-        const glm::vec4 celadon_green = RGB_TO_OPENGL(54, 130, 127);
-        const glm::vec4 english_violet = RGB_TO_OPENGL(89, 63, 98);
-        const glm::vec4 magic_mint = RGB_TO_OPENGL(174, 255, 216);
-        const glm::vec4 english_red = RGB_TO_OPENGL(159, 74, 84);
-        const glm::vec4 dark_purple = RGB_TO_OPENGL(28, 1, 24);
-        const glm::vec4 bone = RGB_TO_OPENGL(217, 207, 193);
-        const glm::vec4 army_green = RGB_TO_OPENGL(65, 82, 31);
-        const glm::vec4 cobalt_blue = RGB_TO_OPENGL(0, 75, 168);
+        const glm::vec4 cyan(0.0f, 1.0f, 0.0f, 1.0f);
+        const glm::vec4 snow = RGB_TO_OPENGL(255.0f, 250.0f, 250.0f);
+        const glm::vec4 spring_green = RGB_TO_OPENGL(94.0f, 252.0f, 141.0f);
+        const glm::vec4 midnight_blue = RGB_TO_OPENGL(7.0f, 0.0f, 77.0f);
+        const glm::vec4 outrageous_orange = RGB_TO_OPENGL(252.0f, 119.0f, 83.0f);
+        const glm::vec4 dim_gray = RGB_TO_OPENGL(113.0f, 105.0f, 105.0f);
+        const glm::vec4 celadon_green = RGB_TO_OPENGL(54.0f, 130.0f, 127.0f);
+        const glm::vec4 english_violet = RGB_TO_OPENGL(89.0f, 63.0f, 98.0f);
+        const glm::vec4 magic_mint = RGB_TO_OPENGL(174.0f, 255.0f, 216.0f);
+        const glm::vec4 english_red = RGB_TO_OPENGL(159.0f, 74.0f, 84.0f);
+        const glm::vec4 dark_purple = RGB_TO_OPENGL(28.0f, 1.0f, 24.0f);
+        const glm::vec4 bone = RGB_TO_OPENGL(217.0f, 207.0f, 193.0f);
+        const glm::vec4 army_green = RGB_TO_OPENGL(65.0f, 82.0f, 31.0f);
+        const glm::vec4 cobalt_blue = RGB_TO_OPENGL(0.0f, 75.0f, 168.0f);
+        const glm::vec4 yellow_green(0.8f, 0.61f, 0.5f, 1.0f);
     };
-    
+
 
 }
 

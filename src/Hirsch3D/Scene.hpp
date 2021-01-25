@@ -9,6 +9,17 @@
 namespace h3d
 {
     class Renderer;
+
+    /**
+     * Renderstate
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+
     class Scene {
     public:
         void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera);
@@ -16,7 +27,7 @@ namespace h3d
         void addObject(h3d::Object* o);
         // void addLight(h3d::PointLight &p);
         virtual void render(const h3d::Renderer &r);
-        
+
 
     protected:
         h3d::Shader shader;
@@ -24,12 +35,19 @@ namespace h3d
         h3d::Camera* camera;
     };
 
+    /**
+     * Renderstate to render 2D objects
+     *
+     *
+     *
+     */
+
     class Scene2D: public Scene {
     public:
         void load2D();
         void render(const h3d::Renderer &r) override;
     private:
-        
+
         h3d::Camera c2d;
     };
 

@@ -9,6 +9,7 @@ namespace h3d
 {
     class Camera {
     public:
+        // Perspective camera
         void init(float fov, float width, float height) {
             projection = glm::perspective((float) glm::radians(fov)/2.0f, width/height, 0.001f, 500.0f);
             view = glm::mat4(1.0f);
@@ -16,7 +17,7 @@ namespace h3d
             update();
         }
 
-        // Orthographic
+        // Orthographic camera
         void init() {
             projection = glm::ortho(-2.0f, 2.0f, 2.0f, 2.0f);
             view = glm::mat4(1.0f);
@@ -38,7 +39,7 @@ namespace h3d
         }
 
         void rotate(float degreeX, float degreeY) {
-            
+
         }
 
         glm::mat4 getView() {
