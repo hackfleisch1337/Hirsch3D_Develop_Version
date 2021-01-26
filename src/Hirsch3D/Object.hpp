@@ -9,9 +9,9 @@
 #include "glm/glm/gtc/matrix_transform.hpp"
 
 #include "Texture.hpp"
-//#include "tools/OBJ_Loader.h"
+#include <fstream>
 
-// #include "tools/OBJ_Loader.h"
+
 
 namespace h3d
 {

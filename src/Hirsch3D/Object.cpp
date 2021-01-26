@@ -1,5 +1,5 @@
 #include "Object.hpp"
-
+#include "tools/OBJ_Loader.h"
 
 #ifndef GREEN
 #define GREEN "\033[92m"
@@ -31,8 +31,32 @@ void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indi
 
 void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* t) {
     
-    
+    objl::Loader loader;
+    if(!loader.LoadFile(path)) {
+        std::cout << "\033[1;31m[FAILED] Failed to load Obj: " << path << "!\033[0m" << std::endl;
+            return;
+    }
 
+    objl::Mesh c = loader.LoadedMeshes[0];
+    std::vector<h3d::Vertex3> l_vertices;
+    for(int i = 0; i < c.Vertices.size(); i++) {
+        l_vertices.push_back({  c.Vertices.at(i).Position.X,
+                                c.Vertices.at(i).Position.Y,
+                                c.Vertices.at(i).Position.Z,
+                                c.Vertices.at(i).TextureCoordinate.X,
+                                c.Vertices.at(i).TextureCoordinate.Y,
+                                c.Vertices.at(i).Normal.X,
+                                c.Vertices.at(i).Normal.Y,
+                                c.Vertices.at(i).Normal.Z
+                            });
+    }
+    this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, t);
+
+    /*
+        Load obj
+    */
+
+   // this->load(...,amountOfV,...,amountOfI, color, t);
 }
 
 void h3d::Object::move(glm::vec3 d) {

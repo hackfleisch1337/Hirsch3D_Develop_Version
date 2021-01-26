@@ -19,6 +19,8 @@ h3d::VertexBuffer::VertexBuffer(void* data, uint32_t amountOfVertices) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(h3d::Vertex3), static_cast<void*>(offsetof(struct h3d::Vertex3, x)));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(h3d::Vertex3), (void*) (offsetof(struct h3d::Vertex3, u)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(h3d::Vertex3), (void*) (offsetof(struct h3d::Vertex3, nx)));
     
     glBindVertexArray(0);
 }

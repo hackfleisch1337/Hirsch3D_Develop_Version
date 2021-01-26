@@ -1,8 +1,4 @@
-#include <iostream>
-#include <string>
-#include <vector>
 #include "Hirsch3D/Hirsch3D.hpp"
-
 
 class Game: public h3d::Hirsch3D {
 
@@ -11,11 +7,12 @@ private:
     h3d::Camera camera;
     h3d::Scene scene1;
     h3d::Texture t;
-   
+
 
     void setup(const h3d::OBJLoader &objLoader) override {
 
         // Cube vertices
+        /*
         h3d::Vertex3 v_array[] = {
             h3d::Vertex3{-0.5, -0.5, -0.5,   0, 0.66f, 0,0,0},  // 0
 
@@ -56,9 +53,10 @@ private:
                                 0,2,4,
                                 2,4,6
                                 };
-
+*/
         t.load("cube.png");
-        cube.load(v_array, 8, indices1, 36, h3d::color::cobalt_blue, nullptr);
+        //cube.load(v_array, 8, indices1, 36, h3d::color::cobalt_blue, nullptr);
+        cube.loadByPath("zwerg.obj", h3d::color::celadon_green, nullptr);
         std::string vertexShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert";
         std::string fragmentShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag";
 
@@ -77,10 +75,10 @@ private:
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
 
-        //cube.rotate(0.5, {0.1, 0.1, 0.1});
+        cube.rotate(0.5, {0.1, 0.1, 0.1});
             //camera.translate({0,0,0.1});
             //camera.update();
-        cube.moveInLineOfSight({0.005,0.005,-0.02});
+        //cube.moveInLineOfSight({0.005,0.005,-0.02});
             //std::cout << "Rx:" << cube.getRotation().x << std::endl;
             //std::cout << "Ry:" << cube.getRotation().y << std::endl;
             //std::cout << "Rz:" << cube.getRotation().z << std::endl << std::endl;

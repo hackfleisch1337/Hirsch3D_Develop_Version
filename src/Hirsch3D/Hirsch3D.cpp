@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "tools/stb/stb_image.h"
 
+
 void h3d::Hirsch3D::setTitle(std::string title) {
     this->title = title;
     SDL_SetWindowTitle(this->window, this->title.data());
@@ -23,7 +24,9 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
  
     std::cout << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
               << "**************************************" << std::endl
-              << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" << std::endl;
+              << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" 
+              << "OBJ File loader by Robert Smith (Copyright (C) 2016 Robert Smith)" << std::endl
+              << std::endl;
 
 
     #ifdef HIRSCH_DEBUG

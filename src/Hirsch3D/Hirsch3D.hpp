@@ -36,11 +36,16 @@
 #ifndef HIRSCH3D_HPP
 #define HIRSCH3D_HPP
 
+#include <iostream>
+#include <string>
+#include <vector>
+
 #define HIRSCH3D_VERSION "0.6.8"
 #define YELLOW "\033[93m"
 #define RED "\033[91m"
 #define GREEN "\033[92m"
 #define RESET_CLR "\x1B[0m"
+
 
 #include <string>
 #define GLEW_STATIC

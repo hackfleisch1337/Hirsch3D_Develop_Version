@@ -1,10 +1,3 @@
-/*
- * This file is written by Robert Smith
- * License: MIT
- * GitHub: https://github.com/Bly7/OBJ-Loader
- */ 
-
-
 // OBJ_Loader.h - A Single Header OBJ Model Loader
 
 #pragma once
