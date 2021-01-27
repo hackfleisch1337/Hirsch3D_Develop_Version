@@ -40,7 +40,7 @@
 #include <string>
 #include <vector>
 
-#define HIRSCH3D_VERSION "0.6.8"
+#define HIRSCH3D_VERSION "0.8.6"
 #define YELLOW "\033[93m"
 #define RED "\033[91m"
 #define GREEN "\033[92m"
@@ -116,6 +116,7 @@ namespace h3d {
         h3d::Object titleScreen;
         clock_t startTime;
         bool showTitle = true;
+        bool loaded = false;
     };
 
     namespace color {

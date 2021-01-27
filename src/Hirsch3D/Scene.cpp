@@ -28,8 +28,11 @@ void h3d::Scene::addObject(h3d::Object* o) {
  *
  */
 void h3d::Scene::render(const h3d::Renderer &r) {
+
     this->shader.bind(); // bind scene shader
+
     for(int i = 0; i < this->objects.size(); i++) {
+
         // uniform mat4 u_model
         int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_model");
         glm::mat4 m = this->camera->getViewProj() * this->objects.at(i)->getMatrix();
@@ -38,13 +41,28 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         int u_colorUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_color");
         glm::vec4 c = this->objects.at(i)->color;
 
+        // uniform vec3 c_position
+        int c_positionUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "c_position");
+
+        // uniform mat4 u_modelView
+        int u_modelViewUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_modelView");
+        glm::mat4 mV = this->camera->getView() * this->objects.at(i)->getMatrix();
+
+
+
         // Set uniforms
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
         glUniformMatrix4fv(u_modelUniformLocation, 1, GL_FALSE, &m[0][0]);
+        glUniformMatrix4fv(u_modelViewUniformLocation, 1, GL_FALSE, &mV[0][0]);
+        glUniform3f(c_positionUniformLocation, this->camera->getPosition().x,this->camera->getPosition().y, this->camera->getPosition().z);
+
 
         // Bind texture if available
         if(this->objects.at(i)->getTexture() != nullptr)
             this->objects.at(i)->getTexture()->bind();
+
+
+        // Sets Texture Uniform
         if(this->objects.at(i)->getTexture() != nullptr) {
             //std::cout << "Texture" << std::endl;
 
@@ -55,6 +73,7 @@ void h3d::Scene::render(const h3d::Renderer &r) {
             // sets uniform isSamplerSet to 1 (= true) to clarify that a texture (u_texture) should be used
             int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
             glUniform1i(isSamplerSetUniformLocation, 1);
+
         } else {
             //std::cout << "Texture2" << std::endl;
 
@@ -63,15 +82,19 @@ void h3d::Scene::render(const h3d::Renderer &r) {
             glUniform1i(isSamplerSetUniformLocation, 0);
         }
 
+
         // sets uniform u_position to objects position
         int u_positionUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_position");
         glm::vec3 p = this->objects.at(i)->position;
         glUniform3f(u_positionUniformLocation, p.x, p.y, p.z);
 
+
         r.renderObject(this->objects.at(i)); // finally renders the object
+
         if(this->objects.at(i)->getTexture() != nullptr)
             this->objects.at(i)->getTexture()->unbind(); // unbind texture if used
     }
+    
     this->shader.unbind(); // unbind scene shader
 }
 

@@ -20,6 +20,7 @@
 // Print progress to console while loading (large models)
 #define OBJL_CONSOLE_OUTPUT
 
+#undef OBJL_CONSOLE_OUTPUT
 // Namespace: OBJL
 //
 // Description: The namespace that holds eveyrthing that

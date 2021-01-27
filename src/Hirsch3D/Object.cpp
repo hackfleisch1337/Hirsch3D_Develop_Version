@@ -52,11 +52,6 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* t)
     }
     this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, t);
 
-    /*
-        Load obj
-    */
-
-   // this->load(...,amountOfV,...,amountOfI, color, t);
 }
 
 void h3d::Object::move(glm::vec3 d) {

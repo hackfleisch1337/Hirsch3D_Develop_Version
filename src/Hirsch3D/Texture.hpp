@@ -25,6 +25,7 @@ namespace h3d
         }
         int32_t getWidth() {return width;}
         int32_t getHeight() {return height;}
+        std::string getPath() {return this->path;}
     private:
         std::string path;
         int32_t width;

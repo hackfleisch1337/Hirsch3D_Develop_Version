@@ -5,7 +5,9 @@ layout(location = 1) in vec2 uv;
 layout(location = 2) in vec3 in_normal;
 
 uniform mat4 u_model; // = proj * view * model
+uniform mat4 u_modelView; // = view * model
 uniform vec3 u_position;
+uniform vec3 c_position;
 
 out vec2 v_uv;
 out vec3 v_normal;
@@ -29,5 +31,5 @@ void main() {
     gl_Position = rotation;*/
     v_uv = uv;
     v_normal = in_normal;
-    v_position = position;
+    v_position = vec3(u_modelView  * vec4(position, 1.0f));
 }

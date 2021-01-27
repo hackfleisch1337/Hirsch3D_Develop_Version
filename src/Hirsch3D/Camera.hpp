@@ -38,8 +38,8 @@ namespace h3d
             view = glm::translate(view, v * -1.0f);
         }
 
-        void rotate(float degreeX, float degreeY) {
-
+        void rotate(float degree, glm::vec3 d) {
+            this->view = glm::rotate(this->view, glm::radians(degree), d);
         }
 
         glm::mat4 getView() {
@@ -57,6 +57,63 @@ protected:
         glm::mat4 viewProj;
 
 };
+
+class FpsCamera: public Camera {
+public:
+    void initFpsCamera(float fov, float width, float height) {
+        init(fov, width, height);
+        up = glm::vec3(0.0f,1.0f,0.0f);
+        yaw = -90.0f;
+        pitch = 0.0f;
+        rotate(0.0f, 0.0f);
+        update();
+    }
+
+    void rotate(float xRel, float yRel) {
+        yaw += xRel * mouseSensitivityX;
+        pitch -= yRel * mouseSensitivityY;
+        if(pitch > 89.0f)
+            pitch = 89.0f;
+        if(pitch < -89.0f)
+            pitch = -89.0f;
+        glm::vec3 front;
+        front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+        front.y = sin(glm::radians(pitch));
+        front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+        lookAt = glm::normalize(front);
+        update();
+    }
+
+    void update() override {
+        view = glm::lookAt(pos, pos + lookAt, up);
+        viewProj = projection * view;
+    }
+
+    void moveFront(float amount) {
+        translate(glm::normalize(glm::vec3(1.0f, 0.0f, 1.0f)*lookAt) * amount);
+        update();
+    }
+    void moveSideways(float amount) {
+        translate(glm::normalize(glm::cross(lookAt, up)) * amount);
+        update();
+    }
+
+
+    void moveUp(float amount) {
+        translate(glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)) * amount);
+        update();
+    }
+
+protected:
+
+    float yaw;
+    float pitch;
+    glm::vec3 lookAt;
+    const float mouseSensitivityX = 0.15f;
+    const float mouseSensitivityY = 0.15f;
+    glm::vec3 up;
+};
+
 } // namespace h3d
 
 

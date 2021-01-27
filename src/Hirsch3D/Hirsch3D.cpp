@@ -8,6 +8,7 @@ void h3d::Hirsch3D::setTitle(std::string title) {
     this->title = title;
     SDL_SetWindowTitle(this->window, this->title.data());
 }
+
 void h3d::Hirsch3D::setSize(uint16_t width, uint16_t height) {
     this->width = width;
     this->height = height;
@@ -80,12 +81,13 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 
 
 
-    // Hirsch3D Texture
+    // Hirsch3D Texture  //
+    //////////////////////
     int textureWidth = 1920;
     int textureHeight = 720;
     int bitsPerPixel = 0;
     stbi_set_flip_vertically_on_load(true);
-    auto textureBuffer = stbi_load("D:/Emanuel/Hirsch3D/Hirsch3D.png", &textureWidth, &textureHeight, &bitsPerPixel, 4);
+    auto textureBuffer = stbi_load("src/Hirsch3D/md/Hirsch3D.png", &textureWidth, &textureHeight, &bitsPerPixel, 4);
 
     glGenTextures(1, &this->tBuffer);
     glBindTexture(GL_TEXTURE_2D, this->tBuffer);
@@ -121,8 +123,9 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 	if(!textureUniformLocation != -1) {
 		glUniform1i(textureUniformLocation, 0);
 	}
+    
 
-    ////
+    ////////////
 
     std::cout << GREEN << "[OK] Initialized " << RESET_CLR << std::endl;
 
@@ -130,18 +133,20 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 
 bool h3d::Hirsch3D::load() {
     this->setup(this->objLoader);
+    loaded = true;
     std::cout << GREEN << "[OK] Setup complete " << RESET_CLR << std::endl;
 }
 
 bool h3d::Hirsch3D::start() {
-
+    clock_t startpoint = clock();
     // Start Mainloop
     std::cout << YELLOW << "[IN_PROCESS] Mainloop" << RESET_CLR << std::endl;
     bool close = false;
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+    
     // Mainloop
     while(!close) {
 
@@ -169,11 +174,11 @@ bool h3d::Hirsch3D::start() {
             /*############ GL END ###############################*/
 
 
-            if(!this->showTitle) {
+            if(!this->showTitle && this->loaded) {
                 this->render(this->renderer);
             }
 
-            if(this->showTitle && this->getCurrentTimeMillies() > 2000) {
+            if(this->showTitle && this->getCurrentTimeMillies() > (2000 + startpoint)) {
                 this->showTitle = false;
             }
 

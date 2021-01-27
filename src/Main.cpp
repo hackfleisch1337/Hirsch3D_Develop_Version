@@ -6,7 +6,7 @@ private:
     h3d::Object cube;
     h3d::Camera camera;
     h3d::Scene scene1;
-    h3d::Texture t;
+    //h3d::Texture t;
 
 
     void setup(const h3d::OBJLoader &objLoader) override {
@@ -54,18 +54,21 @@ private:
                                 2,4,6
                                 };
 */
-        t.load("cube.png");
+
+        //t.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Diffuse.jpg");
         //cube.load(v_array, 8, indices1, 36, h3d::color::cobalt_blue, nullptr);
-        cube.loadByPath("zwerg.obj", h3d::color::celadon_green, nullptr);
+        // Hirsch:D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj
+        cube.loadByPath("obj/klumpen.obj", h3d::color::cobalt_blue, nullptr);
         std::string vertexShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert";
         std::string fragmentShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag";
 
 
         camera.init(100, 1280, 720);
-        camera.translate({0,0,10});
+        camera.translate({0,0,3});
+        //camera.rotate(30, {1,0,0});
         camera.update();
         scene1.load(vertexShader, fragmentShader, &camera);
-        //scene1.load2D();
+
         scene1.addObject(&cube);
 
         //cube.rotate(0.5, {0.1, 0.1, 0.1});
@@ -74,14 +77,12 @@ private:
 
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
-
+        camera.update();
         cube.rotate(0.5, {0.1, 0.1, 0.1});
-            //camera.translate({0,0,0.1});
-            //camera.update();
-        //cube.moveInLineOfSight({0.005,0.005,-0.02});
-            //std::cout << "Rx:" << cube.getRotation().x << std::endl;
-            //std::cout << "Ry:" << cube.getRotation().y << std::endl;
-            //std::cout << "Rz:" << cube.getRotation().z << std::endl << std::endl;
+        //camera.rotate(1, {1,0,0});
+        //camera.update();
+        //cube.moveInLineOfSight({0.001,0.001,-0.02});
+        
     }
 
     void onClose() override {
