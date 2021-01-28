@@ -8,6 +8,7 @@ uniform mat4 u_model; // = proj * view * model
 uniform mat4 u_modelView; // = view * model
 uniform vec3 u_position;
 uniform vec3 c_position;
+uniform mat4 u_invModelView;
 
 out vec2 v_uv;
 out vec3 v_normal;
@@ -30,6 +31,6 @@ void main() {
     vec4 rotation = vec4( u_model * vec4(position + u_position, 1.0f) );
     gl_Position = rotation;*/
     v_uv = uv;
-    v_normal = in_normal;
+    v_normal = mat3(u_invModelView) * in_normal;
     v_position = vec3(u_modelView  * vec4(position, 1.0f));
 }

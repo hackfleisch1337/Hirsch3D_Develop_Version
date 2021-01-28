@@ -37,7 +37,7 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* t)
             return;
     }
 
-    objl::Mesh c = loader.LoadedMeshes[0];
+    objl::Mesh c = loader.LoadedMeshes[0]; // TODO
     std::vector<h3d::Vertex3> l_vertices;
     for(int i = 0; i < c.Vertices.size(); i++) {
         l_vertices.push_back({  c.Vertices.at(i).Position.X,

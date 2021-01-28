@@ -48,14 +48,16 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         int u_modelViewUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_modelView");
         glm::mat4 mV = this->camera->getView() * this->objects.at(i)->getMatrix();
 
-
+        // uniform mat4 u_invModelView
+        int u_invModelViewUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_invModelView");
+        glm::mat4 invMv = glm::inverse(mV);
 
         // Set uniforms
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
         glUniformMatrix4fv(u_modelUniformLocation, 1, GL_FALSE, &m[0][0]);
         glUniformMatrix4fv(u_modelViewUniformLocation, 1, GL_FALSE, &mV[0][0]);
         glUniform3f(c_positionUniformLocation, this->camera->getPosition().x,this->camera->getPosition().y, this->camera->getPosition().z);
-
+        glUniformMatrix4fv(u_invModelViewUniformLocation, 1, GL_FALSE, &invMv[0][0]);
 
         // Bind texture if available
         if(this->objects.at(i)->getTexture() != nullptr)

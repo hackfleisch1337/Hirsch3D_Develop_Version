@@ -21,7 +21,7 @@ void main() {
     }
 
     vec3 view = normalize(-v_position);
-    vec3 light = normalize(vec3(1,1,1));
+    vec3 light = normalize(vec3(0,1,0));
     vec3 normal = normalize(v_normal);
     
     vec3 reflection = reflect(-light, normal);
