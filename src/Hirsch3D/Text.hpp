@@ -1,10 +1,11 @@
 #ifndef HIRSCH3D_TEXT_HPP
 #define HIRSCH3D_TEXT_HPP
 #include <string>
+#include "Object.hpp"
 namespace h3d
 {
     
-class Text {
+class Text: public Object {
 
 public:
 

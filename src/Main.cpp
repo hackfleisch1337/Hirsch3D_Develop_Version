@@ -10,7 +10,6 @@ private:
     h3d::Scene scene1;
     h3d::Texture t;
 
-
     void setup(const h3d::OBJLoader &objLoader) override {
 
 
@@ -18,24 +17,25 @@ private:
         
         // Hirsch:D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj
         cube.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, &t);
-        klumpen.loadByPath("obj/klumpen.obj", h3d::color::blue, nullptr);
+        klumpen.loadByPath("obj/zwerg.obj", h3d::color::spring_green, nullptr);
         dummen.loadByPath("obj/dummen.obj", h3d::color::cobalt_blue, nullptr);
         klumpen.moveInLineOfSight({-1.3,0,0});
-        dummen.moveInLineOfSight({1.5,0,-3});
+        dummen.moveInLineOfSight({1.5,0,0});
         //cube.move({0.5,0,0});
-        std::string vertexShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.vert";
-        std::string fragmentShader = "D:\\Emanuel\\Hirsch3D\\src\\shader\\Obj1\\shader.frag";
+        std::string vertexShader = "D:\\Emanuel\\Hirsch3D\\src\\Hirsch3D\\shader\\main\\shader.vert";
+        std::string fragmentShader = "D:\\Emanuel\\Hirsch3D\\src\\Hirsch3D\\shader\\main\\shader.frag";
 
 
         camera.init(100, 1280, 720);
         camera.translate({0,0,5});
         //camera.rotate(30, {1,0,0});
         camera.update();
-        scene1.load(vertexShader, fragmentShader, &camera);
+        scene1.load(vertexShader, fragmentShader, &camera, 0.1f);
 
         scene1.addObject(&cube);
         scene1.addObject(&klumpen);
         scene1.addObject(&dummen);
+
         //cube.rotate(0.5, {0.1, 0.1, 0.1});
     	//cube.move({0.5f,0.5f, -5.f}); // bugkonstante = 1.0018
     }
@@ -50,7 +50,6 @@ private:
         //camera.rotate(1, {1,0,0});
         //camera.update();
         //cube.moveInLineOfSight({0.001,0.001,-0.02});
-        
     }
 
     void onClose() override {

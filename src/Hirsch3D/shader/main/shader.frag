@@ -8,6 +8,9 @@ in vec3 v_normal;
 in vec3 v_position;
 uniform sampler2D u_texture;
 uniform int isSamplerSet;
+
+uniform float u_ambient;
+
 void main() {
     //if(u_texture != -1)
     
@@ -26,11 +29,9 @@ void main() {
     
     vec3 reflection = reflect(-light, normal);
 
-    vec3 ambient = vec3(f_color) * 0.1;
+    vec3 ambient = vec3(f_color) * u_ambient;
     vec3 deffuse = max(dot(normal, light), 0.0) * vec3(f_color);
-    vec3 specular = pow(max(dot(reflection, view), 0.0), 4.0) * vec3(f_color);
-
-        
+    vec3 specular = pow(max(dot(reflection, view), 0.0), 10) * vec3(f_color);
 
     color = vec4(ambient + deffuse + specular, 1.0);
 

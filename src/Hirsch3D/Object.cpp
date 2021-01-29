@@ -15,21 +15,21 @@ h3d::Object::~Object() {
     }
 }
 
-void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color, h3d::Texture* t) {
+void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color, h3d::Texture* texture) {
     this->amountOfVertices = amountOfVertices;
     this->vertices = new h3d::VertexBuffer(vertices, amountOfVertices);
     this->indices = new h3d::IndexBuffer(indices, amountOfIndices);
-    this->hasLoaded = true;
     this->modelMatrix = glm::mat4(1.0f);
     this->color = color;
     this->position.x = 0;
     this->position.y = 0;
     this->position.z = 0;
-    this->texture = t;
+    this->texture = texture;
     this->rotationVector = glm::vec3(0.0f,0.0f,0.0f);
+    this->hasLoaded = true;
 }
 
-void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* t) {
+void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* texture) {
     
     objl::Loader loader;
     if(!loader.LoadFile(path)) {
@@ -50,7 +50,7 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* t)
                                 c.Vertices.at(i).Normal.Z
                             });
     }
-    this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, t);
+    this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, texture);
 
 }
 
@@ -82,4 +82,36 @@ glm::vec3 h3d::Object::getPosition() {
 void h3d::Object::rotate(float degree, glm::vec3 direction) {
     this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(degree), direction);
     this->rotationVector += glm::normalize(direction) * degree;
+}
+
+
+
+void h3d::Sprite::load(h3d::Texture* t, float x, float y, float w, float h) {
+
+    float width, height;
+    if(w <= 0)
+        width = static_cast<float> (t->getWidth()) / 2;
+    else width = w;
+    if(h <= 0)
+        height = static_cast<float> (t->getHeight()) / 2;
+    else height = h;
+
+    h3d::Vertex3 v[] = {
+    /*     x    y           z    u     v   normal*/
+        {-width, -height, 0.0,  0.0,  0.0,  0,0,0},
+        {width, -height,  0.0,  1.0,  0.0,  0,0,0},
+        {width,  height,  0.0,  1.0,  1.0,  0,0,0},
+        {-width,  height, 0.0,  0.0,  1.0,  0,0,0}
+    };
+    uint32_t indices[] = {0,1,2, 0,2,3};
+    Object::load(v, 4, indices, 6, glm::vec4(1.0f,1.0f,1.0f,1.0f), t);
+    this->move(x,y);
+}
+
+void h3d::Sprite::move(float x, float y) {
+    Object::moveInLineOfSight({x,y,0});
+}
+
+void h3d::Sprite::rotate(float degree) {
+    Object::rotate(degree, {0,0,1});
 }

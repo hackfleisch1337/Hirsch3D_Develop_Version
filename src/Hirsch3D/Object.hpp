@@ -19,7 +19,7 @@ namespace h3d
     public:
         
         virtual ~Object();
-        void load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color, h3d::Texture *t);
+        void load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color, h3d::Texture *texture);
         void loadByPath(std::string, glm::vec4, h3d::Texture*);
         VertexBuffer* getVertexBuffer() const {
             return this->vertices;
@@ -48,6 +48,17 @@ namespace h3d
         uint32_t amountOfIndices;
         h3d::Texture* texture;
     };
+
+
+    class Sprite: public h3d::Object {
+
+    public:
+
+        void load(h3d::Texture* t, float x, float y, float w = 0, float height = 0);
+        void move(float x, float y);
+        void rotate(float degree);
+    };
+
 } // namespace h3d
 
 

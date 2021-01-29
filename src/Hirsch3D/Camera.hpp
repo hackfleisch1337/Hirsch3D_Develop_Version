@@ -18,8 +18,8 @@ namespace h3d
         }
 
         // Orthographic camera
-        void init() {
-            projection = glm::ortho(-2.0f, 2.0f, 2.0f, 2.0f);
+        void init(float viewSpaceWidth, float viewSpaceHeight) {
+            projection = glm::ortho(- (viewSpaceWidth/2), viewSpaceWidth/2, -(viewSpaceHeight/2), viewSpaceHeight/2);
             view = glm::mat4(1.0f);
             pos = glm::vec3(0.0f);
             update();

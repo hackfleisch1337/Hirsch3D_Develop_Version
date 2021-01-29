@@ -22,12 +22,12 @@ namespace h3d
 
     class Scene {
     public:
-        void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera);
+        void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera, float ambient = 0.1f);
 
         void addObject(h3d::Object* o);
         // void addLight(h3d::PointLight &p);
         virtual void render(const h3d::Renderer &r);
-
+        float ambient;
 
     protected:
         h3d::Shader shader;
@@ -44,7 +44,7 @@ namespace h3d
 
     class Scene2D: public Scene {
     public:
-        void load2D();
+        void load2D(float width, float height);
         void render(const h3d::Renderer &r) override;
     private:
 

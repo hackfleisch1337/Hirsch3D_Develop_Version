@@ -1,8 +1,9 @@
 #include "Scene.hpp"
 
-void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera) {
+void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera, float ambient) {
     this->shader.load(vertexShaderSrc, fragmentShaderSrc);
     this->camera = camera;
+    this->ambient = ambient;
 }
 
 /**
@@ -30,6 +31,10 @@ void h3d::Scene::addObject(h3d::Object* o) {
 void h3d::Scene::render(const h3d::Renderer &r) {
 
     this->shader.bind(); // bind scene shader
+
+    // uniform float u_ambient
+    int u_ambientUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_ambient");
+    glUniform1f(u_ambientUniformLocation, this->ambient);
 
     for(int i = 0; i < this->objects.size(); i++) {
 
@@ -100,9 +105,8 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     this->shader.unbind(); // unbind scene shader
 }
 
-void h3d::Scene2D::load2D() {
-    this->c2d.init();
-    c2d.translate({0,0,5});
+void h3d::Scene2D::load2D(float screenWidth, float screenHeight) {
+    this->c2d.init(screenWidth, screenHeight);
     this->load("src/Hirsch3D/shader/2d.vert", "src/Hirsch3D/shader/2d.frag", &c2d);
 }
 
@@ -112,7 +116,7 @@ void h3d::Scene2D::render(const h3d::Renderer &r) {
         // TODO setModelMatrixUniform
 
         int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_model");
-        glm::mat4 m = this->objects.at(i)->getMatrix();
+        glm::mat4 m = this->c2d.getViewProj() * this->objects.at(i)->getMatrix();
         int u_colorUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_color");
         glm::vec4 c = this->objects.at(i)->color;
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
