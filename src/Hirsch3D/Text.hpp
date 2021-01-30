@@ -1,21 +1,22 @@
 #ifndef HIRSCH3D_TEXT_HPP
 #define HIRSCH3D_TEXT_HPP
 #include <string>
+#include "tools/stb/stb_truetype.h"
 #include "Object.hpp"
 namespace h3d
 {
     
-class Text: public Object {
+class Text: public Sprite {
 
 public:
 
-    void load(std::string text, std::string font, uint16_t fontsize);
+    void loadText(std::string text, std::string font, uint16_t fontsize, glm::vec4 color, float x, float y);
     
 
 private:
 
-
-
+    stbtt_bakedchar cdata[96];
+    h3d::Texture fontTex;
 };
 
 

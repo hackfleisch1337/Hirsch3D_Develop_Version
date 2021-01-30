@@ -56,13 +56,14 @@
 #include "VertexBuffer.hpp"
 #include "Texture.hpp"
 #include "Object.hpp"
-
+#include "Keyboard.hpp"
 #include <ctime>
 
 #include "Scene.hpp"
 
 #include "Camera.hpp"
 
+#include "Text.hpp"
 
 namespace h3d {
 
@@ -79,6 +80,7 @@ namespace h3d {
     protected:
 
         virtual void render(const h3d::Renderer&) = 0;
+        virtual void onKeyPressed(SDL_KeyCode key) = 0;
         virtual void setup(const h3d::OBJLoader &objLoader) = 0;
         virtual void onClose() = 0;
         void setTitle(std::string);
@@ -153,6 +155,7 @@ namespace h3d {
         const glm::vec4 dim_gray = RGB_TO_OPENGL(113.0f, 105.0f, 105.0f);
         const glm::vec4 bone = RGB_TO_OPENGL(217.0f, 207.0f, 193.0f);     
     };
+
 
 
 }

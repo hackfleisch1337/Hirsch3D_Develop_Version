@@ -11,7 +11,7 @@ namespace h3d
     public:
         // Perspective camera
         void init(float fov, float width, float height) {
-            projection = glm::perspective((float) glm::radians(fov)/2.0f, width/height, 0.001f, 500.0f);
+            projection = glm::perspective((float) glm::radians(fov)/2.0f, width/height, 0.01f, 500.0f);
             view = glm::mat4(1.0f);
             pos = glm::vec3(0.0f);
             update();
@@ -61,7 +61,7 @@ protected:
 class FpsCamera: public Camera {
 public:
     void initFpsCamera(float fov, float width, float height) {
-        init(fov, width, height);
+        this->init(fov, width, height);
         up = glm::vec3(0.0f,1.0f,0.0f);
         yaw = -90.0f;
         pitch = 0.0f;

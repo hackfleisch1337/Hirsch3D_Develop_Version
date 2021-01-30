@@ -6,6 +6,12 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->ambient = ambient;
 }
 
+void h3d::Scene::load(h3d::Camera* camera, float ambient) {
+    this->ambient = ambient;
+    this->camera = camera;
+    this->shader.load("./src/Hirsch3D/shader/main/shader.vert", "./src/Hirsch3D/shader/main/shader.frag");
+}
+
 /**
  * @param o The pointer of the object to add
  *
@@ -38,8 +44,8 @@ void h3d::Scene::render(const h3d::Renderer &r) {
 
     for(int i = 0; i < this->objects.size(); i++) {
 
-        // uniform mat4 u_model
-        int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_model");
+        // uniform mat4 u_modelViewProj
+        int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_modelViewProj");
         glm::mat4 m = this->camera->getViewProj() * this->objects.at(i)->getMatrix();
 
         // uniform vec4 u_color
@@ -49,6 +55,10 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         // uniform vec3 c_position
         int c_positionUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "c_position");
 
+        // uniform mat4 u_model
+        int uniformU_Model = glGetUniformLocation(this->shader.getShaderId(), "u_model");
+        glm::mat4 u_modelU = this->objects.at(i)->getMatrix();
+
         // uniform mat4 u_modelView
         int u_modelViewUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_modelView");
         glm::mat4 mV = this->camera->getView() * this->objects.at(i)->getMatrix();
@@ -57,13 +67,19 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         int u_invModelViewUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_invModelView");
         glm::mat4 invMv = glm::inverse(mV);
 
+        // uniform mat4 u_view
+
+        int u_viewUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_view");
+        glm::mat4 u_viewU = this->camera->getView();
+
         // Set uniforms
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
         glUniformMatrix4fv(u_modelUniformLocation, 1, GL_FALSE, &m[0][0]);
         glUniformMatrix4fv(u_modelViewUniformLocation, 1, GL_FALSE, &mV[0][0]);
         glUniform3f(c_positionUniformLocation, this->camera->getPosition().x,this->camera->getPosition().y, this->camera->getPosition().z);
         glUniformMatrix4fv(u_invModelViewUniformLocation, 1, GL_FALSE, &invMv[0][0]);
-
+        glUniformMatrix4fv(uniformU_Model, 1, GL_FALSE, &u_modelU[0][0]);
+        glUniformMatrix4fv(u_viewUniformLocation, 1, GL_FALSE, &u_viewU[0][0]);
         // Bind texture if available
         if(this->objects.at(i)->getTexture() != nullptr)
             this->objects.at(i)->getTexture()->bind();

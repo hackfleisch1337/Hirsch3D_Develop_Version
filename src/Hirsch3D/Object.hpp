@@ -37,7 +37,7 @@ namespace h3d
         glm::vec3 position;
         h3d::Texture* getTexture() {return texture;}
         glm::vec3 getRotation() {return this->rotationVector;}
-    private:
+    protected:
         glm::mat4 modelMatrix;
         glm::vec3 rotationVector;
         h3d::VertexBuffer* vertices;

@@ -18,9 +18,24 @@ void h3d::Texture::load(std::string path) {
 
     if(texBuffer) {
         stbi_image_free(texBuffer);
+        hasLoaded = true;
     } else {
-        std::cout << RED << "[FAILED] Failes loading" << RESET_CLR << std::endl;
+        std::cout << RED << "[FAILED] Failes loading Texture" << RESET_CLR << std::endl;
     }
+}
+
+void h3d::Texture::loadTtf(uint8_t* ttfBuffer) {
+    this->path = "///TTF///";
+    glGenTextures(1, &this->buffer);
+    glBindTexture(GL_TEXTURE_2D, this->buffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, this->width, this->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ttfBuffer);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    hasLoaded = true;
 }
 
 void h3d::Texture::bind() {

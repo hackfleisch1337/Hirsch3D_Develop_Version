@@ -23,7 +23,7 @@ namespace h3d
     class Scene {
     public:
         void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera, float ambient = 0.1f);
-
+        void load(h3d::Camera* camera, float ambient = 0.1f);
         void addObject(h3d::Object* o);
         // void addLight(h3d::PointLight &p);
         virtual void render(const h3d::Renderer &r);

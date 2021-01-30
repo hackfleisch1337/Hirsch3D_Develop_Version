@@ -4,10 +4,15 @@ layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 uv;
 layout(location = 2) in vec3 in_normal;
 
-uniform mat4 u_model; // = proj * view * model
-uniform mat4 u_modelView; // = view * model
+
 uniform vec3 u_position;
 uniform vec3 c_position;
+
+uniform mat4 u_model;
+uniform mat4 u_view;
+
+uniform mat4 u_modelViewProj; // = proj * view * model
+uniform mat4 u_modelView; // = view * model
 uniform mat4 u_invModelView;
 
 out vec2 v_uv;
@@ -25,12 +30,12 @@ void main() {
     */
 
 
-    gl_Position = u_model * vec4(position, 1.0f);
+    gl_Position = u_modelViewProj * vec4(position, 1.0f);
 
     /*
     vec4 rotation = vec4( u_model * vec4(position + u_position, 1.0f) );
     gl_Position = rotation;*/
     v_uv = uv;
-    v_normal = mat3(u_invModelView) * in_normal;
-    v_position = vec3(u_modelView  * vec4(position, 1.0f));
+    v_normal = mat3(u_model) * in_normal;
+    v_position = vec3(u_view  * vec4(u_position, 1.0f));
 }

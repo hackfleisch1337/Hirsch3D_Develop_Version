@@ -12,7 +12,6 @@ uniform int isSamplerSet;
 uniform float u_ambient;
 
 void main() {
-    //if(u_texture != -1)
     
     vec4 f_color = vec4(0.0f);
 
@@ -31,10 +30,10 @@ void main() {
 
     vec3 ambient = vec3(f_color) * u_ambient;
     vec3 deffuse = max(dot(normal, light), 0.0) * vec3(f_color);
-    vec3 specular = pow(max(dot(reflection, view), 0.0), 10) * vec3(f_color);
+    vec3 specular = pow(max(dot(reflection, view), 0.0), 20.0) * vec3(1.5);
 
     color = vec4(ambient + deffuse + specular, 1.0);
-
+    
 
     
     //else color = u_color;
