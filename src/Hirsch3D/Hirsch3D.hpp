@@ -46,7 +46,7 @@
 #define GREEN "\033[92m"
 #define RESET_CLR "\x1B[0m"
 
-
+#include <pthread.h>
 #include <string>
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -56,7 +56,6 @@
 #include "VertexBuffer.hpp"
 #include "Texture.hpp"
 #include "Object.hpp"
-#include "Keyboard.hpp"
 #include <ctime>
 
 #include "Scene.hpp"
@@ -73,16 +72,19 @@ namespace h3d {
     public:
         void renderObject(const h3d::Object* o) const;
     };
-    class OBJLoader {};
 
     class Hirsch3D {
 
     protected:
 
         virtual void render(const h3d::Renderer&) = 0;
-        virtual void onKeyPressed(SDL_KeyCode key) = 0;
-        virtual void setup(const h3d::OBJLoader &objLoader) = 0;
+        virtual void setup() = 0;
         virtual void onClose() = 0;
+
+        virtual void onMouseMoved(int relX, int relY) {}
+        virtual void onKeyDown(SDL_Keycode key) {}
+        virtual void onKeyUp(SDL_Keycode key) {}
+
         void setTitle(std::string);
         void setSize(uint16_t, uint16_t);
     public:
@@ -107,7 +109,6 @@ namespace h3d {
     private:
         SDL_Window* window;
         SDL_GLContext glContext;
-        OBJLoader objLoader;
         Renderer renderer;
         std::string title;
         uint16_t width;
@@ -119,6 +120,7 @@ namespace h3d {
         clock_t startTime;
         bool showTitle = true;
         bool loaded = false;
+        pthread_t loading_thread;
     };
 
     namespace color {

@@ -135,7 +135,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 }
 
 bool h3d::Hirsch3D::load() {
-    this->setup(this->objLoader);
+    this->setup();
     loaded = true;
     std::cout << GREEN << "[OK] Setup complete " << RESET_CLR << std::endl;
 }
@@ -154,7 +154,7 @@ bool h3d::Hirsch3D::start() {
     while(!close) {
 
             
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -181,7 +181,7 @@ bool h3d::Hirsch3D::start() {
                 this->render(this->renderer);
             }
 
-            if(this->showTitle && this->getCurrentTimeMillies() > (2000 + startpoint)) {
+            if(this->showTitle && this->getCurrentTimeMillies() > (2000 + startpoint) && this->loaded) {
                 this->showTitle = false;
             }
 
@@ -199,11 +199,21 @@ bool h3d::Hirsch3D::start() {
             SDL_GL_SwapWindow(window);
             SDL_Event event;
             while(SDL_PollEvent(&event)) {
+                if(event.type == SDL_KEYDOWN) {
+                    this->onKeyDown(event.key.keysym.sym);
+                }
                 if(event.type == SDL_QUIT) {
                     close = true;
                     std::cout << GREEN << "[OK] Exited Mainloop" << RESET_CLR << std::endl;
                     this->onClose();
                 }
+                if(event.type == SDL_KEYUP) {
+                    this->onKeyUp(event.key.keysym.sym);
+                }
+                if(event.type == SDL_MOUSEMOTION) {
+                    this->onMouseMoved(event.motion.xrel, event.motion.yrel);
+                }
+                
             }
             SDL_Delay(1000/this->fps);
     }

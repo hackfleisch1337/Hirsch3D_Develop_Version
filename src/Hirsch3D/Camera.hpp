@@ -11,7 +11,7 @@ namespace h3d
     public:
         // Perspective camera
         void init(float fov, float width, float height) {
-            projection = glm::perspective((float) glm::radians(fov)/2.0f, width/height, 0.01f, 500.0f);
+            projection = glm::perspective((float) glm::radians(fov)/2.0f, width/height, 0.01f, 1000.0f);
             view = glm::mat4(1.0f);
             pos = glm::vec3(0.0f);
             update();

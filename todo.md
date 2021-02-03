@@ -9,9 +9,12 @@ Schwer:
 <br>
 
 * Licht
+
 * Transparenz
 * Schatten
 * Normalmaps/Materials
+* Multithreading
+
 ---
 * ~~2d texturen rendering~~
 * ~~Sprite Klasse~~

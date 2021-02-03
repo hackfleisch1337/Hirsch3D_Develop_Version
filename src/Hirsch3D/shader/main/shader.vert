@@ -37,5 +37,5 @@ void main() {
     gl_Position = rotation;*/
     v_uv = uv;
     v_normal = mat3(u_model) * in_normal;
-    v_position = vec3(u_view  * vec4(u_position, 1.0f));
+    v_position = vec3(u_view  * vec4(position, 1.0f));
 }
