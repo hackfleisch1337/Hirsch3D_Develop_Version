@@ -14,6 +14,7 @@ Schwer:
 * Schatten
 * Normalmaps/Materials
 * Multithreading
+* .lib kompilieren
 
 ---
 * ~~2d texturen rendering~~

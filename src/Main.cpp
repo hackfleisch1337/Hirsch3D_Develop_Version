@@ -9,10 +9,15 @@ private:
     h3d::FpsCamera camera;
     h3d::Scene scene1;
     h3d::Texture t;
-    bool w,a,s,d,space, shift, strg;
+
+    h3d::Scene2D s2d;
+    h3d::Sprite sp;
+    h3d::Texture ts;
+
+    bool w,a,s,d,space, shift, strg, alt;
 
     void setup() override {
-
+        std::cout << "SET UP" << std::endl;
 
         t.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Diffuse.jpg");
 
@@ -28,15 +33,19 @@ private:
         camera.translate({0,0,5});
         camera.update();
         
-        scene1.load(&camera, 0.1f);
+        scene1.load(&camera, 0.01f);
         //scene1.load2D(8, 4.5);
 
         scene1.addObject(&cube);
         scene1.addObject(&klumpen);
         scene1.addObject(&dummen);
 
-        w=a=s=d=space=shift=strg=false;
+        w=a=s=d=space=shift=strg=alt=false;
        
+        s2d.load2D(1280, 720);
+        ts.load("Hirsch3D.png");
+        sp.load(&ts, 410,-210, 256,144);
+        s2d.addObject(&sp);
 
     }
 
@@ -66,6 +75,9 @@ private:
         if(key == SDLK_LSHIFT) {
             shift = true;
         }
+        if(key == SDLK_LALT) {
+            alt = true;
+        }
     }
 
     void onKeyUp(SDL_Keycode key) override {
@@ -89,6 +101,9 @@ private:
         }
         if(key == SDLK_LSHIFT) {
             shift = false;
+        }
+        if(key == SDLK_LALT) {
+            alt = false;
         }
     }
     float speed = 0.01;
@@ -116,10 +131,15 @@ private:
         }
         if(shift) {
             speed = 0.03;
+        } else if(alt) {
+            speed = 0.003;
         } else speed = 0.01;
 
+
         dummen.rotate(0.1, {0,1,0});
+        dummen.moveInLineOfSight({0,0,-0.01});
         klumpen.rotate(0.2, {0, 1, 2});
+        s2d.render(r);
     }
 
     void onClose() override {
@@ -132,12 +152,11 @@ public:
 
 
 int main(int argc, char** argv) {
-
     Game game;
-    game.init("Hirsch3D Renderengine | OpenGL C++", 1280, 720, HIRSCH3D_NOFLAG);
-    game.setFps(240);
+    game.init("Hirsch3D Renderengine | OpenGL C++", 1920, 1080, HIRSCH3D_FULLSCREEN);
+    game.setFps(180);
     game.load();
     game.start();
-
+    
     return 0;
 }

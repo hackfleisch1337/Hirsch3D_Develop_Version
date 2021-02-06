@@ -22,6 +22,8 @@ uint32_t h3d::Hirsch3D::getCurrentTimeMillies() {
     return (float)(clock() - startTime) / ((clock_t) 1);
 }
 
+
+
 bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uint8_t flags) {
 
     this->startTime = clock();
@@ -107,10 +109,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
         stbi_image_free(textureBuffer);
     }
 
-
-
     hirschShader.load("D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.vert", "D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.frag");
-
 
     Vertex3 t_vertices[] = {
     /*     x    y      z    u   v    normal*/
@@ -134,11 +133,14 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 
 }
 
+
+
 bool h3d::Hirsch3D::load() {
-    this->setup();
-    loaded = true;
+    this->setup(); // Takes a while
+    this->loaded = true;
     std::cout << GREEN << "[OK] Setup complete " << RESET_CLR << std::endl;
 }
+
 
 bool h3d::Hirsch3D::start() {
     clock_t startpoint = clock();

@@ -67,7 +67,6 @@
 namespace h3d {
 
 
-
     class Renderer {
     public:
         void renderObject(const h3d::Object* o) const;
@@ -79,6 +78,8 @@ namespace h3d {
 
         virtual void render(const h3d::Renderer&) = 0;
         virtual void setup() = 0;
+        
+    
         virtual void onClose() = 0;
 
         virtual void onMouseMoved(int relX, int relY) {}
@@ -92,7 +93,7 @@ namespace h3d {
         #define HIRSCH3D_FULLSCREEN 0b00000001
         #define HIRSCH3D_BORDERLESS 0b00000010
         #define HIRSCH3D_MINIMIZED  0b00000100
-
+        
         bool init(std::string title, uint16_t width, uint16_t height, uint8_t flags);
         bool start();
         bool load();
@@ -120,7 +121,6 @@ namespace h3d {
         clock_t startTime;
         bool showTitle = true;
         bool loaded = false;
-        pthread_t loading_thread;
     };
 
     namespace color {

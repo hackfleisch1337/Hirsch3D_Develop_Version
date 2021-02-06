@@ -30,7 +30,7 @@ void main() {
 
     vec3 ambient = vec3(f_color) * u_ambient;
     vec3 deffuse = max(dot(normal, light), 0.0) * vec3(f_color);
-    vec3 specular = pow(max(dot(reflection, view), 0.0), 20.0) * vec3(1.5);
+    vec3 specular = pow(max(dot(reflection, view), 0.0), 20.0) * vec3(2.0) * abs(deffuse);
 
     color = vec4(ambient + deffuse + specular, 1.0);
     
