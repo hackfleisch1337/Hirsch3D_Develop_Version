@@ -7,7 +7,8 @@
                 "D:/SDL2-devel-2.0.12-VC/SDL2-2.0.12/include",
                 "D:/glew-2.1.0/include",
                 "D:/SDL2-devel-2.0.12-VC/SDL2-2.0.12/lib/x86",
-                "D:/glew-2.1.0/lib/Release/Win32"
+                "D:/glew-2.1.0/lib/Release/Win32",
+                "D:/Emanuel/Hirsch3D/src/Hirsch3D/Include"
             ],
             "defines": [
                 "_DEBUG",

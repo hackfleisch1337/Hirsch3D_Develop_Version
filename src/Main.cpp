@@ -1,4 +1,4 @@
-#include "Hirsch3D/Hirsch3D.hpp"
+#include <Hirsch3D/Hirsch3D.hpp>
 
 class Game: public h3d::Hirsch3D {
 
@@ -22,7 +22,7 @@ private:
         t.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Diffuse.jpg");
 
         cube.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, &t);
-        klumpen.loadByPath("obj/zwerg.obj", h3d::color::spring_green, nullptr);
+        klumpen.loadByPath("obj/zwerg.obj", h3d::color::outrageous_orange, nullptr);
         dummen.loadByPath("obj/dummen.obj", h3d::color::cobalt_blue, nullptr);
 
         dummen.moveInLineOfSight({1.5,-2,-1});
