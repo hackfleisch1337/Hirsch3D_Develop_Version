@@ -9,7 +9,7 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
 void h3d::Scene::load(h3d::Camera* camera, float ambient) {
     this->ambient = ambient;
     this->camera = camera;
-    this->shader.load("./src/Hirsch3D/shader/main/shader.vert", "./src/Hirsch3D/shader/main/shader.frag");
+    this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag");
 }
 
 /**
@@ -123,7 +123,7 @@ void h3d::Scene::render(const h3d::Renderer &r) {
 
 void h3d::Scene2D::load2D(float screenWidth, float screenHeight) {
     this->c2d.init(screenWidth, screenHeight);
-    this->load("src/Hirsch3D/shader/2d.vert", "src/Hirsch3D/shader/2d.frag", &c2d);
+    this->load("shader/2d.vert", "shader/2d.frag", &c2d);
 }
 
 void h3d::Scene2D::render(const h3d::Renderer &r) {

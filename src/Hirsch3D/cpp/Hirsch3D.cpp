@@ -31,7 +31,6 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     std::cout << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
               << "**************************************" << std::endl
               << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" 
-              << "OBJ File loader by Robert Smith (Copyright (C) 2016 Robert Smith)" << std::endl
               << std::endl;
 
 
@@ -92,7 +91,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     int textureHeight = 720;
     int bitsPerPixel = 0;
     stbi_set_flip_vertically_on_load(true);
-    auto textureBuffer = stbi_load("src/Hirsch3D/md/Hirsch3D.png", &textureWidth, &textureHeight, &bitsPerPixel, 4);
+    auto textureBuffer = stbi_load("shader/Hirsch3D.png", &textureWidth, &textureHeight, &bitsPerPixel, 4);
 
     glGenTextures(1, &this->tBuffer);
     glBindTexture(GL_TEXTURE_2D, this->tBuffer);
@@ -109,7 +108,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
         stbi_image_free(textureBuffer);
     }
 
-    hirschShader.load("D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.vert", "D:/Emanuel/Hirsch3D/src/Hirsch3D/shader/shader.frag");
+    hirschShader.load("shader/shader.vert", "shader/shader.frag");
 
     Vertex3 t_vertices[] = {
     /*     x    y      z    u   v    normal*/

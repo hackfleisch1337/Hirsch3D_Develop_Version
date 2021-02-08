@@ -39,9 +39,15 @@ void h3d::Texture::loadTtf(uint8_t* ttfBuffer) {
 }
 
 void h3d::Texture::bind() {
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->buffer);
 }
 
 void h3d::Texture::unbind() {
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void h3d::NormalMap::bind() {
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, this->buffer);
 }

@@ -7,26 +7,8 @@
  * @copyright (C) 2021 Emanuel Zache
  *
  * @brief Hirsch3D is a 3D Renderengine based on OpenGl
- * Basic Setup:
- * { @code
- *  #include <Hirsch3D/Hisch3D.hpp>
- *  class Game: public h3d::Hirsch3D {
- *  private:
- *      void setup() override {}
- *      void render(const h3d::Renderer &renderer) override {}
- *      void onClose() override {};
- *  };
- *
- *  int main(int argc, char** argv) {
- *      Game g;
- *      g.init("Title", 1920, 1080, HIRSCH3D_FULLSCREEN | HIRSCH3D_BORDERLESS);
- *      g.setFps(60);
- *      g.load();
- *      g.start();
- *      return 0;
- *  }
- * }
- *
+ * 
+ * Hirsch3D.hpp is the main file
  *
  *
  *
@@ -52,17 +34,17 @@
 #include <GL/glew.h>
 #define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
+#include <ctime>
+
 #include "core/Vertex.hpp"
 #include "core/VertexBuffer.hpp"
 #include "core/Texture.hpp"
 #include "core/Object.hpp"
-#include <ctime>
-
 #include "core/Scene.hpp"
-
 #include "core/Camera.hpp"
-
 #include "core/Text.hpp"
+
+
 
 namespace h3d {
 
@@ -124,13 +106,14 @@ namespace h3d {
     };
 
     namespace color {
-        #define RGB_TO_OPENGL(r,g,b) glm::vec4(r/256, g/256, b/256, 1)
+        #define RGB_TO_OPENGL(r,g,b) glm::vec4(r/255, g/255, b/255, 1)
 
         // RED
         const glm::vec4 red(1.0f, 0.0f, 0.0f, 1.0f);
         const glm::vec4 outrageous_orange = RGB_TO_OPENGL(252.0f, 119.0f, 83.0f);
         const glm::vec4 english_red = RGB_TO_OPENGL(159.0f, 74.0f, 84.0f);
         const glm::vec4 english_violet = RGB_TO_OPENGL(89.0f, 63.0f, 98.0f);
+        const glm::vec4 golden = RGB_TO_OPENGL(207.0f, 181.0f, 59.0f);
 
         // GREEN
         const glm::vec4 green(0.0f, 1.0f, 0.0f, 1.0f);

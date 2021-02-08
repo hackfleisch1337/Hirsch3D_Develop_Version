@@ -22,8 +22,8 @@ private:
         t.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Diffuse.jpg");
 
         cube.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, &t);
-        klumpen.loadByPath("obj/zwerg.obj", h3d::color::outrageous_orange, nullptr);
-        dummen.loadByPath("obj/dummen.obj", h3d::color::cobalt_blue, nullptr);
+        klumpen.loadByPath("obj/sphere2.obj", h3d::color::english_red, nullptr);
+        dummen.loadByPath("obj/dummen.obj", h3d::color::outrageous_orange, nullptr);
 
         dummen.moveInLineOfSight({1.5,-2,-1});
         klumpen.moveInLineOfSight({-1.3,0,0});
@@ -138,7 +138,8 @@ private:
 
         dummen.rotate(0.1, {0,1,0});
         dummen.moveInLineOfSight({0,0,-0.01});
-        klumpen.rotate(0.2, {0, 1, 2});
+        //klumpen.rotate(0.2, {0, 1, 2});
+        //cube.rotate(0.09, {0, 1, 2});
         s2d.render(r);
     }
 
