@@ -107,8 +107,6 @@ namespace h3d {
 
     #include "core/Color.hpp"
 
-
-
 }
 
 

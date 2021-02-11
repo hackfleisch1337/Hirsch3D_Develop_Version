@@ -36,6 +36,7 @@ namespace color {
         const glm::vec4 snow = RGB_TO_OPENGL(255.0f, 250.0f, 250.0f);
         const glm::vec4 dim_gray = RGB_TO_OPENGL(113.0f, 105.0f, 105.0f);
         const glm::vec4 bone = RGB_TO_OPENGL(217.0f, 207.0f, 193.0f);     
+        const glm::vec4 silver = RGB_TO_OPENGL(219.0f, 219.0f, 219.0f);     
     };
 
 #endif

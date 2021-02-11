@@ -20,6 +20,7 @@ uniform float u_ambient;
 uniform float u_shininess;
 uniform float u_specIntensity;
 uniform float u_kD;
+uniform vec3 u_specColor;
 
 void main() {
     
@@ -47,7 +48,13 @@ void main() {
     
     // Material Constants
     float shininess = u_shininess;
-    vec3 specColor = lightColor * vec3(f_color);
+    vec3 specColor;
+    if(u_specColor == vec3(-1,-1,-1)) {
+        specColor = lightColor * vec3(f_color);
+    } else {
+        specColor = lightColor * u_specColor;
+    }
+    
     float specIntensity = u_specIntensity;
     float Kd = u_kD;
 

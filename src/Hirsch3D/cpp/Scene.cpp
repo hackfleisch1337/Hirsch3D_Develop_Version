@@ -89,6 +89,10 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         int u_roughness = glGetUniformLocation(this->shader.getShaderId(), "u_shininess");
         glUniform1f(u_roughness, this->objects.at(i)->getMaterial().roughness);
 
+        int u_specColor = glGetUniformLocation(this->shader.getShaderId(), "u_specColor");
+        glm::vec3 u_specColorVector = this->objects.at(i)->getMaterial().specColor;
+        glUniform3f(u_specColor, u_specColorVector.x, u_specColorVector.y, u_specColorVector.z);
+
         if(this->objects.at(i)->getNormalMap() != nullptr) {
             glUniform1i(isNormalSet, 1);
             this->objects.at(i)->getNormalMap()->bind();

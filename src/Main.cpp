@@ -16,8 +16,8 @@ private:
     h3d::RoughnessMap rn;
     bool w,a,s,d,space, shift, strg, alt;
 
-    h3d::Material matt = {0.8, 1, 10};
-    h3d::Material glass = {12, 1, 500};
+    h3d::Material matt = {1, 1, 10, h3d::color::white};
+    h3d::Material glass = {12, 1, 500, h3d::color::white};
     h3d::Material hirschmaterial = {5, 1, 40};
 
     void setup() override {
@@ -27,8 +27,8 @@ private:
         rn.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Glossiness.png");
 
         hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, &t, nullptr, &rn);
-        dummen2.loadByPath("obj/dummen.obj",h3d::color::english_violet, nullptr, nullptr, nullptr);
-        dummen.loadByPath("obj/dummen.obj", h3d::color::english_violet, nullptr, nullptr, nullptr);
+        dummen2.loadByPath("obj/dummen.obj",h3d::color::celadon_green, nullptr, nullptr, nullptr);
+        dummen.loadByPath("obj/dummen.obj", h3d::color::celadon_green, nullptr, nullptr, nullptr);
 
         dummen.moveInLineOfSight({1.3,0,0});
         dummen2.moveInLineOfSight({-1.3,0,0});
@@ -80,81 +80,59 @@ private:
     }
 
     void onKeyDown(SDL_Keycode key) override {
-        if(key == SDLK_w) {
+        if(key == SDLK_w) 
             w = true;
-        }
-        if(key == SDLK_a) {
+        if(key == SDLK_a) 
             a = true;
-        }
-        if(key == SDLK_s) {
+        if(key == SDLK_s) 
             s = true;
-        }
-        if(key == SDLK_d) {
+        if(key == SDLK_d) 
             d = true;
-        }
-        if(key == SDLK_SPACE) {
+        if(key == SDLK_SPACE) 
             space = true;
-        }
-        if(key == SDLK_LCTRL) {
+        if(key == SDLK_LCTRL) 
             strg = true;
-        }
-        if(key == SDLK_LSHIFT) {
+        if(key == SDLK_LSHIFT) 
             shift = true;
-        }
-        if(key == SDLK_LALT) {
+        if(key == SDLK_LALT) 
             alt = true;
-        }
     }
 
     void onKeyUp(SDL_Keycode key) override {
-        if(key == SDLK_w) {
+        if(key == SDLK_w)
             w = false;
-        }
-        if(key == SDLK_a) {
+        if(key == SDLK_a)
             a = false;
-        }
-        if(key == SDLK_s) {
+        if(key == SDLK_s)
             s = false;
-        }
-        if(key == SDLK_d) {
+        if(key == SDLK_d)
             d = false;
-        }
-        if(key == SDLK_SPACE) {
+        if(key == SDLK_SPACE)
             space = false;
-        }
-        if(key == SDLK_LCTRL) {
+        if(key == SDLK_LCTRL)
             strg = false;
-        }
-        if(key == SDLK_LSHIFT) {
+        if(key == SDLK_LSHIFT)
             shift = false;
-        }
-        if(key == SDLK_LALT) {
+        if(key == SDLK_LALT)
             alt = false;
-        }
     }
     float speed = 0.01;
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
         //cube.rotate(0.5, {1, 1, 1});
 
-        if(w) {
+        if(w)
             camera.moveFront(speed);
-        }
-        if(a) {
+        if(a)
             camera.moveSideways(-speed);
-        }
-        if(s) {
+        if(s)
             camera.moveFront(-speed);
-        }
-        if(d) {
+        if(d)
             camera.moveSideways(speed);
-        }
-        if(space) {
+        if(space)
             camera.moveUp(speed);
-        }
-        if(strg) {
+        if(strg)
             camera.moveUp(-speed);
-        }
         if(shift) {
             speed = 0.03;
         } else if(alt) {
