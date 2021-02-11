@@ -18,8 +18,8 @@ namespace h3d
     public:
         void load(std::string path);
         void loadTtf(uint8_t* ttfBuffer);
-        void bind();
-        void unbind();
+        virtual void bind();
+        virtual void unbind();
         virtual ~Texture(){
             std::cout << GREEN << "[OK] Deleted Texture Buffer Data" << RESET_CLR << std::endl;
             glDeleteTextures(1, &buffer);
@@ -41,8 +41,14 @@ namespace h3d
 
     class NormalMap: public Texture {
     public:
-        void bind();
+        void bind() override;
+        void unbind() override;
+    };
 
+    class RoughnessMap: public Texture {
+    public: 
+        void bind() override;
+        void unbind() override;
     };
 
 } // namespace h3d

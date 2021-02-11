@@ -13,7 +13,7 @@ h3d::IndexBuffer::IndexBuffer(uint32_t* data, uint32_t amountOfIndices) {
     glGenBuffers(1, &this->bufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->bufferId);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->amountOfIndices * sizeof(data[0]), data, GL_STATIC_DRAW);
-    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
 }
 

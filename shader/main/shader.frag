@@ -9,7 +9,17 @@ in vec3 v_position;
 uniform sampler2D u_texture;
 uniform int isSamplerSet;
 
+uniform sampler2D u_normalmap;
+uniform int isNormalSet;
+
+uniform sampler2D u_roughnessmap;
+uniform int isRoughnessSet;
+
 uniform float u_ambient;
+
+uniform float u_shininess;
+uniform float u_specIntensity;
+uniform float u_kD;
 
 void main() {
     
@@ -23,20 +33,29 @@ void main() {
     }
 
     // Light Constants
-    vec3 light = normalize(vec3(0,-0.5,1));
-    vec3 lightColor = vec3(1,1,1);
+    vec3 light = normalize(vec3(0,0,1));
+    vec3 lightColor = vec3(1.0,1.0,1.0);
 
     // Vectors
     vec3 view = normalize(-v_position);
     vec3 normal = normalize(v_normal);
+    if(isNormalSet == 1) {
+        normal = normalize(vec3(texture(u_normalmap, v_uv)) + v_normal);
+    }
     vec3 reflection = reflect(-light, normal);
 
     
     // Material Constants
-    float shininess = 100.0;
-    vec3 specColor = lightColor;
-    float specIntensity = 80;
-    float Kd = 1.0;
+    float shininess = u_shininess;
+    vec3 specColor = lightColor * vec3(f_color);
+    float specIntensity = u_specIntensity;
+    float Kd = u_kD;
+
+    if(isRoughnessSet == 1) {
+        shininess = 1 + shininess * max(log2(texture(u_roughnessmap, v_uv).x) + 1,0.0);
+        specIntensity = max(specIntensity * max(log2(texture(u_roughnessmap, v_uv).x + 1),0.0), 0.1);
+        specColor *= max(log2(texture(u_roughnessmap, v_uv).x) + 1, 0.0);
+    }
 
     // Light 
     vec3 ambient = vec3(f_color) * u_ambient;

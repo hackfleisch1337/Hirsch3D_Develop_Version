@@ -15,7 +15,8 @@ h3d::Object::~Object() {
     }
 }
 
-void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color, h3d::Texture* texture) {
+void h3d::Object::load  (void* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices, glm::vec4 color,
+                        h3d::Texture* texture, h3d::NormalMap* nmap, h3d::RoughnessMap* r) {
     this->amountOfVertices = amountOfVertices;
     this->vertices = new h3d::VertexBuffer(vertices, amountOfVertices);
     this->indices = new h3d::IndexBuffer(indices, amountOfIndices);
@@ -25,11 +26,14 @@ void h3d::Object::load(void* vertices, uint32_t amountOfVertices, uint32_t* indi
     this->position.y = 0;
     this->position.z = 0;
     this->texture = texture;
+    this->nmap = nmap;
+    this->rm = r;
     this->rotationVector = glm::vec3(0.0f,0.0f,0.0f);
+    this->material = {1.0f, 1.0f, 10.0f};
     this->hasLoaded = true;
 }
 
-void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* texture) {
+void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* texture, h3d::NormalMap* nm, h3d::RoughnessMap* r) {
     
     objl::Loader loader;
     if(!loader.LoadFile(path)) {
@@ -50,7 +54,8 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* te
                                 c.Vertices.at(i).Normal.Z
                             });
     }
-    this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, texture);
+    //std::cout << path << "_OBJLOADER::__" << l_vertices.data()[0].x << " " << l_vertices.data()[0].y << " " << l_vertices.data()[0].z << std::endl;
+    this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, texture, nm, r);
 
 }
 
@@ -104,7 +109,7 @@ void h3d::Sprite::load(h3d::Texture* t, float x, float y, float w, float h) {
         {-width,  height, 0.0,  0.0,  1.0,  0,0,0}
     };
     uint32_t indices[] = {0,1,2, 0,2,3};
-    Object::load(v, 4, indices, 6, glm::vec4(1.0f,1.0f,1.0f,1.0f), t);
+    Object::load(v, 4, indices, 6, glm::vec4(1.0f,1.0f,1.0f,1.0f), t, nullptr, nullptr);
     this->move(x,y);
 }
 
@@ -114,4 +119,8 @@ void h3d::Sprite::move(float x, float y) {
 
 void h3d::Sprite::rotate(float degree) {
     Object::rotate(degree, {0,0,1});
+}
+
+void h3d::Object::setMaterial(h3d::Material m) {
+    this->material = m;
 }

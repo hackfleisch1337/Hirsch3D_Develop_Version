@@ -44,10 +44,26 @@ void h3d::Texture::bind() {
 }
 
 void h3d::Texture::unbind() {
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void h3d::NormalMap::bind() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, this->buffer);
+}
+
+void h3d::RoughnessMap::bind() {
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, this->buffer);
+}
+
+void h3d::NormalMap::unbind() {
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void h3d::RoughnessMap::unbind() {
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

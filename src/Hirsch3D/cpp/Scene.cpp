@@ -72,6 +72,39 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         int u_viewUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_view");
         glm::mat4 u_viewU = this->camera->getView();
 
+        // Normalmap
+        int u_normalmap = glGetUniformLocation(this->shader.getShaderId(), "u_normalmap");
+        int isNormalSet = glGetUniformLocation(this->shader.getShaderId(), "isNormalSet");
+
+        int u_roughnessmap = glGetUniformLocation(this->shader.getShaderId(), "u_roughnessmap");
+        int isRoughnessSet = glGetUniformLocation(this->shader.getShaderId(), "isRoughnessSet");
+
+
+        int u_kD = glGetUniformLocation(this->shader.getShaderId(), "u_kD");
+        glUniform1f(u_kD, this->objects.at(i)->getMaterial().kD);
+
+        int u_kS = glGetUniformLocation(this->shader.getShaderId(), "u_specIntensity");
+        glUniform1f(u_kS, this->objects.at(i)->getMaterial().kS);
+
+        int u_roughness = glGetUniformLocation(this->shader.getShaderId(), "u_shininess");
+        glUniform1f(u_roughness, this->objects.at(i)->getMaterial().roughness);
+
+        if(this->objects.at(i)->getNormalMap() != nullptr) {
+            glUniform1i(isNormalSet, 1);
+            this->objects.at(i)->getNormalMap()->bind();
+            glUniform1i(u_normalmap, 1);
+        } else {
+            glUniform1i(isNormalSet, 0);
+        }
+
+        if(this->objects.at(i)->getRoughnessMap() != nullptr) {
+            glUniform1i(isRoughnessSet, 1);
+            this->objects.at(i)->getRoughnessMap()->bind();
+            glUniform1i(u_roughnessmap, 2);
+        } else {
+            glUniform1i(isRoughnessSet, 0);
+        }
+
         // Set uniforms
         glUniform4f(u_colorUniformLocation, c.r, c.g, c.b, c.a);
         glUniformMatrix4fv(u_modelUniformLocation, 1, GL_FALSE, &m[0][0]);
@@ -116,6 +149,12 @@ void h3d::Scene::render(const h3d::Renderer &r) {
 
         if(this->objects.at(i)->getTexture() != nullptr)
             this->objects.at(i)->getTexture()->unbind(); // unbind texture if used
+        if(this->objects.at(i)->getNormalMap() != nullptr) {
+            this->objects.at(i)->getNormalMap()->unbind();
+        }
+        if(this->objects.at(i)->getRoughnessMap() != nullptr) {
+            this->objects.at(i)->getRoughnessMap()->unbind();
+        }
     }
     
     this->shader.unbind(); // unbind scene shader

@@ -119,7 +119,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     };
     uint32_t t_indices[] = {0, 1, 2, 0, 2, 3};
 
-    titleScreen.load(t_vertices, 4, t_indices, 6, glm::vec4(1,1,1,1), nullptr);
+    titleScreen.load(t_vertices, 4, t_indices, 6, glm::vec4(1,1,1,1), nullptr, nullptr, nullptr);
     int textureUniformLocation = glGetUniformLocation(hirschShader.getShaderId(), "u_texture");
 	if(!textureUniformLocation != -1) {
 		glUniform1i(textureUniformLocation, 0);
