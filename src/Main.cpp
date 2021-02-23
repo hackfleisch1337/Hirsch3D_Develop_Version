@@ -6,6 +6,7 @@ private:
     h3d::Object hirsch;
     h3d::Object dummen2;
     h3d::Object dummen;
+
     h3d::FpsCamera camera;
     h3d::Scene scene1;
     h3d::Texture t;
@@ -14,21 +15,29 @@ private:
     h3d::Sprite sp;
     h3d::Texture ts;
     h3d::RoughnessMap rn;
+    h3d::NormalMap nm;
     bool w,a,s,d,space, shift, strg, alt;
 
     h3d::Material matt = {1, 1, 10, h3d::color::white};
     h3d::Material glass = {12, 1, 500, h3d::color::white};
     h3d::Material hirschmaterial = {5, 1, 40};
 
+    h3d::Object o;
+    h3d::Object o2;
+    h3d::Texture ot;
+    h3d::NormalMap on;
+
     void setup() override {
         std::cout << "SETUP..." << std::endl;
 
         t.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Diffuse.jpg");
         rn.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Glossiness.png");
+        nm.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Normal.jpg");
 
-        hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, &t, nullptr, &rn);
-        dummen2.loadByPath("obj/dummen.obj",h3d::color::celadon_green, nullptr, nullptr, nullptr);
-        dummen.loadByPath("obj/dummen.obj", h3d::color::celadon_green, nullptr, nullptr, nullptr);
+        hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, nullptr, &nm, nullptr);
+        dummen2.loadByPath("obj/dummen.obj",h3d::color::dark_gray, nullptr, nullptr, nullptr);
+        dummen.loadByPath("obj/dummen.obj", h3d::color::dark_gray, nullptr, nullptr, nullptr);
+
 
         dummen.moveInLineOfSight({1.3,0,0});
         dummen2.moveInLineOfSight({-1.3,0,0});
@@ -37,17 +46,36 @@ private:
         dummen2.setMaterial(glass);
         hirsch.setMaterial(hirschmaterial);
 
+        float width = 1.0f;
+        float height = 1.0f;
+        h3d::Vertex3 vo[] = {
+             {-width, -height, 0.0,  0.0,  0.0,  0,0,1},
+            {width, -height,  0.0,  1.0,  0.0,  0,0,1},
+            {width,  height,  0.0,  1.0,  1.0,  0,0,1},
+            {-width,  height, 0.0,  0.0,  1.0,  0,0,1}
+        };
+        uint32_t indices[] = {0,1,2, 0,2,3};
+        ot.load("obj/188.JPG");
+        on.load("obj/188_norm.JPG");
+        o.load(vo, 4, indices, 6, h3d::color::english_red, &ot, &on, nullptr);
+        o2.load(vo, 4, indices, 6, h3d::color::english_red, &ot, nullptr, nullptr);
+        o.rotate(-30, {1,0,0});
+        o.rotate(-70, {0,1,0});
+        
+        o2.moveInLineOfSight({2,0,0});
+        o2.rotate(-30, {1,0,0});
+        o2.rotate(-70, {0,1,0});
+        
         camera.initFpsCamera(100, 1280, 720);
         camera.translate({0,0,5});
         camera.update();
         
         scene1.load(&camera, 0.02f);
-        //scene1.load2D(8, 4.5);
-
-        scene1.addObject(&hirsch);
-        scene1.addObject(&dummen2);
-        scene1.addObject(&dummen);
-
+        //scene1.addObject(&hirsch);
+        //scene1.addObject(&dummen2);
+        //scene1.addObject(&dummen);
+        scene1.addObject(&o);
+        scene1.addObject(&o2);
         w=a=s=d=space=shift=strg=alt=false;
 
         s2d.load2D(1280, 720);
@@ -75,7 +103,7 @@ private:
 */
     }
 
-    void onMouseMoved(int relX, int relY) override {
+    void onMouseMoved(int relX, int relY, glm::vec2 mouse) override {
         camera.rotate(relX, relY);
     }
 
@@ -142,7 +170,9 @@ private:
 
         dummen.rotate(0.13, {0,1,0});
         dummen2.rotate(0.13, {0, 1, 0});
-        hirsch.rotate(0.15, {0, 1, 0});
+        hirsch.rotate(0.15, {0.0, 1.0, 0.0});
+        o.rotate(0.1, {0,0,1});
+        o2.rotate(0.1, {0,0,1});
         s2d.render(r);        
     }
 

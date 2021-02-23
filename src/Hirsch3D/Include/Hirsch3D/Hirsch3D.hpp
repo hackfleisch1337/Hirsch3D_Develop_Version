@@ -3,7 +3,7 @@
  * @ref Hirsch3d/core
  *
  * @author Emanuel Zache
- * @version 0.3.7
+ * @version 0.9.1
  * @copyright (C) 2021 Emanuel Zache
  *
  * @brief Hirsch3D is a 3D Renderengine based on OpenGl
@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-#define HIRSCH3D_VERSION "0.8.6"
+#define HIRSCH3D_VERSION "0.9.1"
 #define YELLOW "\033[93m"
 #define RED "\033[91m"
 #define GREEN "\033[92m"
@@ -36,9 +36,11 @@
 #include <SDL/SDL.h>
 #include <ctime>
 
+// Hirsch3D core
 #include "core/Vertex.hpp"
 #include "core/VertexBuffer.hpp"
 #include "core/Texture.hpp"
+#include "core/Light.hpp"
 #include "core/Object.hpp"
 #include "core/Scene.hpp"
 #include "core/Camera.hpp"
@@ -60,11 +62,9 @@ namespace h3d {
 
         virtual void render(const h3d::Renderer&) = 0;
         virtual void setup() = 0;
-        
-    
         virtual void onClose() = 0;
 
-        virtual void onMouseMoved(int relX, int relY) {}
+        virtual void onMouseMoved(int relX, int relY, glm::vec2 mouse) {}
         virtual void onKeyDown(SDL_Keycode key) {}
         virtual void onKeyUp(SDL_Keycode key) {}
 

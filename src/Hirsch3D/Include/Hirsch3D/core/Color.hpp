@@ -3,7 +3,8 @@
 #include "glm/glm/glm.hpp"
 
 namespace color {
-        #define RGB_TO_OPENGL(r,g,b) glm::vec4((float)r/255,(float) g/255, (float)b/255, 1)
+        #define RGB_TO_OPENGL(r,g,b) glm::vec4((float)r/255,(float) g/255, (float)b/255, 1.0f)
+        #define OPENGL_TO_RGB(r,g,b) glm::vec4((int) (r*255), (int) (g*255), (int) (b*255), 1.0f);
 
         // RED
         const glm::vec4 red(1.0f, 0.0f, 0.0f, 1.0f);
@@ -30,6 +31,7 @@ namespace color {
         // BLACK
         const glm::vec4 black(0.0f, 0.0f, 0.0f, 1.0f);
         const glm::vec4 dark_purple = RGB_TO_OPENGL(28.0f, 1.0f, 24.0f);
+        const glm::vec4 dark_gray = RGB_TO_OPENGL(15.0f, 15.0f, 15.0f);
 
         // WHITE
         const glm::vec4 white(1.0f, 1.0f, 1.0f, 1.0f);

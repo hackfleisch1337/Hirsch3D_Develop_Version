@@ -28,6 +28,11 @@ void h3d::Scene::addObject(h3d::Object* o) {
     }
     this->objects.push_back(o);
 }
+
+void h3d::Scene::addLight(h3d::Light* l) {
+    this->lights.push_back(l);
+}
+
 /**
  * @param r The h3d::Renderer r object
  *
@@ -117,6 +122,7 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glUniformMatrix4fv(u_invModelViewUniformLocation, 1, GL_FALSE, &invMv[0][0]);
         glUniformMatrix4fv(uniformU_Model, 1, GL_FALSE, &u_modelU[0][0]);
         glUniformMatrix4fv(u_viewUniformLocation, 1, GL_FALSE, &u_viewU[0][0]);
+
         // Bind texture if available
         if(this->objects.at(i)->getTexture() != nullptr)
             this->objects.at(i)->getTexture()->bind();

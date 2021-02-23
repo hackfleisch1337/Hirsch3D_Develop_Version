@@ -1,6 +1,6 @@
 #include "../Include/Hirsch3D/core/Object.hpp"
 #include "../Include/OBJ_Loader.h"
-
+#include <cmath>
 #ifndef GREEN
 #define GREEN "\033[92m"
 #define RESET_CLR "\x1B[0m"
@@ -59,19 +59,28 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* te
 
 }
 
+
+/**
+ * Makes the Object move relative to
+ * the coordinate axes instead of their
+ * viewing direction.
+ * 
+ */
+
 void h3d::Object::move(glm::vec3 d) {
 
-    glm::vec3 r = rotationVector;
-    glm::vec3 dnorm = glm::normalize(d);
-    glm::vec3 dabs = glm::abs(d);
+    float xR = rotationVector.x;
+    float yR = rotationVector.y;
+    float zR = rotationVector.z;
+    
+    glm::mat4 rm = glm::rotate(glm::mat4(1.0f), glm::radians(xR), {1,0,0});
+    rm = glm::rotate(rm, glm::radians(yR), {0,1,0});
+    rm = glm::rotate(rm, glm::radians(zR), {0,0,1});
 
-    glm::vec3 rnorm = glm::normalize(r);
+    glm::vec4 d_new = glm::vec4(d,1.0f) * rm;
+    glm::vec3 vecR = glm::vec3(d_new);
 
-    float angle = dnorm.x * rnorm.x + dnorm.y * rnorm.y + dnorm.z * rnorm.z;
-
-    glm::vec4 d2 = glm::rotate(glm::mat4(1.0f), angle, glm::cross(rnorm, dnorm)) * glm::vec4(d, 1.0f);
-
-    this->modelMatrix = glm::translate(this->modelMatrix, {d2.x, d2.y, d2.z});
+    this->modelMatrix = glm::translate(this->modelMatrix, vecR);
     this->position += d;
 }
 

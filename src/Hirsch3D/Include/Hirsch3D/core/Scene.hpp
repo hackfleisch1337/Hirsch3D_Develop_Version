@@ -25,6 +25,7 @@ namespace h3d
         void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera, float ambient = 0.1f);
         void load(h3d::Camera* camera, float ambient = 0.1f);
         void addObject(h3d::Object* o);
+        void addLight(h3d::Light* l);
         // void addLight(h3d::PointLight &p);
         virtual void render(const h3d::Renderer &r);
         float ambient;
@@ -32,6 +33,7 @@ namespace h3d
     protected:
         h3d::Shader shader;
         std::vector<h3d::Object*> objects;
+        std::vector<h3d::Light*> lights;
         h3d::Camera* camera;
     };
 

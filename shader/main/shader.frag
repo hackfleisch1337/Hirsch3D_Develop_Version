@@ -2,10 +2,14 @@
 
 layout(location = 0) out vec4 color;
 
-uniform vec4 u_color;
+
 in vec2 v_uv;
 in vec3 v_normal;
 in vec3 v_position;
+in mat4 v_model;
+
+uniform vec4 u_color;
+
 uniform sampler2D u_texture;
 uniform int isSamplerSet;
 
@@ -22,9 +26,11 @@ uniform float u_specIntensity;
 uniform float u_kD;
 uniform vec3 u_specColor;
 
+// Light
+
 void main() {
     
-    vec4 f_color = vec4(0.0f);
+    vec4 f_color = vec4(0.0);
 
     if(isSamplerSet != 1) {
         f_color = u_color;
@@ -32,16 +38,26 @@ void main() {
         vec4 tColor = texture(u_texture, v_uv);
         f_color = tColor;
     }
+    
+    // Scene ambient constant lightning
+    vec3 ambient = vec3(f_color) * u_ambient;
+
 
     // Light Constants
+    float brightness = 1.0;
     vec3 light = normalize(vec3(0,0,1));
-    vec3 lightColor = vec3(1.0,1.0,1.0);
+    vec3 lightColor = vec3(1.0, 1.0, 1.0) * brightness;
 
     // Vectors
+
     vec3 view = normalize(-v_position);
     vec3 normal = normalize(v_normal);
     if(isNormalSet == 1) {
-        normal = normalize(vec3(texture(u_normalmap, v_uv)) + v_normal);
+        vec3 uv_normal = vec3(texture(u_normalmap, v_uv));
+        uv_normal.x = uv_normal.x * 2 - 1;
+        uv_normal.y = uv_normal.y * 2 - 1;
+        uv_normal.z = uv_normal.z * 2 - 1;
+        normal =  normalize(mat3(v_model) * uv_normal);
     }
     vec3 reflection = reflect(-light, normal);
 
@@ -65,7 +81,7 @@ void main() {
     }
 
     // Light 
-    vec3 ambient = vec3(f_color) * u_ambient;
+    
     vec3 deffuse = max(dot(normal, light), 0.0) * vec3(f_color);
     vec3 specular = pow(max(dot(reflection, view), 0.0), shininess) * specColor * abs(deffuse);
 

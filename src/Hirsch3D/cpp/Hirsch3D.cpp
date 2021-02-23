@@ -212,7 +212,7 @@ bool h3d::Hirsch3D::start() {
                     this->onKeyUp(event.key.keysym.sym);
                 }
                 if(event.type == SDL_MOUSEMOTION) {
-                    this->onMouseMoved(event.motion.xrel, event.motion.yrel);
+                    this->onMouseMoved(event.motion.xrel, event.motion.yrel, glm::vec2{event.motion.x, event.motion.y});
                 }
                 
             }
