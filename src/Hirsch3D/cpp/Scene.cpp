@@ -1,7 +1,7 @@
 #include "../Include/Hirsch3D/core/Scene.hpp"
 
-void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, h3d::Camera* camera, float ambient) {
-    this->shader.load(vertexShaderSrc, fragmentShaderSrc);
+void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, std::string geometryShaderSrc,h3d::Camera* camera, float ambient) {
+    this->shader.load(vertexShaderSrc, fragmentShaderSrc, geometryShaderSrc);
     this->camera = camera;
     this->ambient = ambient;
 }
@@ -9,7 +9,7 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
 void h3d::Scene::load(h3d::Camera* camera, float ambient) {
     this->ambient = ambient;
     this->camera = camera;
-    this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag");
+    this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag", HIRSCH3D_NO_GEOMETRY_SHADER);
 }
 
 /**
@@ -46,7 +46,27 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     // uniform float u_ambient
     int u_ambientUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_ambient");
     glUniform1f(u_ambientUniformLocation, this->ambient);
+/*
+    int u_amountOfLights = glGetUniformLocation(this->shader.getShaderId(), "u_amountOfLights");
+    int u_light_pos = glGetUniformLocation(this->shader.getShaderId(), "u_light_pos");
+    int u_type = glGetUniformLocation(this->shader.getShaderId(), "u_light_type");
+    int u_light_color = glGetUniformLocation(this->shader.getShaderId(), "u_light_color");
+    int u_brightness = glGetUniformLocation(this->shader.getShaderId(), "u_brightness");
+    
+    glUniform1i(u_amountOfLights, this->lights.size());
 
+    std::vector<glm::vec3> lightPositions;
+    std::vector<glm::vec3> lightColors;
+    std::vector<float> lightBrightness;
+    std::vector<int> lightTypes;
+
+    for(int i = 0; i < this->lights.size(); i++) {
+        lightPositions.push_back(this->lights.at(i)->getPosition());
+        lightColors.push_back(this->lights.at(i)->getColor());
+        lightBrightness.push_back(this->lights.at(i)->getBrightness());
+        lightTypes.push_back(this->lights.at(i)->getLightType());
+    }
+*/
     for(int i = 0; i < this->objects.size(); i++) {
 
         // uniform mat4 u_modelViewProj
@@ -172,7 +192,7 @@ void h3d::Scene::render(const h3d::Renderer &r) {
 
 void h3d::Scene2D::load2D(float screenWidth, float screenHeight) {
     this->c2d.init(screenWidth, screenHeight);
-    this->load("shader/2d.vert", "shader/2d.frag", &c2d);
+    this->load("shader/2d.vert", "shader/2d.frag", "nogeometryshader", &c2d);
 }
 
 void h3d::Scene2D::render(const h3d::Renderer &r) {

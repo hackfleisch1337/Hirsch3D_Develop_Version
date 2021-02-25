@@ -5,8 +5,10 @@
 #include <cstdio>
 #include <iostream>
 
-bool h3d::Shader::load(std::string vertexSrc, std::string fragmentSrc) {
-    this->shaderId = createShader(vertexSrc.data(), fragmentSrc.data());
+bool h3d::Shader::load(std::string vertexSrc, std::string fragmentSrc, std::string geometryShader) {
+    if(geometryShader == "nogeometryshader") useGeometryShader = false;
+    else useGeometryShader = true;
+    this->shaderId = createShader(vertexSrc.data(), fragmentSrc.data(), geometryShader.data());
     this->hasLoaded = true;
     return true;
 }
@@ -72,21 +74,38 @@ std::string h3d::Shader::parse(const char* filename) {
     return contents;
 }
 
-GLuint h3d::Shader::createShader(const char* vertexShaderFile, const char* fragmentShaderFile) {
+GLuint h3d::Shader::createShader(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile) {
     std::string vertexShaderSrc = parse(vertexShaderFile).data();
     std::string fragmentShaderSrc = parse(fragmentShaderFile).data();
+    
+    std::string geometryShaderSrc;
+    if(useGeometryShader)
+    geometryShaderSrc = parse(geometryShaderFile).data();
     GLuint program = glCreateProgram();
     GLuint vs = compile(vertexShaderSrc, GL_VERTEX_SHADER);
     GLuint fs = compile(fragmentShaderSrc, GL_FRAGMENT_SHADER);
+    GLuint gs = 0; 
+    if(useGeometryShader)
+    gs = compile(geometryShaderSrc, GL_GEOMETRY_SHADER);
 
     glAttachShader(program, vs);
+    
+    if(useGeometryShader)
+        glAttachShader(program, gs);
     glAttachShader(program, fs);
-    glLinkProgram(program);
 
+    glLinkProgram(program);
     glDetachShader(program, vs);
     glDetachShader(program, fs);
     glDeleteShader(vs);
     glDeleteShader(fs);
+
+    if(useGeometryShader)
+    glDetachShader(program, gs);
+    if(useGeometryShader)
+    glDeleteShader(gs);
+   
+    
 
     return program;
 }

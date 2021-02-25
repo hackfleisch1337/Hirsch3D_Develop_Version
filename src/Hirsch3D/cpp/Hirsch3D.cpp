@@ -108,7 +108,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
         stbi_image_free(textureBuffer);
     }
 
-    hirschShader.load("shader/shader.vert", "shader/shader.frag");
+    hirschShader.load("shader/shader.vert", "shader/shader.frag", "nogeometryshader");
 
     Vertex3 t_vertices[] = {
     /*     x    y      z    u   v    normal*/

@@ -26,11 +26,31 @@ uniform float u_specIntensity;
 uniform float u_kD;
 uniform vec3 u_specColor;
 
+// TBN Matrix
+/*
+#define MAX_LIGHTS 10
+uniform int u_amountOfLights;
+uniform vec3 u_light_pos[MAX_LIGHTS];
+uniform vec3 u_light_color[MAX_LIGHTS];
+uniform int u_light_type[MAX_LIGHTS];
+uniform float brightness[MAX_LIGHTS];
+*/
+
+
+
+in vec3 gf_T;
+in vec3 gf_B;
+in vec3 gf_N;
+in vec3 gf_Pos;
+in vec2 gf_TexCoord;
+
+
 // Light
 
 void main() {
     
     vec4 f_color = vec4(0.0);
+    mat3 tbn = mat3(gf_T, gf_B, gf_N);
 
     if(isSamplerSet != 1) {
         f_color = u_color;
@@ -59,7 +79,7 @@ void main() {
         uv_normal.z = uv_normal.z * 2 - 1;
         normal =  normalize(mat3(v_model) * uv_normal);
     }
-    vec3 reflection = reflect(-light, normal);
+    
 
     
     // Material Constants
@@ -81,7 +101,7 @@ void main() {
     }
 
     // Light 
-    
+    vec3 reflection = reflect(-light, normal);
     vec3 deffuse = max(dot(normal, light), 0.0) * vec3(f_color);
     vec3 specular = pow(max(dot(reflection, view), 0.0), shininess) * specColor * abs(deffuse);
 

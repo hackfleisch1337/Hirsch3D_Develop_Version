@@ -4,8 +4,6 @@ class Game: public h3d::Hirsch3D {
 
 private:
     h3d::Object hirsch;
-    h3d::Object dummen2;
-    h3d::Object dummen;
 
     h3d::FpsCamera camera;
     h3d::Scene scene1;
@@ -14,6 +12,7 @@ private:
     h3d::Scene2D s2d;
     h3d::Sprite sp;
     h3d::Texture ts;
+
     h3d::RoughnessMap rn;
     h3d::NormalMap nm;
     bool w,a,s,d,space, shift, strg, alt;
@@ -24,8 +23,10 @@ private:
 
     h3d::Object o;
     h3d::Object o2;
+    h3d::Object o3;
     h3d::Texture ot;
     h3d::NormalMap on;
+    h3d::RoughnessMap orougness;
 
     void setup() override {
         std::cout << "SETUP..." << std::endl;
@@ -34,16 +35,9 @@ private:
         rn.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Glossiness.png");
         nm.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Normal.jpg");
 
-        hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, nullptr, &nm, nullptr);
-        dummen2.loadByPath("obj/dummen.obj",h3d::color::dark_gray, nullptr, nullptr, nullptr);
-        dummen.loadByPath("obj/dummen.obj", h3d::color::dark_gray, nullptr, nullptr, nullptr);
+        hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, &t, nullptr, &rn);
+        hirsch.moveInLineOfSight({-2,0,0});
 
-
-        dummen.moveInLineOfSight({1.3,0,0});
-        dummen2.moveInLineOfSight({-1.3,0,0});
-    
-        dummen.setMaterial(matt);
-        dummen2.setMaterial(glass);
         hirsch.setMaterial(hirschmaterial);
 
         float width = 1.0f;
@@ -55,27 +49,29 @@ private:
             {-width,  height, 0.0,  0.0,  1.0,  0,0,1}
         };
         uint32_t indices[] = {0,1,2, 0,2,3};
-        ot.load("obj/188.JPG");
-        on.load("obj/188_norm.JPG");
-        o.load(vo, 4, indices, 6, h3d::color::english_red, &ot, &on, nullptr);
-        o2.load(vo, 4, indices, 6, h3d::color::english_red, &ot, nullptr, nullptr);
-        o.rotate(-30, {1,0,0});
-        o.rotate(-70, {0,1,0});
-        
+        ot.load("obj/154.JPG");
+        on.load("obj/154_norm.JPG");
+        orougness.load("obj/154_reflection.JPG");
+        o.load(vo, 4, indices, 6, h3d::color::silver, &ot, &on, &orougness);
+        o.setMaterial({4,1,10, h3d::color::white});
+        o2.load(vo, 4, indices, 6, h3d::color::english_red, &ot, nullptr, &orougness);
+        o2.setMaterial({4,1,10, h3d::color::white});
+        o3.load(vo, 4, indices, 6, h3d::color::english_red, nullptr, nullptr, &orougness);
+        o3.setMaterial({4,1,10, h3d::color::white});
         o2.moveInLineOfSight({2,0,0});
-        o2.rotate(-30, {1,0,0});
-        o2.rotate(-70, {0,1,0});
+        o3.moveInLineOfSight({4,0,0});
+    
         
         camera.initFpsCamera(100, 1280, 720);
         camera.translate({0,0,5});
         camera.update();
-        
+
         scene1.load(&camera, 0.02f);
-        //scene1.addObject(&hirsch);
-        //scene1.addObject(&dummen2);
-        //scene1.addObject(&dummen);
+        
         scene1.addObject(&o);
         scene1.addObject(&o2);
+        scene1.addObject(&o3);
+        scene1.addObject(&hirsch);
         w=a=s=d=space=shift=strg=alt=false;
 
         s2d.load2D(1280, 720);
@@ -168,11 +164,10 @@ private:
         } else speed = 0.01;
 
 
-        dummen.rotate(0.13, {0,1,0});
-        dummen2.rotate(0.13, {0, 1, 0});
         hirsch.rotate(0.15, {0.0, 1.0, 0.0});
-        o.rotate(0.1, {0,0,1});
-        o2.rotate(0.1, {0,0,1});
+        o.setRotation({o.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o.getRotation().z});
+        o2.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
+        o3.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
         s2d.render(r);        
     }
 

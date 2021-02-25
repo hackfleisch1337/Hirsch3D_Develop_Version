@@ -30,6 +30,7 @@ namespace h3d
         }
         glm::mat4 getMatrix() {return modelMatrix;}
         void rotate(float degree, glm::vec3 direction);
+        void setRotation(glm::vec3 r);
         glm::vec4 color;
         bool loaded() const {return hasLoaded;}
         void move(glm::vec3 d);
@@ -56,7 +57,6 @@ namespace h3d
         h3d::RoughnessMap* rm;
         h3d::Material material;
     };
-
 
     class Sprite: public h3d::Object {
 

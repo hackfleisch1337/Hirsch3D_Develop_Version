@@ -1,8 +1,9 @@
 #include "../Include/Hirsch3D/core/Light.hpp"
 
-void h3d::Light::init(glm::vec3 p, glm::vec3 c) {
+void h3d::Light::init(glm::vec3 p, glm::vec3 c, float b) {
     this->position = p;
     this->color = c;
+    this->brightness = b;
 }
 void h3d::Light::setColor(glm::vec3 c) {
     this->color = c;

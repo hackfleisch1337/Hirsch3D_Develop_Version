@@ -98,7 +98,14 @@ void h3d::Object::rotate(float degree, glm::vec3 direction) {
     this->rotationVector += glm::normalize(direction) * degree;
 }
 
-
+void h3d::Object::setRotation(glm::vec3 r) {
+    float x = r.x - this->rotationVector.x;
+    float y = r.y - this->rotationVector.y;
+    float z = r.z - this->rotationVector.z;
+    this->rotate(x,{1,0,0});
+    this->rotate(y,{0,1,0});
+    this->rotate(z,{0,0,1});
+}
 
 void h3d::Sprite::load(h3d::Texture* t, float x, float y, float w, float h) {
 
@@ -132,4 +139,13 @@ void h3d::Sprite::rotate(float degree) {
 
 void h3d::Object::setMaterial(h3d::Material m) {
     this->material = m;
+}
+
+
+void calculateTangents(h3d::Vertex3* vertices, uint32_t amountOfVertices, uint32_t* indices, uint32_t amountOfIndices) {
+    for(int i = 0; i < amountOfIndices/3;i+=3) {
+        h3d::Vertex3 a = vertices[indices[i]];
+        h3d::Vertex3 b = vertices[indices[i+1]];
+        h3d::Vertex3 c = vertices[indices[i+2]];
+    }
 }
