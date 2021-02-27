@@ -35,10 +35,10 @@ private:
         rn.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Glossiness.png");
         nm.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Normal.jpg");
 
-        hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::outrageous_orange, &t, nullptr, &rn);
+        hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::cobalt_blue, nullptr, nullptr, nullptr);
         hirsch.moveInLineOfSight({-2,0,0});
 
-        hirsch.setMaterial(hirschmaterial);
+        hirsch.setMaterial(glass);
 
         float width = 1.0f;
         float height = 1.0f;
@@ -75,7 +75,7 @@ private:
         w=a=s=d=space=shift=strg=alt=false;
 
         s2d.load2D(1280, 720);
-        ts.load("Hirsch3D.png");
+        ts.load("Hirsch3D_t.png");
         sp.load(&ts, 520,-290, 128,72);
         s2d.addObject(&sp);
 

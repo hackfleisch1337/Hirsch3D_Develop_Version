@@ -9,7 +9,7 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
 void h3d::Scene::load(h3d::Camera* camera, float ambient) {
     this->ambient = ambient;
     this->camera = camera;
-    this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag", HIRSCH3D_NO_GEOMETRY_SHADER);
+    this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag", "./shader/main/shader.geo");
 }
 
 /**

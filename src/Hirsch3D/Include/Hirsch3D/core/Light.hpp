@@ -37,18 +37,6 @@ namespace h3d
             return 2;
         }
     };
-    struct UniformLight {
-        float x;
-        float y;
-        float z;
-
-        float r;
-        float g;
-        float b;
-
-        float brightness;
-        int type;
-    };
 } // namespace h3d
 
 

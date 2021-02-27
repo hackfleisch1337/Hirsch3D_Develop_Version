@@ -14,26 +14,24 @@ uniform mat4 u_view;
 uniform mat4 u_modelViewProj; // = proj * view * model
 uniform mat4 u_modelView; // = view * model
 uniform mat4 u_invModelView;
-
+/*
 out vec2 v_uv;
 out vec3 v_normal;
 out vec3 v_position;
 out mat4 v_model;
-
+*/
 out vec3 vg_N;
 out vec3 vg_Pos;
 out vec2 vg_TexCoord;
+out mat4 vg_model;
 
 void main() {
 
     gl_Position = u_modelViewProj * vec4(position, 1.0f);
 
-    v_uv = uv;
-    v_normal = mat3(u_model) * in_normal;
-    v_position = vec3(u_view  * vec4(position, 1.0f));
-    v_model = u_model;
-
-    vg_N = mat3(u_model) * in_normal;
-    vg_Pos = vec3(u_modelViewProj * vec4(position,1.0));
     vg_TexCoord = uv;
+    vg_N = mat3(u_model) * in_normal;
+    vg_Pos = vec3(u_view  * vec4(position, 1.0f));
+    vg_model = u_model;
+
 }

@@ -27,30 +27,25 @@ uniform float u_kD;
 uniform vec3 u_specColor;
 
 // TBN Matrix
-/*
+
 #define MAX_LIGHTS 10
-uniform int u_amountOfLights;
-uniform vec3 u_light_pos[MAX_LIGHTS];
-uniform vec3 u_light_color[MAX_LIGHTS];
-uniform int u_light_type[MAX_LIGHTS];
-uniform float brightness[MAX_LIGHTS];
-*/
 
 
 
 in vec3 gf_T;
 in vec3 gf_B;
-in vec3 gf_N;
+/*
+
 in vec3 gf_Pos;
 in vec2 gf_TexCoord;
-
-
+in mat4 gf_model;
+*/
 // Light
 
 void main() {
     
     vec4 f_color = vec4(0.0);
-    mat3 tbn = mat3(gf_T, gf_B, gf_N);
+    mat3 tbn = mat3(gf_T, gf_B, v_normal);
 
     if(isSamplerSet != 1) {
         f_color = u_color;
@@ -74,10 +69,8 @@ void main() {
     vec3 normal = normalize(v_normal);
     if(isNormalSet == 1) {
         vec3 uv_normal = vec3(texture(u_normalmap, v_uv));
-        uv_normal.x = uv_normal.x * 2 - 1;
-        uv_normal.y = uv_normal.y * 2 - 1;
-        uv_normal.z = uv_normal.z * 2 - 1;
-        normal =  normalize(mat3(v_model) * uv_normal);
+        uv_normal = normalize(uv_normal * 2.0 - 1.0);
+        normal =  normalize(mat3(v_model) * uv_normal + v_normal);
     }
     
 
