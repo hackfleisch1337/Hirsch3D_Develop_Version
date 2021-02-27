@@ -29,10 +29,21 @@ void h3d::Scene::addObject(h3d::Object* o) {
     this->objects.push_back(o);
 }
 
-void h3d::Scene::addLight(h3d::Light* l) {
-    this->lights.push_back(l);
+void h3d::Scene::addDirectionalLight(h3d::DirectionalLight l) {
+    if(this->dlights.size() < MAX_LIGHTS_) {
+        this->dlights.push_back(l);
+    }
 }
-
+void h3d::Scene::addPointLight(h3d::PointLight l) {
+    if(this->plights.size() < MAX_LIGHTS_) {
+        this->plights.push_back(l);
+    }
+}
+void h3d::Scene::addSpotLight(h3d::SpotLight l) {
+    if(this->slights.size() < MAX_LIGHTS_) {
+        this->slights.push_back(l);
+    }
+}
 /**
  * @param r The h3d::Renderer r object
  *
@@ -40,33 +51,86 @@ void h3d::Scene::addLight(h3d::Light* l) {
  *
  */
 void h3d::Scene::render(const h3d::Renderer &r) {
-
+    //std::cout << "RENDER" << std::endl;
     this->shader.bind(); // bind scene shader
 
     // uniform float u_ambient
     int u_ambientUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_ambient");
     glUniform1f(u_ambientUniformLocation, this->ambient);
-/*
-    int u_amountOfLights = glGetUniformLocation(this->shader.getShaderId(), "u_amountOfLights");
-    int u_light_pos = glGetUniformLocation(this->shader.getShaderId(), "u_light_pos");
-    int u_type = glGetUniformLocation(this->shader.getShaderId(), "u_light_type");
-    int u_light_color = glGetUniformLocation(this->shader.getShaderId(), "u_light_color");
-    int u_brightness = glGetUniformLocation(this->shader.getShaderId(), "u_brightness");
+
+    glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfDlights"), this->dlights.size());
+    glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfPlights"), this->plights.size());
+    glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfSlights"), this->slights.size());
+    /*
+    glUniform3f(glGetUniformLocation(shader.getShaderId(), "dlights[0].direction"), 
+            0,0,1
+    );
     
-    glUniform1i(u_amountOfLights, this->lights.size());
+    glUniform3f(glGetUniformLocation(shader.getShaderId(), (std::string("dlights[") + std::to_string(0) + "].color").data()), 
+           0.4f,1.0f,0.4f
+    );
+    glUniform1f(glGetUniformLocation(shader.getShaderId(), "dlights[0].brightness"), 
+        1.0f
+    );*/
 
-    std::vector<glm::vec3> lightPositions;
-    std::vector<glm::vec3> lightColors;
-    std::vector<float> lightBrightness;
-    std::vector<int> lightTypes;
 
-    for(int i = 0; i < this->lights.size(); i++) {
-        lightPositions.push_back(this->lights.at(i)->getPosition());
-        lightColors.push_back(this->lights.at(i)->getColor());
-        lightBrightness.push_back(this->lights.at(i)->getBrightness());
-        lightTypes.push_back(this->lights.at(i)->getLightType());
+    
+    for(int i = 0; i < dlights.size(); i++) {
+        std::string uniformname = "dlights[" + std::to_string(i) + "]";
+        glm::vec3 dir = this->dlights.at(i).direction;
+        glm::vec3 col = this->dlights.at(i).color;
+        float br = this->dlights.at(i).brightness;
+        //std::cout << dir.x << " " << dir.y << " " << dir.z << std::endl;
+        glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".direction")).data()), 
+            dir.x, dir.y, dir.z
+        );
+        
+        glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".color")).data()), 
+            col.x, col.y, col.z
+        );
+        glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".brightness")).data()), 
+            br
+        );
     }
-*/
+
+    for(int i = 0; i < plights.size(); i++) {
+        std::string uniformname = "plights[" + std::to_string(i) + "]";
+        glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".position")).data()), 
+            plights.at(i).position.x, plights.at(i).position.y, plights.at(i).position.z
+        );
+        glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".color")).data()), 
+            plights.at(i).color.x, plights.at(i).color.y, plights.at(i).color.z
+        );
+        glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".brightness")).data()), 
+            plights.at(i).brightness
+        );
+        glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".linear")).data()), 
+            plights.at(i).linear
+        );
+        glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".quadratic")).data()), 
+            plights.at(i).quadratic
+        );
+    }
+
+    for(int i = 0; i < slights.size(); i++) {
+        std::string uniformname = "slights[" + std::to_string(i) + "]";
+        glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".position")).data()), 
+            slights.at(i).position.x, slights.at(i).position.y, slights.at(i).position.z
+        );
+        glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".color")).data()), 
+            slights.at(i).color.x, slights.at(i).color.y, slights.at(i).color.z
+        );
+        glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".brightness")).data()), 
+            slights.at(i).brightness
+        );
+        glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".outerCone")).data()), 
+            slights.at(i).outerCone
+        );
+        glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".innerCone")).data()), 
+            slights.at(i).innerCone
+        );
+    }
+
     for(int i = 0; i < this->objects.size(); i++) {
 
         // uniform mat4 u_modelViewProj

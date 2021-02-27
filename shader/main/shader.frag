@@ -30,7 +30,35 @@ uniform vec3 u_specColor;
 
 #define MAX_LIGHTS 10
 
+struct DirectionalLight {
+    vec3 color;
+    vec3 direction;
+    float brightness;
+};
 
+struct PointLight {
+    vec3 color;
+    vec3 position;
+    float brightness;
+    float linear;
+    float quadratic;
+};
+
+struct SpotLight {
+    vec3 color;
+    vec3 position;
+    float brightness;
+    float outerCone;
+    float innerCone;
+};
+
+uniform int amountOfDlights;
+uniform int amountOfPlights;
+uniform int amountOfSlights;
+
+uniform DirectionalLight dlights[MAX_LIGHTS];
+uniform PointLight plights[MAX_LIGHTS];
+uniform SpotLight slights[MAX_LIGHTS];
 
 in vec3 gf_T;
 in vec3 gf_B;
@@ -59,9 +87,9 @@ void main() {
 
 
     // Light Constants
-    float brightness = 1.0;
-    vec3 light = normalize(vec3(0,0,1));
-    vec3 lightColor = vec3(1.0, 1.0, 1.0) * brightness;
+    float brightness = dlights[0].brightness;
+    vec3 light = normalize(dlights[0].direction);
+    vec3 lightColor = dlights[0].color * brightness;
 
     // Vectors
 

@@ -67,11 +67,16 @@ private:
         camera.update();
 
         scene1.load(&camera, 0.02f);
-        
+
+        h3d::DirectionalLight l = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(1.0f,0.0f,0.0f), 1.0f};
+        h3d::DirectionalLight l2 = {glm::vec3(0.0f,1.0f,0.0f), glm::vec3(0.0f,1.0f,0.4f), 1.0f};
+
         scene1.addObject(&o);
         scene1.addObject(&o2);
         scene1.addObject(&o3);
         scene1.addObject(&hirsch);
+        scene1.addDirectionalLight(l);
+        scene1.addDirectionalLight(l2);
         w=a=s=d=space=shift=strg=alt=false;
 
         s2d.load2D(1280, 720);
