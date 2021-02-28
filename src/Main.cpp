@@ -3,7 +3,7 @@
 class Game: public h3d::Hirsch3D {
 
 private:
-    h3d::Object hirsch;
+    h3d::Object hirsch, hirsch2;
 
     h3d::FpsCamera camera;
     h3d::Scene scene1;
@@ -28,6 +28,10 @@ private:
     h3d::NormalMap on;
     h3d::RoughnessMap orougness;
 
+    h3d::DirectionalLight l = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(0.0f,1.0f,0.0f), 1.0f};
+    h3d::DirectionalLight l2 = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(0.0f,0.0f,1.0f), 1.0f};
+    h3d::PointLight pl = {{-3,0,0}, {1,1,1}, 1.0f, 0.02, 0.008};
+
     void setup() override {
         std::cout << "SETUP..." << std::endl;
 
@@ -36,9 +40,11 @@ private:
         nm.load("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch\\Normal.jpg");
 
         hirsch.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::cobalt_blue, nullptr, nullptr, nullptr);
+        hirsch2.loadByPath("D:\\Emanuel\\Hirsch3dRenderEngine\\assets\\model\\hirsch.obj", h3d::color::cobalt_blue, nullptr, nullptr, nullptr);
         hirsch.moveInLineOfSight({-2,0,0});
-
+        hirsch2.move({2,0,0});
         hirsch.setMaterial(glass);
+        hirsch2.setMaterial(glass);
 
         float width = 1.0f;
         float height = 1.0f;
@@ -49,8 +55,8 @@ private:
             {-width,  height, 0.0,  0.0,  1.0,  0,0,1}
         };
         uint32_t indices[] = {0,1,2, 0,2,3};
-        ot.load("obj/154.JPG");
-        on.load("obj/154_norm.JPG");
+        ot.load("obj/172.JPG");
+        on.load("obj/172_norm.JPG");
         orougness.load("obj/154_reflection.JPG");
         o.load(vo, 4, indices, 6, h3d::color::silver, &ot, &on, &orougness);
         o.setMaterial({4,1,10, h3d::color::white});
@@ -68,15 +74,20 @@ private:
 
         scene1.load(&camera, 0.02f);
 
-        h3d::DirectionalLight l = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(1.0f,0.0f,0.0f), 1.0f};
-        h3d::DirectionalLight l2 = {glm::vec3(0.0f,1.0f,0.0f), glm::vec3(0.0f,1.0f,0.4f), 1.0f};
+        
 
-        scene1.addObject(&o);
-        scene1.addObject(&o2);
-        scene1.addObject(&o3);
+        //h3d::SpotLight spl = {glm::vec3(0,0,-1), glm::vec3(0,0,1), glm::vec3(0.0,1.0,0.4), 1.0f, 0.95f, 0.80f};
+
+        //
+
+        //scene1.addObject(&o);
+        //scene1.addObject(&o2);
+        //scene1.addObject(&o3);
         scene1.addObject(&hirsch);
-        scene1.addDirectionalLight(l);
-        scene1.addDirectionalLight(l2);
+        scene1.addObject(&hirsch2);
+        scene1.addDirectionalLight(&l);
+        scene1.addPointLight(&pl);
+       
         w=a=s=d=space=shift=strg=alt=false;
 
         s2d.load2D(1280, 720);
@@ -168,6 +179,7 @@ private:
             speed = 0.003;
         } else speed = 0.01;
 
+        pl.position.x = 5*sin(getCurrentTimeMillies()*0.001);
 
         hirsch.rotate(0.15, {0.0, 1.0, 0.0});
         o.setRotation({o.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o.getRotation().z});

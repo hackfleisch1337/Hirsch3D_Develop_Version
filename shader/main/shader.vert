@@ -24,14 +24,16 @@ out vec3 vg_N;
 out vec3 vg_Pos;
 out vec2 vg_TexCoord;
 out mat4 vg_model;
+out vec3 vg_Vertex_Pos;
 
 void main() {
 
-    gl_Position = u_modelViewProj * vec4(position, 1.0f);
+    gl_Position = u_modelViewProj * vec4(position, 1.0);
 
     vg_TexCoord = uv;
     vg_N = mat3(u_model) * in_normal;
-    vg_Pos = vec3(u_view  * vec4(position, 1.0f));
+    vg_Pos = vec3(u_modelView  * vec4(position, 1.0));
     vg_model = u_model;
+    vg_Vertex_Pos = vec3(u_model  * vec4(position, 1.0));
 
 }

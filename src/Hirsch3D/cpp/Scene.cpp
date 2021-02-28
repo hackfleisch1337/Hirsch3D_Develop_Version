@@ -29,17 +29,17 @@ void h3d::Scene::addObject(h3d::Object* o) {
     this->objects.push_back(o);
 }
 
-void h3d::Scene::addDirectionalLight(h3d::DirectionalLight l) {
+void h3d::Scene::addDirectionalLight(h3d::DirectionalLight* l) {
     if(this->dlights.size() < MAX_LIGHTS_) {
         this->dlights.push_back(l);
     }
 }
-void h3d::Scene::addPointLight(h3d::PointLight l) {
+void h3d::Scene::addPointLight(h3d::PointLight* l) {
     if(this->plights.size() < MAX_LIGHTS_) {
         this->plights.push_back(l);
     }
 }
-void h3d::Scene::addSpotLight(h3d::SpotLight l) {
+void h3d::Scene::addSpotLight(h3d::SpotLight* l) {
     if(this->slights.size() < MAX_LIGHTS_) {
         this->slights.push_back(l);
     }
@@ -77,9 +77,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     
     for(int i = 0; i < dlights.size(); i++) {
         std::string uniformname = "dlights[" + std::to_string(i) + "]";
-        glm::vec3 dir = this->dlights.at(i).direction;
-        glm::vec3 col = this->dlights.at(i).color;
-        float br = this->dlights.at(i).brightness;
+        glm::vec3 dir = this->dlights.at(i)->direction;
+        glm::vec3 col = this->dlights.at(i)->color;
+        float br = this->dlights.at(i)->brightness;
         //std::cout << dir.x << " " << dir.y << " " << dir.z << std::endl;
         glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".direction")).data()), 
             dir.x, dir.y, dir.z
@@ -96,38 +96,41 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     for(int i = 0; i < plights.size(); i++) {
         std::string uniformname = "plights[" + std::to_string(i) + "]";
         glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".position")).data()), 
-            plights.at(i).position.x, plights.at(i).position.y, plights.at(i).position.z
+            plights.at(i)->position.x, plights.at(i)->position.y, plights.at(i)->position.z
         );
         glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".color")).data()), 
-            plights.at(i).color.x, plights.at(i).color.y, plights.at(i).color.z
+            plights.at(i)->color.x, plights.at(i)->color.y, plights.at(i)->color.z
         );
         glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".brightness")).data()), 
-            plights.at(i).brightness
+            plights.at(i)->brightness
         );
         glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".linear")).data()), 
-            plights.at(i).linear
+            plights.at(i)->linear
         );
         glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".quadratic")).data()), 
-            plights.at(i).quadratic
+            plights.at(i)->quadratic
         );
     }
 
     for(int i = 0; i < slights.size(); i++) {
         std::string uniformname = "slights[" + std::to_string(i) + "]";
         glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".position")).data()), 
-            slights.at(i).position.x, slights.at(i).position.y, slights.at(i).position.z
+            slights.at(i)->position.x, slights.at(i)->position.y, slights.at(i)->position.z
+        );
+        glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".direction")).data()), 
+            slights.at(i)->direction.x, slights.at(i)->direction.y, slights.at(i)->direction.z
         );
         glUniform3f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".color")).data()), 
-            slights.at(i).color.x, slights.at(i).color.y, slights.at(i).color.z
+            slights.at(i)->color.x, slights.at(i)->color.y, slights.at(i)->color.z
         );
         glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".brightness")).data()), 
-            slights.at(i).brightness
+            slights.at(i)->brightness
         );
         glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".outerCone")).data()), 
-            slights.at(i).outerCone
+            slights.at(i)->outerCone
         );
         glUniform1f(glGetUniformLocation(shader.getShaderId(), (uniformname + std::string(".innerCone")).data()), 
-            slights.at(i).innerCone
+            slights.at(i)->innerCone
         );
     }
 
