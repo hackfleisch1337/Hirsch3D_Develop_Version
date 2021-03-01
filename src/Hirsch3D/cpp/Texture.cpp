@@ -1,5 +1,6 @@
 #include "../Include/Hirsch3D/core/Texture.hpp"
 #include "../Include/stb/stb_image.h"
+#include "../Include/Hirsch3D/error/Exception.hpp"
 
 void h3d::Texture::load(std::string path) {
     stbi_set_flip_vertically_on_load(true);
@@ -18,9 +19,10 @@ void h3d::Texture::load(std::string path) {
 
     if(texBuffer) {
         stbi_image_free(texBuffer);
+        std::cout << GREEN << "[Ok] Loaded Texture" << RESET_CLR << std::endl;
         hasLoaded = true;
     } else {
-        std::cout << RED << "[FAILED] Failes loading Texture" << RESET_CLR << std::endl;
+        throw h3d::Exception("Texture could not be loaded");
     }
 }
 

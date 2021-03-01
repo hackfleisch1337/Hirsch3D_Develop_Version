@@ -5,7 +5,7 @@
 #define RED "\033[91m"
 #define RESET_CLR "\x1B[0m"
 #endif
-
+#include "../Include/Hirsch3D/error/Exception.hpp"
 h3d::VertexBuffer::VertexBuffer(void* data, uint32_t amountOfVertices) {
 
     this->amountOfVertices = amountOfVertices;
@@ -25,6 +25,7 @@ h3d::VertexBuffer::VertexBuffer(void* data, uint32_t amountOfVertices) {
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(h3d::Vertex3), (void*) (offsetof(struct h3d::Vertex3, nx)));
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    std::cout << GREEN << "[Ok] Generated Vertex buffer" << RESET_CLR << std::endl;
 }
 
 h3d::VertexBuffer::~VertexBuffer() {
@@ -47,7 +48,7 @@ uint32_t h3d::VertexBuffer::getAmountOfVertices() {
 
 void h3d::VertexBuffer::changeVertex(uint32_t vertex, h3d::Vertex3 newVertex) {
     if(vertex >= this->amountOfVertices) {
-        std::cout << RED << "[FAILED] Vetex number out of bounds!" << RESET_CLR << std::endl;
+        throw h3d::Exception("Vertex number out of bounds");
         return;
     }
     glBindBuffer(GL_ARRAY_BUFFER, this->bufferId);

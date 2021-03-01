@@ -28,9 +28,10 @@ private:
     h3d::NormalMap on;
     h3d::RoughnessMap orougness;
 
-    h3d::DirectionalLight l = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(0.0f,1.0f,0.0f), 1.0f};
+    h3d::DirectionalLight l = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(1.0f,0.0f,0.0f), 1.0f};
     h3d::DirectionalLight l2 = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(0.0f,0.0f,1.0f), 1.0f};
     h3d::PointLight pl = {{-3,0,0}, {1,1,1}, 1.0f, 0.02, 0.008};
+    h3d::SpotLight spl = {{0,0,7}, {0,0,1}, {1,1,1}, 1.0f,  0.95f, 0.80f};
 
     void setup() override {
         std::cout << "SETUP..." << std::endl;
@@ -44,7 +45,7 @@ private:
         hirsch.moveInLineOfSight({-2,0,0});
         hirsch2.move({2,0,0});
         hirsch.setMaterial(glass);
-        hirsch2.setMaterial(glass);
+        hirsch2.setMaterial(matt);
 
         float width = 1.0f;
         float height = 1.0f;
@@ -55,17 +56,19 @@ private:
             {-width,  height, 0.0,  0.0,  1.0,  0,0,1}
         };
         uint32_t indices[] = {0,1,2, 0,2,3};
-        ot.load("obj/172.JPG");
-        on.load("obj/172_norm.JPG");
+        ot.load("obj/154.JPG");
+        on.load("obj/154_norm.JPG");
         orougness.load("obj/154_reflection.JPG");
-        o.load(vo, 4, indices, 6, h3d::color::silver, &ot, &on, &orougness);
-        o.setMaterial({4,1,10, h3d::color::white});
-        o2.load(vo, 4, indices, 6, h3d::color::english_red, &ot, nullptr, &orougness);
-        o2.setMaterial({4,1,10, h3d::color::white});
-        o3.load(vo, 4, indices, 6, h3d::color::english_red, nullptr, nullptr, &orougness);
-        o3.setMaterial({4,1,10, h3d::color::white});
-        o2.moveInLineOfSight({2,0,0});
-        o3.moveInLineOfSight({4,0,0});
+        o.load(vo, 4, indices, 6, h3d::color::english_red, nullptr, &on, nullptr);
+        o.setMaterial({1,1,10, h3d::color::white});
+        o2.load(vo, 4, indices, 6, h3d::color::english_red, &ot, &on, nullptr);
+        o2.setMaterial({1,1,10, h3d::color::white});
+        o3.load(vo, 4, indices, 6, h3d::color::english_red, &ot, nullptr, nullptr);
+        o3.setMaterial({1,1,10, h3d::color::white});
+        o2.moveInLineOfSight({2,0,-3});
+        o3.moveInLineOfSight({4,0,-3});
+        o.moveInLineOfSight({0,0,-3});
+
     
         
         camera.initFpsCamera(100, 1280, 720);
@@ -80,39 +83,20 @@ private:
 
         //
 
-        //scene1.addObject(&o);
-        //scene1.addObject(&o2);
-        //scene1.addObject(&o3);
+        scene1.addObject(&o);
+        scene1.addObject(&o2);
+        scene1.addObject(&o3);
         scene1.addObject(&hirsch);
         scene1.addObject(&hirsch2);
-        scene1.addDirectionalLight(&l);
+        //scene1.addDirectionalLight(&l);
         scene1.addPointLight(&pl);
-       
+        //scene1.addSpotLight(&spl);
+        
         w=a=s=d=space=shift=strg=alt=false;
-
         s2d.load2D(1280, 720);
         ts.load("Hirsch3D_t.png");
         sp.load(&ts, 520,-290, 128,72);
         s2d.addObject(&sp);
-
-/*
-        h3d::Vertex3 a = klumpen.getVertexBuffer()->getVertex(0);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-        a = klumpen.getVertexBuffer()->getVertex(1);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-        a = klumpen.getVertexBuffer()->getVertex(2);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-        a = klumpen.getVertexBuffer()->getVertex(3);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-        a = klumpen.getVertexBuffer()->getVertex(4);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-        a = klumpen.getVertexBuffer()->getVertex(5);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-        a = klumpen.getVertexBuffer()->getVertex(6);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-        a = klumpen.getVertexBuffer()->getVertex(7);
-        std::cout << a.x << " " << a.y << " " << a.z << std::endl;
-*/
     }
 
     void onMouseMoved(int relX, int relY, glm::vec2 mouse) override {
@@ -160,7 +144,7 @@ private:
     void render(const h3d::Renderer &r) override {
         scene1.render(r);
         //cube.rotate(0.5, {1, 1, 1});
-
+        
         if(w)
             camera.moveFront(speed);
         if(a)
@@ -180,12 +164,14 @@ private:
         } else speed = 0.01;
 
         pl.position.x = 5*sin(getCurrentTimeMillies()*0.001);
-
+        //spl.position.x = 5*sin(getCurrentTimeMillies()*0.001);
+        //spl.direction.x = sin(getCurrentTimeMillies() * 0.001);
         hirsch.rotate(0.15, {0.0, 1.0, 0.0});
-        o.setRotation({o.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o.getRotation().z});
-        o2.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
-        o3.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
-        s2d.render(r);        
+        //o.setRotation({o.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o.getRotation().z});
+        //o2.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
+        //o3.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
+        s2d.render(r);
+        
     }
 
     void onClose() override {

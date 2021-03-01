@@ -235,7 +235,7 @@ h3d::Hirsch3D::~Hirsch3D() {
 void h3d::Renderer::renderObject(const h3d::Object* o) const{
 
     if(!o->loaded()) {
-        std::cout << RED << "[FAILED] Unable to render uninitialized object" << RESET_CLR << std::endl;
+        throw h3d::Exception("Unable to render uninitialized object");
         return;
     }
 

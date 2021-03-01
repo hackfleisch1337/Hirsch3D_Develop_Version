@@ -4,12 +4,16 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->shader.load(vertexShaderSrc, fragmentShaderSrc, geometryShaderSrc);
     this->camera = camera;
     this->ambient = ambient;
+    this->isLoaded = true;
+    std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
 void h3d::Scene::load(h3d::Camera* camera, float ambient) {
     this->ambient = ambient;
     this->camera = camera;
     this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag", "./shader/main/shader.geo");
+    this->isLoaded = true;
+    std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
 /**
@@ -23,7 +27,7 @@ void h3d::Scene::load(h3d::Camera* camera, float ambient) {
  */
 void h3d::Scene::addObject(h3d::Object* o) {
     if(!o->loaded()) {
-        std::cout << RED << "[FAILED] Could not add object to scene (Object is not inititalized)" << RESET_CLR << std::endl;
+        throw h3d::Exception("Could not add uninitialized objects to scene");
         return;
     }
     this->objects.push_back(o);
@@ -32,16 +36,22 @@ void h3d::Scene::addObject(h3d::Object* o) {
 void h3d::Scene::addDirectionalLight(h3d::DirectionalLight* l) {
     if(this->dlights.size() < MAX_LIGHTS_) {
         this->dlights.push_back(l);
+    } else {
+        throw h3d::Exception("Maximum amount of lights already reached");
     }
 }
 void h3d::Scene::addPointLight(h3d::PointLight* l) {
     if(this->plights.size() < MAX_LIGHTS_) {
         this->plights.push_back(l);
+    } else {
+        throw h3d::Exception("Maximum amount of lights already reached");
     }
 }
 void h3d::Scene::addSpotLight(h3d::SpotLight* l) {
     if(this->slights.size() < MAX_LIGHTS_) {
         this->slights.push_back(l);
+    } else {
+        throw h3d::Exception("Maximum amount of lights already reached");
     }
 }
 /**
@@ -52,6 +62,10 @@ void h3d::Scene::addSpotLight(h3d::SpotLight* l) {
  */
 void h3d::Scene::render(const h3d::Renderer &r) {
     //std::cout << "RENDER" << std::endl;
+    if(!this->isLoaded) {
+        throw h3d::Exception("Can not render uninitialized Scene");
+        return;
+    }
     this->shader.bind(); // bind scene shader
 
     // uniform float u_ambient
@@ -265,7 +279,6 @@ void h3d::Scene2D::load2D(float screenWidth, float screenHeight) {
 void h3d::Scene2D::render(const h3d::Renderer &r) {
     this->shader.bind(); // Bind scene shader
     for(int i = 0; i < this->objects.size(); i++) {
-        // TODO setModelMatrixUniform
 
         int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_model");
         glm::mat4 m = this->c2d.getViewProj() * this->objects.at(i)->getMatrix();

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdio>
 #include <iostream>
+#include "../Include/Hirsch3D/error/Exception.hpp"
 
 bool h3d::Shader::load(std::string vertexSrc, std::string fragmentSrc, std::string geometryShader) {
     if(geometryShader == "nogeometryshader") useGeometryShader = false;
@@ -15,6 +16,7 @@ bool h3d::Shader::load(std::string vertexSrc, std::string fragmentSrc, std::stri
 
 h3d::Shader::~Shader() {
     glDeleteProgram(shaderId);
+
 }
 
 void h3d::Shader::bind() const{
@@ -57,7 +59,7 @@ std::string h3d::Shader::parse(const char* filename) {
     FILE* file;
     file = fopen(filename, "rb");
 	if (file == nullptr) {
-		std::cout << RED << "[FAILED] File " << filename << " could not be found" << RESET_CLR << std::endl;
+		throw h3d::Exception("Shader file could not be found");
 		return "";
 	}
 
