@@ -1,8 +1,8 @@
 .vscode/
-.font/
-.obj/
-.old/
-./rcs
+font/
+obj/
+old/
+rcs/
 Debug.exe
 desktop.ini
 Hirsch3D_t.png
