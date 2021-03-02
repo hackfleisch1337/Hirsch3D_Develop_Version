@@ -61,27 +61,9 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* te
 }
 
 
-/**
- * Makes the Object move relative to
- * the coordinate axes instead of their
- * viewing direction.
- * 
- */
 
 void h3d::Object::move(glm::vec3 d) {
-
-    float xR = rotationVector.x;
-    float yR = rotationVector.y;
-    float zR = rotationVector.z;
-    
-    glm::mat4 rm = glm::rotate(glm::mat4(1.0f), glm::radians(xR), {1,0,0});
-    rm = glm::rotate(rm, glm::radians(yR), {0,1,0});
-    rm = glm::rotate(rm, glm::radians(zR), {0,0,1});
-
-    glm::vec4 d_new = glm::vec4(d,1.0f) * rm;
-    glm::vec3 vecR = glm::vec3(d_new);
-
-    this->modelMatrix = glm::translate(this->modelMatrix, vecR);
+    this->setPosition(this->position + d);
     this->position += d;
 }
 
@@ -92,6 +74,14 @@ void h3d::Object::moveInLineOfSight(glm::vec3 d) {
 
 glm::vec3 h3d::Object::getPosition() {
     return this->position;
+}
+
+void h3d::Object::setPosition(glm::vec3 pos) {
+        this->modelMatrix = glm::mat4(1.0f);
+        glm::vec3 currentRotation = this->rotationVector;
+        this->rotationVector = glm::vec3(0.0f);
+        this->moveInLineOfSight(pos);
+        this->setRotation(currentRotation);
 }
 
 void h3d::Object::rotate(float degree, glm::vec3 direction) {

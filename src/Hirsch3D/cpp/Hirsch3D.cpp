@@ -18,7 +18,7 @@ void h3d::Hirsch3D::setSize(uint16_t width, uint16_t height) {
     SDL_SetWindowSize(this->window, this->width, this->height);
 }
 
-uint32_t h3d::Hirsch3D::getCurrentTimeMillies() {
+uint32_t h3d::Hirsch3D::getCurrentTimeMillis() {
     return (float)(clock() - startTime) / ((clock_t) 1);
 }
 
@@ -78,7 +78,7 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     // Glew init
     GLenum err = glewInit();
     if(err != GLEW_OK) {
-        std::cout << "\033[1;31m[FAILED] Glew initialisation failed: \033[0m" << glewGetErrorString(err) << std::endl;
+        throw h3d::Exception("Glew initialisaion failed");
         return false;
     } else std::cout << "\033[1;32m[OK] Initialized Glew succesful!\033[0m" << std::endl;
     std::cout << "OpenGl Driver Version: " << YELLOW << glGetString(GL_VERSION) << RESET_CLR << std::endl;
@@ -129,19 +129,27 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     ////////////
 
     std::cout << GREEN << "[OK] Initialized " << RESET_CLR << std::endl;
-
+    return true;
 }
 
 
 
 bool h3d::Hirsch3D::load() {
-    this->setup(); // Takes a while
+    try {
+        this->setup(); // Takes a while
+    } catch(h3d::Exception e) {
+        std::cout << RED << "[FAILED] Error while loading the programm" << RESET_CLR << std::endl;
+        e.printErrorMessage();
+        return false;
+    }
+    
     this->loaded = true;
     std::cout << GREEN << "[OK] Setup complete " << RESET_CLR << std::endl;
+    return true;
 }
 
 
-bool h3d::Hirsch3D::start() {
+void h3d::Hirsch3D::start() {
     clock_t startpoint = clock();
     // Start Mainloop
     std::cout << YELLOW << "[IN_PROCESS] Mainloop" << RESET_CLR << std::endl;
@@ -182,7 +190,7 @@ bool h3d::Hirsch3D::start() {
                 this->render(this->renderer);
             }
 
-            if(this->showTitle && this->getCurrentTimeMillies() > (2000 + startpoint) && this->loaded) {
+            if(this->showTitle && this->getCurrentTimeMillis() > (2000 + startpoint) && this->loaded) {
                 this->showTitle = false;
             }
 

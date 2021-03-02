@@ -1,0 +1,12 @@
+.vscode/
+.font/
+.obj/
+.old/
+./rcs
+Debug.exe
+desktop.ini
+Hirsch3D_t.png
+Release.exe
+run.bat
+runWithLib.bat
+src/Main.cpp

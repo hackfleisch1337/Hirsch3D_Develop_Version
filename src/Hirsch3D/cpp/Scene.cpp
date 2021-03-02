@@ -199,6 +199,10 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::vec3 u_specColorVector = this->objects.at(i)->getMaterial().specColor;
         glUniform3f(u_specColor, u_specColorVector.x, u_specColorVector.y, u_specColorVector.z);
 
+        int u_emmisive = glGetUniformLocation(this->shader.getShaderId(), "u_emmisive");
+        glm::vec3 u_emmisive3f = this->objects.at(i)->getMaterial().emmisive;
+        glUniform3f(u_emmisive, u_emmisive3f.x, u_emmisive3f.y, u_emmisive3f.z);
+
         if(this->objects.at(i)->getNormalMap() != nullptr) {
             glUniform1i(isNormalSet, 1);
             this->objects.at(i)->getNormalMap()->bind();
@@ -252,7 +256,7 @@ void h3d::Scene::render(const h3d::Renderer &r) {
 
         // sets uniform u_position to objects position
         int u_positionUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_position");
-        glm::vec3 p = this->objects.at(i)->position;
+        glm::vec3 p = this->objects.at(i)->getPosition();
         glUniform3f(u_positionUniformLocation, p.x, p.y, p.z);
 
 

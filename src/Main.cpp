@@ -3,7 +3,7 @@
 class Game: public h3d::Hirsch3D {
 
 private:
-    h3d::Object hirsch, hirsch2;
+    h3d::Object hirsch, hirsch2, lightObject;
 
     h3d::FpsCamera camera;
     h3d::Scene scene1;
@@ -28,10 +28,10 @@ private:
     h3d::NormalMap on;
     h3d::RoughnessMap orougness;
 
-    h3d::DirectionalLight l = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(1.0f,0.0f,0.0f), 1.0f};
+    h3d::DirectionalLight l = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(1.0f,1.0f,1.0f), 1.0f};
     h3d::DirectionalLight l2 = {glm::vec3(0.0f,0.0f,1.0f), glm::vec3(0.0f,0.0f,1.0f), 1.0f};
-    h3d::PointLight pl = {{-3,0,0}, {1,1,1}, 1.0f, 0.02, 0.008};
-    h3d::SpotLight spl = {{0,0,7}, {0,0,1}, {1,1,1}, 1.0f,  0.95f, 0.80f};
+    h3d::PointLight pl = {{-3,0,0}, {1,1,1}, 1.0f, 0.025, 0.008};
+    h3d::SpotLight spl = {{0,0,7}, {0,0,1}, {1,1,1}, 1.0f,  0.99f, 0.99f};
 
     void setup() override {
         std::cout << "SETUP..." << std::endl;
@@ -47,10 +47,17 @@ private:
         hirsch.setMaterial(glass);
         hirsch2.setMaterial(matt);
 
+        h3d::Vertex3 vlo[] = H3D_QUAD_VERTICES(0.04,0.04);
+        uint32_t ilo[] = H3D_QUAD_INDICES;
+        lightObject.load(vlo, 4, ilo, 6, h3d::color::white, nullptr, nullptr, nullptr);
+        lightObject.setMaterial({1,1,1,h3d::color::white, h3d::color::white});
+        lightObject.moveInLineOfSight({-3,0,0});
+        lightObject.rotate(45, {0,0,1});
+
         float width = 1.0f;
         float height = 1.0f;
         h3d::Vertex3 vo[] = {
-             {-width, -height, 0.0,  0.0,  0.0,  0,0,1},
+            {-width, -height, 0.0,  0.0,  0.0,  0,0,1},
             {width, -height,  0.0,  1.0,  0.0,  0,0,1},
             {width,  height,  0.0,  1.0,  1.0,  0,0,1},
             {-width,  height, 0.0,  0.0,  1.0,  0,0,1}
@@ -82,12 +89,12 @@ private:
         //h3d::SpotLight spl = {glm::vec3(0,0,-1), glm::vec3(0,0,1), glm::vec3(0.0,1.0,0.4), 1.0f, 0.95f, 0.80f};
 
         //
-
         scene1.addObject(&o);
         scene1.addObject(&o2);
         scene1.addObject(&o3);
         scene1.addObject(&hirsch);
         scene1.addObject(&hirsch2);
+        scene1.addObject(&lightObject);
         //scene1.addDirectionalLight(&l);
         scene1.addPointLight(&pl);
         //scene1.addSpotLight(&spl);
@@ -163,13 +170,14 @@ private:
             speed = 0.003;
         } else speed = 0.01;
 
-        pl.position.x = 5*sin(getCurrentTimeMillies()*0.001);
-        //spl.position.x = 5*sin(getCurrentTimeMillies()*0.001);
-        //spl.direction.x = sin(getCurrentTimeMillies() * 0.001);
+        pl.position.x = 5*sin(getCurrentTimeMillis()*0.0003);
+        lightObject.setPosition({5*sin(getCurrentTimeMillis()*0.0003),0,0});
+        //spl.position.x = 5*sin(getCurrentTimeMillis()*0.001);
+        //spl.direction.x = sin(getCurrentTimeMillis() * 0.001);
         hirsch.rotate(0.15, {0.0, 1.0, 0.0});
-        //o.setRotation({o.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o.getRotation().z});
-        //o2.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
-        //o3.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillies()*0.001),o2.getRotation().z});
+        //o.setRotation({o.getRotation().x,70*sin(getCurrentTimeMillis()*0.001),o.getRotation().z});
+        //o2.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillis()*0.001),o2.getRotation().z});
+        //o3.setRotation({o2.getRotation().x,70*sin(getCurrentTimeMillis()*0.001),o2.getRotation().z});
         s2d.render(r);
         
     }

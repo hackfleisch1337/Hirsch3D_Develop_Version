@@ -1,20 +1,13 @@
 Leicht
 * Text rendering
 * Alle Meshes Laden
-
-* Maus / Tastatur
 * Deltatime rendering
-
-Schwer:
-<br>
-
-* Licht
-
-* Transparenz
-* Schatten
-* Normalmaps/Materials
-* Multithreading
-* .lib kompilieren
+* SpotLight
+* h3d::Thread
+* DOC
+* normalmaps bei komplexen modellen
+* camera.hpp -> camera.cpp
+* getter setter...
 
 ---
 * ~~2d texturen rendering~~
