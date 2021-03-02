@@ -198,7 +198,5 @@ int main(int argc, char** argv) {
     game.load();
     game.start();
     
-
-    //
     return 0;
 }
