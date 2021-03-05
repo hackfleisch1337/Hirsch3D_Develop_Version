@@ -28,6 +28,7 @@ uniform float u_kD;
 uniform vec3 u_specColor;
 uniform vec3 u_emmisive;
 
+uniform int u_transparency;
 // TBN Matrix
 
 #define MAX_LIGHTS 10
@@ -65,13 +66,6 @@ uniform SpotLight slights[MAX_LIGHTS];
 
 in vec3 gf_T;
 in vec3 gf_B;
-/*
-
-in vec3 gf_Pos;
-in vec2 gf_TexCoord;
-in mat4 gf_model;
-*/
-// Light
 
 void main() {
     
@@ -84,7 +78,9 @@ void main() {
         vec4 tColor = texture(u_texture, v_uv);
         f_color = tColor;
     }
-    
+    if(f_color.a < 0.1) {
+        discard;
+    }
     // Scene ambient constant lightning
     vec3 ambient = vec3(f_color) * u_ambient;
 
@@ -208,8 +204,12 @@ void main() {
 
     // Lightcolor
 
+    float transparentcy = 1.0;
+    if(u_transparency == 1) {
+        transparentcy = f_color.a;
+    }
 
-    color = vec4(ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, 1.0);
+    color = vec4(ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
     
 
     

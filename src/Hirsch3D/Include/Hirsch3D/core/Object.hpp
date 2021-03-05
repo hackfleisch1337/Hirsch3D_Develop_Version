@@ -165,6 +165,18 @@ namespace h3d
         void setPosition(glm::vec3 pos);
         
         /**
+         * Defines if an object is transparent
+         * 
+         * @param t Is the object transparent
+         */
+        void setTransparent(bool t);
+
+        /**
+         * @returns The objects transparency
+         */
+        bool getTransparency();
+
+        /**
          * The objects color
          */
         glm::vec4 color;
@@ -182,6 +194,7 @@ namespace h3d
         h3d::NormalMap* nmap;
         h3d::RoughnessMap* rm;
         h3d::Material material;
+        bool isTransparent = false;
     };
 
 

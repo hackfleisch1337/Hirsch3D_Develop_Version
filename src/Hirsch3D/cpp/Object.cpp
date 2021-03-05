@@ -63,13 +63,12 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* te
 
 
 void h3d::Object::move(glm::vec3 d) {
-    this->setPosition(this->position + d);
-    this->position += d;
+    glm::vec3 newPosition = this->position + d;
+    this->setPosition(newPosition);
 }
 
 void h3d::Object::moveInLineOfSight(glm::vec3 d) {
     this->modelMatrix = glm::translate(this->modelMatrix, d);
-    this->position += d;
 }
 
 glm::vec3 h3d::Object::getPosition() {
@@ -82,10 +81,11 @@ void h3d::Object::setPosition(glm::vec3 pos) {
         this->rotationVector = glm::vec3(0.0f);
         this->moveInLineOfSight(pos);
         this->setRotation(currentRotation);
+        this->position = pos;
 }
 
 void h3d::Object::rotate(float degree, glm::vec3 direction) {
-    this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(degree), direction);
+    this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(degree), glm::normalize(direction));
     this->rotationVector += glm::normalize(direction) * degree;
 }
 
@@ -139,4 +139,12 @@ void calculateTangents(h3d::Vertex3* vertices, uint32_t amountOfVertices, uint32
         h3d::Vertex3 b = vertices[indices[i+1]];
         h3d::Vertex3 c = vertices[indices[i+2]];
     }
+}
+
+void h3d::Object::setTransparent(bool t) {
+    this->isTransparent = t;
+}
+
+bool h3d::Object::getTransparency() {
+    return this->isTransparent;
 }

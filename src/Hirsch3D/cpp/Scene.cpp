@@ -75,19 +75,15 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfDlights"), this->dlights.size());
     glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfPlights"), this->plights.size());
     glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfSlights"), this->slights.size());
-    /*
-    glUniform3f(glGetUniformLocation(shader.getShaderId(), "dlights[0].direction"), 
-            0,0,1
-    );
     
-    glUniform3f(glGetUniformLocation(shader.getShaderId(), (std::string("dlights[") + std::to_string(0) + "].color").data()), 
-           0.4f,1.0f,0.4f
-    );
-    glUniform1f(glGetUniformLocation(shader.getShaderId(), "dlights[0].brightness"), 
-        1.0f
-    );*/
+    glUniform1i(glGetUniformLocation(this->shader.getShaderId(), "u_transparency"), this->transparency ? 1:0);
 
-
+    if(transparency) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    } else {
+        glDisable(GL_BLEND);
+    }
     
     for(int i = 0; i < dlights.size(); i++) {
         std::string uniformname = "dlights[" + std::to_string(i) + "]";
@@ -149,6 +145,14 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     }
 
     for(int i = 0; i < this->objects.size(); i++) {
+
+        if(this->objects.at(i)->getTransparency()) {
+            //glDisable(GL_CULL_FACE);
+            glDisable(GL_DEPTH_TEST);
+        } else {
+            //glEnable(GL_CULL_FACE);
+            glEnable(GL_DEPTH_TEST);
+        }
 
         // uniform mat4 u_modelViewProj
         int u_modelUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_modelViewProj");
@@ -310,4 +314,12 @@ void h3d::Scene2D::render(const h3d::Renderer &r) {
 
     }
     this->shader.unbind(); // Unbind scene shader
+}
+
+void h3d::Scene::setTransparency(bool t) {
+    this->transparency = t;
+}
+
+bool h3d::Scene::hasTransparency() {
+    return this->transparency;
 }

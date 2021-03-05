@@ -17,7 +17,7 @@ void main() {
         
         f_color = tColor;
     }
-    if(f_color.a < 0.5) {
+    if(f_color.a < 0.1) {
         discard;
     } 
     color = f_color;

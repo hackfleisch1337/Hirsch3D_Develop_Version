@@ -108,6 +108,20 @@ namespace h3d
          */
         virtual void render(const h3d::Renderer &r);
         
+        /**
+         * Enables/Disables the transparency
+         * No transparency means better performance
+         * 
+         * @param t True if the scene should have transparency
+         */
+        void setTransparency(bool t);
+
+
+        /**
+         * @returns true if transparency is enabled
+         */
+        bool hasTransparency();
+
         float ambient;
     protected:
         h3d::Shader shader;
@@ -117,6 +131,8 @@ namespace h3d
         std::vector<h3d::SpotLight*> slights;
         h3d::Camera* camera;
         bool isLoaded = false;
+    private:
+        bool transparency = false;
     };
 
     /**
