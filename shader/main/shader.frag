@@ -8,6 +8,7 @@ in vec3 v_normal;
 in vec3 v_position;
 in mat4 v_model;
 in vec3 v_vertex_pos;
+in vec3 v_camera_pos;
 
 uniform vec4 u_color;
 
@@ -29,6 +30,10 @@ uniform vec3 u_specColor;
 uniform vec3 u_emmisive;
 
 uniform int u_transparency;
+
+uniform samplerCube u_cubemap;
+uniform int u_isCubeMapSet;
+
 // TBN Matrix
 
 #define MAX_LIGHTS 10
@@ -82,8 +87,11 @@ void main() {
         discard;
     }
     // Scene ambient constant lightning
-    vec3 ambient = vec3(f_color) * u_ambient;
+    vec3 ambient = vec3(f_color);
 
+    if(u_isCubeMapSet == 1) {
+        ambient = texture(u_cubemap, reflect(-v_camera_pos, normal));
+    }
 
     // Vectors
 
@@ -140,6 +148,7 @@ void main() {
         c_deffuse.y *= lightColor.y;
         c_deffuse.z *= lightColor.z;
 
+        ambient *= lightColor;
         deffuse += c_deffuse;
         specular += c_specular;
     }
@@ -160,7 +169,7 @@ void main() {
         vec3 reflection = reflect(-light, normal);
 
         float dist = length(plights[i].position - v_vertex_pos);
-        float attentuation = 1.0 / ((1.0) + (plights[i].linear*dist) + (plights[i].quadratic*dist*dist));
+        float attentuation = 1.0 / ((1.0) + plights[i].linear*dist + plights[i].quadratic*dist*dist);
         
         vec3 c_deffuse = attentuation * plights[i].color * max(dot(normal, light), 0.0) * vec3(f_color);
         vec3 c_specular = attentuation * pow(max(dot(reflection, view), 0.0), shininess) * specColor * abs(c_deffuse);
@@ -169,6 +178,7 @@ void main() {
         c_deffuse.y *= lightColor.y;
         c_deffuse.z *= lightColor.z;
 
+        ambient *= lightColor;
         deffuse += c_deffuse;
         specular += c_specular;
     }
@@ -198,6 +208,7 @@ void main() {
         c_deffuse.y *= slights[i].color.y;
         c_deffuse.z *= slights[i].color.z;
 
+        ambient *= lightColor;
         deffuse += c_deffuse;
         specular += c_specular;
     }
@@ -209,7 +220,7 @@ void main() {
         transparentcy = f_color.a;
     }
 
-    color = vec4(ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
+    color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
     
 
     

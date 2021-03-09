@@ -98,3 +98,7 @@ void h3d::FpsCamera::moveUp(float amount) {
     translate(glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)) * amount);
     update();
 }
+
+glm::mat4 h3d::Camera::getProj() {
+    return this->projection;
+}

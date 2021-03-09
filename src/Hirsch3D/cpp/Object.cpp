@@ -148,3 +148,11 @@ void h3d::Object::setTransparent(bool t) {
 bool h3d::Object::getTransparency() {
     return this->isTransparent;
 }
+
+void h3d::Object::setVisible(bool v) {
+    this->draw = v;
+}
+
+bool h3d::Object::isVisible() {
+    return this->draw;
+}

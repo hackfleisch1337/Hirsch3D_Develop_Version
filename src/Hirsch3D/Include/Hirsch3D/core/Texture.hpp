@@ -95,7 +95,6 @@ namespace h3d
         bool loaded() { return hasLoaded; }
     protected:
         GLuint buffer;
-    private:
         std::string path;
         int32_t width;
         int32_t height;
@@ -124,6 +123,12 @@ namespace h3d
         void unbind() override;
     };
 
+    class CubeMap: public Texture {
+    public:
+        void bind() override;
+        void unbind() override;
+        void loadCubeMap(std::string px, std::string py, std::string pz,std::string nx, std::string ny, std::string nz);
+    };
 } // namespace h3d
 
 

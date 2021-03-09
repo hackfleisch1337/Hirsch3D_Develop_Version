@@ -122,6 +122,13 @@ namespace h3d
          */
         bool hasTransparency();
 
+        /**
+         * Sets a cube envoirement map for the scene
+         * @param c The cubemap
+         */
+        void setCubeMap(h3d::CubeMap* c);
+
+
         float ambient;
     protected:
         h3d::Shader shader;
@@ -133,6 +140,9 @@ namespace h3d
         bool isLoaded = false;
     private:
         bool transparency = false;
+        h3d::CubeMap* cubemap = nullptr;
+        h3d::Shader cubemapshader;
+        h3d::Object cube;
     };
 
     /**

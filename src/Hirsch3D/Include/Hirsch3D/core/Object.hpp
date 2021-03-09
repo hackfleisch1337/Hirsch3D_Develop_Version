@@ -180,6 +180,18 @@ namespace h3d
          * The objects color
          */
         glm::vec4 color;
+
+        /**
+         * Changes the Objects visibility
+         * @param v
+         */
+        void setVisible(bool v);
+
+        /**
+         * 
+         * @returns the visibility of an object
+         */
+        bool isVisible();
     protected:
         glm::vec3 position;
         glm::mat4 modelMatrix;
@@ -195,6 +207,7 @@ namespace h3d
         h3d::RoughnessMap* rm;
         h3d::Material material;
         bool isTransparent = false;
+        bool draw = true;
     };
 
 

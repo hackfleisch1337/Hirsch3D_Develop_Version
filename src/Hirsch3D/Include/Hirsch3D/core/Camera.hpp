@@ -85,6 +85,10 @@ namespace h3d
          */
         glm::mat4 getView();
 
+        /**
+         * @returns The projection matrix
+         */
+        glm::mat4 getProj();
 
         /**
          * 
