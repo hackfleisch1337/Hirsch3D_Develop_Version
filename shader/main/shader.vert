@@ -25,7 +25,8 @@ out vec3 vg_Pos;
 out vec2 vg_TexCoord;
 out mat4 vg_model;
 out vec3 vg_Vertex_Pos;
-out vg_cameraPos;
+out vec3 vg_cameraPos;
+out vec3 vg_rawNormal;
 
 void main() {
 
@@ -36,5 +37,7 @@ void main() {
     vg_Pos = vec3(u_modelView  * vec4(position, 1.0));
     vg_model = u_model;
     vg_Vertex_Pos = vec3(u_model  * vec4(position, 1.0));
-    vg_cameraPos = c_position;
+    vec4 worldpos = u_model * vec4(position,1.0);
+    vg_cameraPos = worldpos.xyz - c_position;//vec3(u_view * vec4(0.0,0.0,0.0,1.0));
+    vg_rawNormal = in_normal;
 }

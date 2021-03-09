@@ -9,6 +9,7 @@ in vec3 v_position;
 in mat4 v_model;
 in vec3 v_vertex_pos;
 in vec3 v_camera_pos;
+in vec3 v_rawNormal;
 
 uniform vec4 u_color;
 
@@ -33,6 +34,8 @@ uniform int u_transparency;
 
 uniform samplerCube u_cubemap;
 uniform int u_isCubeMapSet;
+
+uniform float u_reflection;
 
 // TBN Matrix
 
@@ -90,7 +93,7 @@ void main() {
     vec3 ambient = vec3(f_color);
 
     if(u_isCubeMapSet == 1) {
-        ambient = texture(u_cubemap, reflect(-v_camera_pos, normal));
+        ambient = mix(vec3(f_color), vec3(texture(u_cubemap, reflect(v_camera_pos, normalize(v_normal)))), u_reflection);
     }
 
     // Vectors
@@ -220,9 +223,18 @@ void main() {
         transparentcy = f_color.a;
     }
 
-    color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
+
+    
     
 
+    vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
+    
+    if(u_isCubeMapSet) {
+        color = mix(out_color, texture(u_cubemap, reflect(v_camera_pos, normalize(v_normal))), u_reflection);
+    } else {
+        color = out_color;
+    }
+    
     
     //else color = u_color;
 }

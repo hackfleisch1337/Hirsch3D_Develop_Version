@@ -239,6 +239,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::vec3 u_emmisive3f = currentObject->getMaterial().emmisive;
         glUniform3f(u_emmisive, u_emmisive3f.x, u_emmisive3f.y, u_emmisive3f.z);
 
+        int u_reflection = glGetUniformLocation(shaderId, "u_reflection");
+        glUniform1f(u_reflection, currentObject->getMaterial().reflection);
+
         if(currentObject->getNormalMap() != nullptr) {
             glUniform1i(isNormalSet, 1);
             currentObject->getNormalMap()->bind();

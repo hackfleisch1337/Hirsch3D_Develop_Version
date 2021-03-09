@@ -9,6 +9,7 @@ in vec2 vg_TexCoord[];
 in mat4 vg_model[];
 in vec3 vg_Vertex_Pos[];
 in vec3 vg_cameraPos[];
+in vec3 vg_rawNormal[];
 
 out vec3 gf_T;
 out vec3 gf_B;
@@ -18,6 +19,7 @@ out vec2 v_uv;
 out mat4 v_model;
 out vec3 v_vertex_pos;
 out vec3 v_camera_pos;
+out vec3 v_rawNormal;
 
 vec3 GetTangent(vec3 A, vec3 B, vec3 C,  vec2 Auv, vec2 Buv, vec2 Cuv)
 {
@@ -51,6 +53,8 @@ void main(void)
         v_model = vg_model[i];
         v_vertex_pos = vg_Vertex_Pos[i];
         v_camera_pos = vg_cameraPos[i];
+        v_rawNormal = vg_rawNormal[i];
+
         gl_Position = gl_in[i].gl_Position;
         EmitVertex();
     }
