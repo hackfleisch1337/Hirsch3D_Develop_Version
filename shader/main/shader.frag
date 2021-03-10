@@ -92,9 +92,7 @@ void main() {
     // Scene ambient constant lightning
     vec3 ambient = vec3(f_color);
 
-    if(u_isCubeMapSet == 1) {
-        ambient = mix(vec3(f_color), vec3(texture(u_cubemap, reflect(v_camera_pos, normalize(v_normal)))), u_reflection);
-    }
+    
 
     // Vectors
 
@@ -106,8 +104,9 @@ void main() {
         normal =  normalize(mat3(v_model) * uv_normal + v_normal);
     }
     
-
-    
+    if(u_isCubeMapSet == 1) {
+        ambient = mix(vec3(f_color), vec3(texture(u_cubemap, reflect(v_camera_pos, normalize(normal)))), u_reflection);
+    }
 
     // Light Constants
     
@@ -229,12 +228,10 @@ void main() {
 
     vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
     
-    if(u_isCubeMapSet) {
-        color = mix(out_color, texture(u_cubemap, reflect(v_camera_pos, normalize(v_normal))), u_reflection);
+    if(u_isCubeMapSet == 1) {
+        color = mix(out_color, texture(u_cubemap, reflect(v_camera_pos, normalize(normal))), u_reflection);
     } else {
         color = out_color;
     }
-    
-    
     //else color = u_color;
 }

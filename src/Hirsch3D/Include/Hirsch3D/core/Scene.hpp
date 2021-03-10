@@ -128,6 +128,10 @@ namespace h3d
          */
         void setCubeMap(h3d::CubeMap* c);
 
+        /**
+         * @returns The cubemap
+         */
+        h3d::CubeMap* getCubeMap();
 
         float ambient;
     protected:
