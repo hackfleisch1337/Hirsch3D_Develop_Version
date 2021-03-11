@@ -28,15 +28,15 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
 
     this->startTime = clock();
  
-    std::cout << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
-              << "**************************************" << std::endl
-              << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" 
-              << std::endl;
+    std::cout   << std::endl
+                << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
+                << "**************************************" << std::endl
+                << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" 
+                << std::endl;
 
 
     #ifdef HIRSCH_DEBUG
         std::cout << "Launching Hirsch3D in Debug Mode" << std::endl;
-
     #elif defined HIRSCH_RELEASE
         std::cout << "Launching Hirsch3D in Release Mode" << std::endl;
     #endif

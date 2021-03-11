@@ -25,7 +25,10 @@ h3d::VertexBuffer::VertexBuffer(void* data, uint32_t amountOfVertices) {
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(h3d::Vertex3), (void*) (offsetof(struct h3d::Vertex3, nx)));
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    std::cout << GREEN << "[Ok] Generated vertex buffer " << YELLOW << "(" << amountOfVertices << " vertices)" << RESET_CLR << std::endl;
+    uint32_t amountOfByte = amountOfVertices*sizeof(h3d::Vertex3);
+    std::cout << GREEN << "[Ok] Generated vertex buffer " << YELLOW << "(" << amountOfVertices
+    << " vertices [" << amountOfByte << " Byte])"
+    << RESET_CLR << std::endl;
 }
 
 h3d::VertexBuffer::~VertexBuffer() {

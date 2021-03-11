@@ -15,7 +15,10 @@ h3d::IndexBuffer::IndexBuffer(uint32_t* data, uint32_t amountOfIndices) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->bufferId);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->amountOfIndices * sizeof(data[0]), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    std::cout << GREEN << "[Ok] Generated index buffer" << YELLOW << "(" << amountOfIndices << " indices)" << RESET_CLR << std::endl;
+    uint32_t amountOfByte = amountOfIndices*sizeof(uint32_t);
+    std::cout << GREEN << "[Ok] Generated index buffer" << YELLOW << "(" << amountOfIndices << " indices [" 
+    << amountOfByte << " Byte])"
+    << RESET_CLR << std::endl;
 }
 
 h3d::IndexBuffer::~IndexBuffer() {
