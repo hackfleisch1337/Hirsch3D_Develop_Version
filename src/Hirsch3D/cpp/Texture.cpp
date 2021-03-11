@@ -19,7 +19,7 @@ void h3d::Texture::load(std::string path) {
 
     if(texBuffer) {
         stbi_image_free(texBuffer);
-        std::cout << GREEN << "[Ok] Loaded Texture" << RESET_CLR << std::endl;
+        std::cout << GREEN << "[Ok] Loaded Texture " << YELLOW << "(" << path << ")" << RESET_CLR << std::endl;
         hasLoaded = true;
     } else {
         throw h3d::Exception("Texture could not be loaded");
@@ -99,7 +99,7 @@ void h3d::CubeMap::loadCubeMap(std::string px, std::string py, std::string pz,st
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, 0, GL_RGBA8, this->width, this->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texBuffer);
         if(texBuffer) {
             stbi_image_free(texBuffer);
-            std::cout << GREEN << "[Ok] Loaded Cubemap Texture" << RESET_CLR << std::endl;
+            std::cout << GREEN << "[Ok] Loaded Cubemap Texture " << YELLOW << "[" << i << "]" << RESET_CLR << std::endl;
         } else {
             throw h3d::Exception("Texture could not be loaded");
         }

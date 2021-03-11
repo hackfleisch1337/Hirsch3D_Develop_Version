@@ -11,7 +11,7 @@ h3d::Object::~Object() {
     if(hasLoaded) {
         delete this->vertices;
         delete this->indices;
-        std::cout << GREEN  << "[OK] Deleted Object" << RESET_CLR << std::endl;
+        std::cout << GREEN  << "[OK] Deleted Object " << YELLOW << "(" << this->objPath << ")" << RESET_CLR << std::endl;
     }
 }
 
@@ -31,11 +31,12 @@ void h3d::Object::load  (void* vertices, uint32_t amountOfVertices, uint32_t* in
     this->rotationVector = glm::vec3(0.0f,0.0f,0.0f);
     this->material = {1.0f, 1.0f, 10.0f};
     this->hasLoaded = true;
-    std::cout << GREEN << "[Ok] Loaded 3D Object" << RESET_CLR << std::endl;
+    std::cout << GREEN << "[Ok] Loaded 3D Object " << YELLOW << "(" << this->objPath << ", " << amountOfVertices << " vertices, "
+    << amountOfIndices << " indices)" << RESET_CLR << std::endl;
 }
 
 void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* texture, h3d::NormalMap* nm, h3d::RoughnessMap* r) {
-    
+    this->objPath = path;
     objl::Loader loader;
     if(!loader.LoadFile(path)) {
         std::cout << "\033[1;31m[FAILED] Failed to load Obj: " << path << "!\033[0m" << std::endl;
@@ -56,8 +57,8 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* te
                             });
     }
     //std::cout << path << "_OBJLOADER::__" << l_vertices.data()[0].x << " " << l_vertices.data()[0].y << " " << l_vertices.data()[0].z << std::endl;
+    
     this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, texture, nm, r);
-
 }
 
 

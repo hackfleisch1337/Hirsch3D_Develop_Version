@@ -158,6 +158,7 @@ void h3d::Hirsch3D::start() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); // Wireframe
     
     // Mainloop
     while(!close) {

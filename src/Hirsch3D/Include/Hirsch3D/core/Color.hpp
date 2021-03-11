@@ -29,7 +29,7 @@
 #include "glm/glm/glm.hpp"
 
 /**
- * hirsch3D colors
+ * Hirsch3D colors
  * 
  */
 namespace color {

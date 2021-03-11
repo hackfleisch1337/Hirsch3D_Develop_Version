@@ -197,7 +197,7 @@ namespace h3d
         glm::mat4 modelMatrix;
         glm::vec3 rotationVector;
         h3d::VertexBuffer* vertices;
-        std::string objPath;
+        std::string objPath = "/";
         uint32_t amountOfVertices;
         bool hasLoaded = false;
         h3d::IndexBuffer* indices;

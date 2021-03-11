@@ -36,6 +36,9 @@ uniform samplerCube u_cubemap;
 uniform int u_isCubeMapSet;
 
 uniform float u_reflection;
+uniform float u_refractionIndex;
+
+uniform float u_solidColor;
 
 // TBN Matrix
 
@@ -103,10 +106,7 @@ void main() {
         uv_normal = normalize(uv_normal * 2.0 - 1.0);
         normal =  normalize(mat3(v_model) * uv_normal + v_normal);
     }
-    
-    if(u_isCubeMapSet == 1) {
-        ambient = mix(vec3(f_color), vec3(texture(u_cubemap, reflect(v_camera_pos, normalize(normal)))), u_reflection);
-    }
+
 
     // Light Constants
     
@@ -229,7 +229,12 @@ void main() {
     vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
     
     if(u_isCubeMapSet == 1) {
-        color = mix(out_color, texture(u_cubemap, reflect(v_camera_pos, normalize(normal))), u_reflection);
+
+        vec4 reflectedColor = texture(u_cubemap, reflect(v_camera_pos, normalize(normal)));
+        vec4 refractedColor = texture(u_cubemap, refract(v_camera_pos, normalize(normal), 1.0/u_refractionIndex));
+        vec4 envColor = mix(reflectedColor, refractedColor, u_reflection);
+
+        color = mix(envColor,out_color, u_solidColor);
     } else {
         color = out_color;
     }

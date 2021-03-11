@@ -255,6 +255,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         int u_reflection = glGetUniformLocation(shaderId, "u_reflection");
         glUniform1f(u_reflection, currentObject->getMaterial().reflection);
 
+        glUniform1f(glGetUniformLocation(shaderId, "u_refractionIndex"), currentObject->getMaterial().refractionIndex);
+        glUniform1f(glGetUniformLocation(shaderId, "u_solidColor"), currentObject->getMaterial().solidColor);
+
         if(currentObject->getNormalMap() != nullptr) {
             glUniform1i(isNormalSet, 1);
             currentObject->getNormalMap()->bind();

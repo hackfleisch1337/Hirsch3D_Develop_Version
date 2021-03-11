@@ -66,8 +66,8 @@ namespace h3d
         virtual void unbind();
 
         virtual ~Texture(){
-            std::cout << GREEN << "[OK] Deleted Texture Buffer Data" << RESET_CLR << std::endl;
             glDeleteTextures(1, &buffer);
+            std::cout << GREEN << "[OK] Deleted texture buffer data" << RESET_CLR << std::endl;
         }
 
         /**

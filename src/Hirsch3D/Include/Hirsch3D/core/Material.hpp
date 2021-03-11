@@ -46,9 +46,15 @@ namespace h3d
         
         // Color the object emmits
         glm::vec3 emmisive = {0,0,0};
+        
+        float solidColor = 1.0;
 
-        // The amount of the reflection with the cube map
+         // The amount of the reflection with the cube map
         float reflection = 0.0f;
+
+        float refractionIndex = 1.0;
+
+        
     };
 } // namespace h3d
 
