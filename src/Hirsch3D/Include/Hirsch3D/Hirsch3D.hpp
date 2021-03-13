@@ -38,7 +38,6 @@
 #define RESET_CLR "\x1B[0m"
 
 #include <pthread.h>
-#include <string>
 #define GLEW_STATIC
 #include <GL/glew.h>
 #define SDL_MAIN_HANDLED
@@ -79,7 +78,7 @@ namespace h3d {
     class Hirsch3D {
 
     protected:
-        virtual void render(const h3d::Renderer&) = 0;
+        virtual void render(const h3d::Renderer&, float delta) = 0;
         virtual void setup() = 0;
         virtual void onClose() = 0;
 
@@ -100,10 +99,10 @@ namespace h3d {
          */
         void setSize(uint16_t width, uint16_t height);
     public:
-        #define HIRSCH3D_NOFLAG     0b00000000
-        #define HIRSCH3D_FULLSCREEN 0b00000001
-        #define HIRSCH3D_BORDERLESS 0b00000010
-        #define HIRSCH3D_MINIMIZED  0b00000100
+        #define HIRSCH3D_NOFLAG     0x00
+        #define HIRSCH3D_FULLSCREEN 0x01
+        #define HIRSCH3D_BORDERLESS 0x02
+        #define HIRSCH3D_MINIMIZED  0x04
         
         /**
          * Inits the Hirsch3D Programm
@@ -163,6 +162,7 @@ namespace h3d {
         clock_t startTime;
         bool showTitle = true;
         bool loaded = false;
+        clock_t delta = 0;
     };
 
     #include "core/Color.hpp"

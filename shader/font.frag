@@ -25,13 +25,14 @@
 
 
 #version 330 core
-
+layout(location = 0) out vec4 color;
 in vec2 v_uv;
 
-uniform u_color;
+uniform vec4 u_color;
 uniform sampler2D u_texture;
 
 
 void main() {
-    gl_FragColor = vec4(texture2D(u_texture, v_uv).a) * u_color;
+    if(texture2D(u_texture, v_uv).a < 0.1) discard;
+    color = vec4(texture2D(u_texture, v_uv).a) * u_color;
 }

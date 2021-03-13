@@ -162,33 +162,12 @@ void h3d::Hirsch3D::start() {
     
     // Mainloop
     while(!close) {
-
-            
+            clock_t loopstart = clock();
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
-
-            /*############ GL DRAW ##################
-            buffer.bind();
-            glDrawArrays(GL_TRIANGLES, 0, buffer.getAmountOfVertices());
-            buffer.unbind();
-
-
-            glBegin(GL_TRIANGLES);
-
-
-            glVertex2f(-0.5f, -0.5f);
-            glVertex2f(0.0f, 0.5f);
-            glVertex2f(0.5f, -0.5f);
-
-            glEnd();
-            /*############ GL END ###############################*/
-
-
             if(!this->showTitle && this->loaded) {
-                this->render(this->renderer);
+                this->render(this->renderer, (float)delta/1000.0f);
             }
 
             if(this->showTitle && this->getCurrentTimeMillis() > (2000 + startpoint) && this->loaded) {
@@ -226,6 +205,8 @@ void h3d::Hirsch3D::start() {
                 
             }
             SDL_Delay(1000/this->fps);
+            clock_t loopend = clock();
+            this->delta = loopend - loopstart;
     }
 
 }

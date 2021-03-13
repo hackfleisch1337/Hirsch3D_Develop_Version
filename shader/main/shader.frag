@@ -254,7 +254,7 @@ void main() {
 
     vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
     
-    if(u_isCubeMapSet == 1) {
+    if(u_isCubeMapSet == 1 && u_solidColor != 1) {
 
         vec4 reflectedColor = texture(u_cubemap, reflect(v_camera_pos, normalize(normal)));
         vec4 refractedColor = texture(u_cubemap, refract(v_camera_pos, normalize(normal), 1.0/u_refractionIndex));
