@@ -1,11 +1,13 @@
 #include "../Include/Hirsch3D/core/Scene.hpp"
 
-void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, std::string geometryShaderSrc,h3d::Camera* camera, float ambient) {
+void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, std::string geometryShaderSrc,h3d::Camera* camera, glm::vec2 size, float ambient) {
     this->shader.load(vertexShaderSrc, fragmentShaderSrc, geometryShaderSrc);
     this->camera = camera;
     this->ambient = ambient;
     this->isLoaded = true;
     this->cubemap = nullptr;
+    this->size = size;
+    this->fb.load(size);
     h3d::Vertex3 cube_v[] = H3D_CUBE_VERTICES(1,1,1);
     uint32_t cube_i[] = H3D_CUBE_INDICES;
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
@@ -13,18 +15,22 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
-void h3d::Scene::load(h3d::Camera* camera, float ambient) {
+void h3d::Scene::load(h3d::Camera* camera, glm::vec2 size, float ambient) {
     this->cubemap = nullptr;
     this->ambient = ambient;
     this->camera = camera;
+    this->size = size;
     this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag", "./shader/main/shader.geo");
     this->isLoaded = true;
+    this->fb.load(size);
     h3d::Vertex3 cube_v[] = H3D_CUBE_VERTICES(1,1,1);
     uint32_t cube_i[] = H3D_CUBE_INDICES;
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
+
+
 
 /**
  * @param o The pointer of the object to add
@@ -87,7 +93,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::mat4 cubemapproj = this->camera->getProj();
         glUniformMatrix4fv(glGetUniformLocation(this->cubemapshader.getShaderId(), "u_view"), 1, GL_FALSE, &cubemapmat[0][0]);
         glUniformMatrix4fv(glGetUniformLocation(this->cubemapshader.getShaderId(), "u_proj"), 1, GL_FALSE, &cubemapproj[0][0]);
-        r.renderObject(&this->cube);
+        //fb.bind();
+        r.renderObject(&this->cube); // RENDER
+        //fb.unbind();
         this->cubemap->unbind();
         this->cubemapshader.unbind();
         glEnable(GL_DEPTH_TEST);
@@ -314,8 +322,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::vec3 p = currentObject->getPosition();
         glUniform3f(u_positionUniformLocation, p.x, p.y, p.z);
 
-
+        //fb.bind();
         r.renderObject(currentObject); // finally renders the object
+        //fb.unbind();
 
         if(currentObject->getTexture() != nullptr)
             currentObject->getTexture()->unbind(); // unbind texture if used
@@ -331,10 +340,17 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     }
     
     this->shader.unbind(); // unbind scene shader
+
+    //fb.render();
+
     glDisable(GL_BLEND);
 }
 
 void h3d::Scene::setCubeMap(h3d::CubeMap* c) {
+    if(!c->loaded()) {
+        throw h3d::Exception("Unable to set not loaded cubemap");
+        return;
+    }
     this->cubemap = c;
 }
 
@@ -344,7 +360,7 @@ h3d::CubeMap* h3d::Scene::getCubeMap() {
 
 void h3d::Scene2D::load2D(float screenWidth, float screenHeight) {
     this->c2d.init(screenWidth, screenHeight);
-    this->load("shader/2d.vert", "shader/2d.frag", "nogeometryshader", &c2d);
+    this->load("shader/2d.vert", "shader/2d.frag", "nogeometryshader", &c2d, {screenWidth, screenHeight});
 }
 
 void h3d::Scene2D::render(const h3d::Renderer &r) {
@@ -389,4 +405,8 @@ void h3d::Scene::setTransparency(bool t) {
 
 bool h3d::Scene::hasTransparency() {
     return this->transparency;
+}
+
+h3d::Scene::~Scene() {
+
 }

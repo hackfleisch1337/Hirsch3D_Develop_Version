@@ -49,7 +49,7 @@ namespace h3d
          * 
          * @returns the shader id
          */
-        GLuint getShaderId() {return shaderId;}
+        GLuint getShaderId() const {return shaderId;}
         /**
          * 
          * @returns true if the shader is loaded

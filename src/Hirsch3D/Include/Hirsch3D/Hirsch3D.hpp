@@ -52,6 +52,7 @@
 #include "core/Texture.hpp"
 #include "core/Light.hpp"
 #include "core/Object.hpp"
+#include "core/FrameBuffer.hpp"
 #include "core/Scene.hpp"
 #include "core/Camera.hpp"
 #include "core/Text.hpp"

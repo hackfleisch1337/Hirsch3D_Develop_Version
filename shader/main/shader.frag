@@ -248,10 +248,6 @@ void main() {
         transparentcy = f_color.a;
     }
 
-
-    
-    
-
     vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
     
     if(u_isCubeMapSet == 1 && u_solidColor != 1) {

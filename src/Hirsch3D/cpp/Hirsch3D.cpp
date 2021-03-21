@@ -83,8 +83,6 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     } else std::cout << "\033[1;32m[OK] Initialized Glew succesful!\033[0m" << std::endl;
     std::cout << "OpenGl Driver Version: " << YELLOW << glGetString(GL_VERSION) << RESET_CLR << std::endl;
 
-
-
     // Hirsch3D Texture  //
     //////////////////////
     int textureWidth = 1920;

@@ -57,7 +57,7 @@ namespace h3d
          * @param ambient intensity of the scenes ambient light (default=0.1f)
          * 
          */
-        void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, std::string geometryShaderSrc,h3d::Camera* camera, float ambient = 0.1f);
+        void load(std::string vertexShaderSrc, std::string fragmentShaderSrc, std::string geometryShaderSrc,h3d::Camera* camera, glm::vec2 size,float ambient = 0.1f);
         
         /**
          * Inititalizes the scene with the default shader
@@ -66,7 +66,13 @@ namespace h3d
          * @param ambient intensity of the scenes ambient light (default=0.1f)
          * 
          */
-        void load(h3d::Camera* camera, float ambient = 0.1f);
+        void load(h3d::Camera* camera, glm::vec2 size, float ambient = 0.1f);
+
+        /**
+         * 
+         * Destructor
+         */
+        virtual ~Scene();
 
         /**
          * Adds an object to the scene
@@ -142,6 +148,8 @@ namespace h3d
         std::vector<h3d::SpotLight*> slights;
         h3d::Camera* camera;
         bool isLoaded = false;
+        glm::vec2 size;
+        h3d::FrameBuffer fb;
     private:
         bool transparency = false;
         h3d::CubeMap* cubemap = nullptr;
