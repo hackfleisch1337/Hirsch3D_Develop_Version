@@ -26,16 +26,17 @@
 
 #version 330 core
 
-layout(location = 0) out vec4 color;
-
-in vec2 v_uv;
+in vec2 texCoord;
 uniform sampler2D u_texture;
 
 void main() {
-    vec4 tColor = texture(u_texture, v_uv);
+    vec4 tColor = texture2D(u_texture, texCoord);
     
     if(tColor.a < 0.1) {
         discard;
-    } 
-    color = tColor;
+    }
+
+    vec4 cl = tColor;
+    
+    gl_FragColor = cl;
 }

@@ -6,8 +6,8 @@
  * Licence: MIT Licence
  * Last changes: 02.03.2021 (DD.MM.YYYY)
  * 
- * @file Hirsch3D/shader/2d.vert
- * @ref Hirsch3d/shader
+ * @file Hirsch3D/shader/framebuffer/framebuffer.vert
+ * @ref Hirsch3d/shader/framebuffer
  *
  * @author Emanuel Zache
  * @version 0.9.7
@@ -26,13 +26,12 @@
 
 #version 330 core
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec2 uv;
-
-uniform mat4 u_matrix;
-out vec2 v_uv;
+out vec2 texCoord;
 
 void main() {
-    gl_Position = vec4(u_matrix * vec4(position, 1.0f));
-    v_uv = uv;
+    float x = -1.0 + float((gl_VertexID & 1) << 2);
+    float y = -1.0 + float((gl_VertexID & 2) << 1);
+    texCoord.x = (x+1.0)*0.5;
+    texCoord.y = (y+1.0)*0.5;
+    gl_Position = vec4(x,y,0,1);
 }

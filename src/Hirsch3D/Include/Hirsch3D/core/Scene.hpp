@@ -150,6 +150,7 @@ namespace h3d
         bool isLoaded = false;
         glm::vec2 size;
         h3d::FrameBuffer fb;
+        h3d::Shader fbs;
     private:
         bool transparency = false;
         h3d::CubeMap* cubemap = nullptr;

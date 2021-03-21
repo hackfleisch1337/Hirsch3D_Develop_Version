@@ -12,6 +12,7 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     uint32_t cube_i[] = H3D_CUBE_INDICES;
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
+    this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
@@ -27,6 +28,7 @@ void h3d::Scene::load(h3d::Camera* camera, glm::vec2 size, float ambient) {
     uint32_t cube_i[] = H3D_CUBE_INDICES;
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
+    this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
@@ -83,9 +85,14 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         return;
     }
 
+    this->fb.bind();
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     if(this->cubemap != nullptr) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
+       
         this->cubemapshader.bind();
         this->cubemap->bind();
         glUniform1i(glGetUniformLocation(this->cubemapshader.getShaderId(), "u_cubemap"), 3);
@@ -93,14 +100,15 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::mat4 cubemapproj = this->camera->getProj();
         glUniformMatrix4fv(glGetUniformLocation(this->cubemapshader.getShaderId(), "u_view"), 1, GL_FALSE, &cubemapmat[0][0]);
         glUniformMatrix4fv(glGetUniformLocation(this->cubemapshader.getShaderId(), "u_proj"), 1, GL_FALSE, &cubemapproj[0][0]);
-        //fb.bind();
+
         r.renderObject(&this->cube); // RENDER
-        //fb.unbind();
+       
         this->cubemap->unbind();
         this->cubemapshader.unbind();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
     }
+
 
     this->shader.bind(); // bind scene shader
 
@@ -322,9 +330,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::vec3 p = currentObject->getPosition();
         glUniform3f(u_positionUniformLocation, p.x, p.y, p.z);
 
-        //fb.bind();
+
         r.renderObject(currentObject); // finally renders the object
-        //fb.unbind();
+
 
         if(currentObject->getTexture() != nullptr)
             currentObject->getTexture()->unbind(); // unbind texture if used
@@ -340,8 +348,17 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     }
     
     this->shader.unbind(); // unbind scene shader
+    this->fb.unbind();
+ 
 
-    //fb.render();
+    // Render the framebuffer
+    glEnable(GL_BLEND);
+    fbs.bind();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fb.getTexture());
+    glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_texture"), 0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    fbs.unbind();
 
     glDisable(GL_BLEND);
 }

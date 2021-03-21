@@ -26,13 +26,11 @@ namespace h3d
         void render();
     private:
         GLuint id;
-        GLuint tex;
+        GLuint tex[2];
         bool loaded = false;
         glm::vec2 size;
         h3d::VertexBuffer* vertices;
         h3d::IndexBuffer* indices;
-        h3d::Shader shader;
-        
     };
 } // namespace h3d
 
