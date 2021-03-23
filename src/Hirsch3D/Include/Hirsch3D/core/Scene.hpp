@@ -156,6 +156,44 @@ namespace h3d
         h3d::CubeMap* cubemap = nullptr;
         h3d::Shader cubemapshader;
         h3d::Object cube;
+
+        void loadUniformLocations();
+
+        // uniform locations;
+        uint32_t amountOfDlights;
+        uint32_t amountOfPlights;
+        uint32_t amountOfSlights;
+
+        uint32_t u_transparency;
+
+        uint32_t u_isCubeMapSet;
+        uint32_t u_cubemap;
+
+        uint32_t u_modelViewProj;
+        uint32_t u_color;
+        uint32_t c_position;
+        uint32_t u_model;
+        uint32_t u_modelView;
+        uint32_t u_invModelView;
+        uint32_t u_view;
+        uint32_t u_normalmap;
+        uint32_t isNormalSet;
+        uint32_t u_roughnessmap;
+        uint32_t isRoughnessSet;
+
+        uint32_t u_kD;
+        uint32_t u_specIntensity;
+        uint32_t u_shininess;
+        uint32_t u_specColor;
+        uint32_t u_emmisive;
+        uint32_t u_reflection;
+        uint32_t u_refractionIndex;
+        uint32_t u_solidColor;
+        uint32_t u_texture;
+        uint32_t isSamplerSet;
+        uint32_t u_position;
+
+
     };
 
     /**

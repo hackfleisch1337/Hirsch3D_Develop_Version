@@ -13,6 +13,7 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
     this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
+    loadUniformLocations();
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
@@ -29,10 +30,47 @@ void h3d::Scene::load(h3d::Camera* camera, glm::vec2 size, float ambient) {
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
     this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
+    loadUniformLocations();
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
+void h3d::Scene::loadUniformLocations() {
 
+    #define H3D_UL(x) glGetUniformLocation(this->shader.getShaderId(), x)
+
+    amountOfDlights = H3D_UL("amountOfDlights");
+    amountOfPlights = H3D_UL("amountOfPlights");
+    amountOfSlights = H3D_UL("amountOfSlights");
+
+    u_transparency = H3D_UL("u_transparency");
+
+    u_isCubeMapSet = H3D_UL("u_isCubeMapSet");
+    u_cubemap  = H3D_UL("u_cubemap");
+
+    u_modelViewProj = H3D_UL("u_modelViewProj");
+    u_color = H3D_UL("u_color");
+    c_position = H3D_UL("c_position");
+    u_model = H3D_UL("u_model");
+    u_modelView = H3D_UL("u_modelView");
+    u_invModelView = H3D_UL("u_invModelView");
+    u_view = H3D_UL("u_view");
+    u_normalmap = H3D_UL("u_normalmap");
+    isNormalSet = H3D_UL("isNormalSet");
+    u_roughnessmap = H3D_UL("u_roughnessmap");
+    isRoughnessSet = H3D_UL("isRoughnessSet");
+
+    u_kD = H3D_UL("u_kD");
+    u_specIntensity = H3D_UL("u_specIntensity");
+    u_shininess = H3D_UL("u_shininess");
+    u_specColor = H3D_UL("u_specColor");
+    u_emmisive = H3D_UL("u_emmisive");
+    u_reflection = H3D_UL("u_reflection");
+    u_refractionIndex = H3D_UL("u_refractionIndex");
+    u_solidColor = H3D_UL("u_solidColor");
+    u_texture = H3D_UL("u_texture");
+    isSamplerSet = H3D_UL("isSamplerSet");
+    u_position = H3D_UL("u_position");
+}
 
 /**
  * @param o The pointer of the object to add
@@ -118,21 +156,20 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     int u_ambientUniformLocation = glGetUniformLocation(shaderId, "u_ambient");
     glUniform1f(u_ambientUniformLocation, this->ambient);
 
-    glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfDlights"), this->dlights.size());
-    glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfPlights"), this->plights.size());
-    glUniform1i(glGetUniformLocation(shader.getShaderId(), "amountOfSlights"), this->slights.size());
+    glUniform1i(amountOfDlights, this->dlights.size());
+    glUniform1i(amountOfPlights, this->plights.size());
+    glUniform1i(amountOfSlights, this->slights.size());
     
-    glUniform1i(glGetUniformLocation(shaderId, "u_transparency"), this->transparency ? 1:0);
+    glUniform1i(u_transparency, this->transparency ? 1:0);
 
-    
     
     if(this->cubemap != nullptr) {
         this->cubemap->bind();
-        glUniform1i(glGetUniformLocation(shaderId, "u_isCubeMapSet"), 1);
-        glUniform1i(glGetUniformLocation(shaderId, "u_cubemap"), 3);
+        glUniform1i(u_isCubeMapSet, 1);
+        glUniform1i(u_cubemap, 3);
     } else {
-        glUniform1i(glGetUniformLocation(shaderId, "u_isCubeMapSet"), 0);
-        glUniform1i(glGetUniformLocation(shaderId, "u_cubemap"), 3);
+        glUniform1i(u_isCubeMapSet, 0);
+        glUniform1i(u_cubemap, 3);
     }
 
     if(transparency) {
@@ -216,63 +253,56 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         }
 
         // uniform mat4 u_modelViewProj
-        int u_modelUniformLocation = glGetUniformLocation(shaderId, "u_modelViewProj");
+        int u_modelUniformLocation = u_modelViewProj;
         glm::mat4 m = this->camera->getViewProj() * currentObject->getMatrix();
 
         // uniform vec4 u_color
-        int u_colorUniformLocation = glGetUniformLocation(shaderId, "u_color");
+        int u_colorUniformLocation = u_color;
         glm::vec4 c = currentObject->color;
 
         // uniform vec3 c_position
-        int c_positionUniformLocation = glGetUniformLocation(shaderId, "c_position");
+        int c_positionUniformLocation = c_position;
 
         // uniform mat4 u_model
-        int uniformU_Model = glGetUniformLocation(shaderId, "u_model");
+        int uniformU_Model = u_model;
         glm::mat4 u_modelU = currentObject->getMatrix();
 
         // uniform mat4 u_modelView
-        int u_modelViewUniformLocation = glGetUniformLocation(shaderId, "u_modelView");
+        int u_modelViewUniformLocation = u_modelView;
         glm::mat4 mV = this->camera->getView() * currentObject->getMatrix();
 
         // uniform mat4 u_invModelView
-        int u_invModelViewUniformLocation = glGetUniformLocation(shaderId, "u_invModelView");
+        int u_invModelViewUniformLocation = u_invModelView;
         glm::mat4 invMv = glm::inverse(mV);
 
         // uniform mat4 u_view
 
-        int u_viewUniformLocation = glGetUniformLocation(shaderId, "u_view");
+        int u_viewUniformLocation = u_view;
         glm::mat4 u_viewU = this->camera->getView();
 
         // Normalmap
-        int u_normalmap = glGetUniformLocation(shaderId, "u_normalmap");
-        int isNormalSet = glGetUniformLocation(shaderId, "isNormalSet");
 
-        int u_roughnessmap = glGetUniformLocation(shaderId, "u_roughnessmap");
-        int isRoughnessSet = glGetUniformLocation(shaderId, "isRoughnessSet");
-
-
-        int u_kD = glGetUniformLocation(shaderId, "u_kD");
         glUniform1f(u_kD, currentObject->getMaterial().kD);
 
-        int u_kS = glGetUniformLocation(shaderId, "u_specIntensity");
-        glUniform1f(u_kS, currentObject->getMaterial().kS);
+        
+        glUniform1f(u_specIntensity, currentObject->getMaterial().kS);
 
-        int u_roughness = glGetUniformLocation(shaderId, "u_shininess");
-        glUniform1f(u_roughness, currentObject->getMaterial().roughness);
+        
+        glUniform1f(u_shininess, currentObject->getMaterial().roughness);
 
-        int u_specColor = glGetUniformLocation(shaderId, "u_specColor");
+        
         glm::vec3 u_specColorVector = currentObject->getMaterial().specColor;
         glUniform3f(u_specColor, u_specColorVector.x, u_specColorVector.y, u_specColorVector.z);
 
-        int u_emmisive = glGetUniformLocation(shaderId, "u_emmisive");
+        
         glm::vec3 u_emmisive3f = currentObject->getMaterial().emmisive;
         glUniform3f(u_emmisive, u_emmisive3f.x, u_emmisive3f.y, u_emmisive3f.z);
 
-        int u_reflection = glGetUniformLocation(shaderId, "u_reflection");
+        
         glUniform1f(u_reflection, currentObject->getMaterial().reflection);
 
-        glUniform1f(glGetUniformLocation(shaderId, "u_refractionIndex"), currentObject->getMaterial().refractionIndex);
-        glUniform1f(glGetUniformLocation(shaderId, "u_solidColor"), currentObject->getMaterial().solidColor);
+        glUniform1f(u_refractionIndex, currentObject->getMaterial().refractionIndex);
+        glUniform1f(u_solidColor, currentObject->getMaterial().solidColor);
 
         if(currentObject->getNormalMap() != nullptr) {
             glUniform1i(isNormalSet, 1);
@@ -309,26 +339,18 @@ void h3d::Scene::render(const h3d::Renderer &r) {
             //std::cout << "Texture" << std::endl;
 
             // set u_texture if available
-            int textureUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_texture");
-            glUniform1i(textureUniformLocation, 0);
-
+            glUniform1i(u_texture, 0);
             // sets uniform isSamplerSet to 1 (= true) to clarify that a texture (u_texture) should be used
-            int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
-            glUniform1i(isSamplerSetUniformLocation, 1);
+            glUniform1i(isSamplerSet, 1);
 
         } else {
-            //std::cout << "Texture2" << std::endl;
-
             // sets uniform isSamplerSet to 0 (= false) to clarify that theres no texture and a color (u_color) should be used
-            int isSamplerSetUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "isSamplerSet");
-            glUniform1i(isSamplerSetUniformLocation, 0);
+            glUniform1i(isSamplerSet, 0);
         }
 
-
         // sets uniform u_position to objects position
-        int u_positionUniformLocation = glGetUniformLocation(this->shader.getShaderId(), "u_position");
         glm::vec3 p = currentObject->getPosition();
-        glUniform3f(u_positionUniformLocation, p.x, p.y, p.z);
+        glUniform3f(u_position, p.x, p.y, p.z);
 
 
         r.renderObject(currentObject); // finally renders the object
