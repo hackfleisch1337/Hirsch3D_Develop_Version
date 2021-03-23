@@ -35,7 +35,7 @@ void main() {
     if(tColor.a < 0.1) {
         discard;
     }
-
+    
     vec4 cl = tColor;
     
     gl_FragColor = cl;
