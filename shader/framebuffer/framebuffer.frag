@@ -29,14 +29,19 @@
 in vec2 texCoord;
 uniform sampler2D u_texture;
 
+uniform sampler2D u_brightTexture;
+
 void main() {
+    
+    const float gamma = 2.2;
+    
     vec4 tColor = texture2D(u_texture, texCoord);
+    vec4 bColor = texture2D(u_brightTexture, texCoord);
+
+    tColor += bColor*3;
+
+    if(tColor.a < 0.1) discard;
+
     
-    if(tColor.a < 0.1) {
-        discard;
-    }
-    
-    vec4 cl = tColor;
-    
-    gl_FragColor = cl;
+    gl_FragColor = tColor;
 }

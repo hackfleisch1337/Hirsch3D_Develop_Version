@@ -1,18 +1,32 @@
 #include "../Include/Hirsch3D/core/FrameBuffer.hpp"
 #include <iostream>
 
-void h3d::FrameBuffer::load(glm::vec2 size) {
+void h3d::FrameBuffer::load(glm::vec2 size, unsigned int components) {
+    if(components > 5) {
+        return;
+    }
     this->size = size;
     glGenFramebuffers(1, &id);
+    
+    this->amountOfComponents = components;
 
-    glGenTextures(2, tex);
+    this->tex = new GLuint[components];
 
-    glBindTexture(GL_TEXTURE_2D, tex[0]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenTextures(components+1, tex);
 
-    glBindTexture(GL_TEXTURE_2D, tex[1]);
+    for(int i = 0; i < components; i++) {
+        glBindTexture(GL_TEXTURE_2D, tex[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+    
+
+
+
+
+
+    glBindTexture(GL_TEXTURE_2D, tex[components]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, size.x, size.y, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -20,9 +34,14 @@ void h3d::FrameBuffer::load(glm::vec2 size) {
 
     this->bind();
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex[0], 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, tex[1], 0);
+    for(int i = 0; i < components; i++) {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, tex[i], 0);
+    }
+    
 
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, tex[components], 0);
+    glDrawBuffers(components, attachments);
     this->unbind();
 
 }
@@ -36,6 +55,7 @@ void h3d::FrameBuffer::unbind() {
 }
 
 h3d::FrameBuffer::~FrameBuffer() {
+    glDeleteTextures(this->amountOfComponents,tex);
     glDeleteFramebuffers(1, &id);
 }
 
@@ -50,6 +70,21 @@ bool h3d::FrameBuffer::hasLoaded() const {
 
 GLuint h3d::FrameBuffer::getTexture() const {
    return this->tex[0];
+}
+
+GLuint h3d::FrameBuffer::getDepthBuffer() const {
+    return this->tex[amountOfComponents];
+}
+
+GLuint h3d::FrameBuffer::getBrightColorBuffer() const {
+    return this->tex[1];
+}
+
+GLuint h3d::FrameBuffer::getRenderTarget(unsigned int target) {
+    if(target>=amountOfComponents) {
+        return 0;
+    }
+    return this->tex[target];
 }
 
 void h3d::FrameBuffer::render() {

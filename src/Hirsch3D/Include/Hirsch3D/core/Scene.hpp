@@ -151,15 +151,22 @@ namespace h3d
         glm::vec2 size;
         h3d::FrameBuffer fb;
         h3d::Shader fbs;
+        
+        
+        h3d::Shader blurShader;
+        h3d::FrameBuffer blurFb1;
+        h3d::FrameBuffer blurFb2;
     private:
         bool transparency = false;
         h3d::CubeMap* cubemap = nullptr;
         h3d::Shader cubemapshader;
         h3d::Object cube;
 
+        
+
         void loadUniformLocations();
 
-        // uniform locations;
+        // Uniform locations;
         uint32_t amountOfDlights;
         uint32_t amountOfPlights;
         uint32_t amountOfSlights;

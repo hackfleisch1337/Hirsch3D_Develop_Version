@@ -29,8 +29,9 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     this->startTime = clock();
  
     std::cout   << std::endl
-                << "Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
-                << "**************************************" << std::endl
+                << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" << std::endl
+                << "    Hirsch3D Renderengine | Version " << YELLOW << HIRSCH3D_VERSION << RESET_CLR << std::endl
+                << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-" << std::endl << std::endl
                 << "Copyright (C) 2021 Emanuel Zache\nLicence: MIT Licence (See https://mit-license.org/)\n" 
                 << std::endl;
 
@@ -233,4 +234,15 @@ void h3d::Renderer::renderObject(const h3d::Object* o) const{
     glDrawElements(GL_TRIANGLES, o->getIndexBuffer()->getAmountOfIndices(), GL_UNSIGNED_INT, 0);
     o->getIndexBuffer()->unbind();
     o->getVertexBuffer()->unbind();
+}
+
+void h3d::Renderer::renderQuad() const{
+    glBegin(GL_TRIANGLES);
+    glVertex2f(0,0);
+    glVertex2f(1,0);
+    glVertex2f(1,1);
+    glVertex2f(0,0);
+    glVertex2f(0,1);
+    glVertex2f(1,1);
+    glEnd();
 }

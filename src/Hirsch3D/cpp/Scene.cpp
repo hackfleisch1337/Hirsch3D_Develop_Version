@@ -7,13 +7,17 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->isLoaded = true;
     this->cubemap = nullptr;
     this->size = size;
-    this->fb.load(size);
+    this->fb.load(size, 2);
+    this->blurFb1.load(size, 1);
+    this->blurFb2.load(size, 1);
     h3d::Vertex3 cube_v[] = H3D_CUBE_VERTICES(1,1,1);
     uint32_t cube_i[] = H3D_CUBE_INDICES;
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
     this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
+    this->blurShader.load("shader/blur/blur.vert", "shader/blur/blur.frag");
     loadUniformLocations();
+
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
@@ -24,12 +28,15 @@ void h3d::Scene::load(h3d::Camera* camera, glm::vec2 size, float ambient) {
     this->size = size;
     this->shader.load("./shader/main/shader.vert", "./shader/main/shader.frag", "./shader/main/shader.geo");
     this->isLoaded = true;
-    this->fb.load(size);
+    this->fb.load(size, 2);
+    this->blurFb1.load(size, 1);
+    this->blurFb2.load(size, 1);
     h3d::Vertex3 cube_v[] = H3D_CUBE_VERTICES(1,1,1);
     uint32_t cube_i[] = H3D_CUBE_INDICES;
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
     this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
+    this->blurShader.load("shader/blur/blur.vert", "shader/blur/blur.frag");
     loadUniformLocations();
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
@@ -371,14 +378,49 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     
     this->shader.unbind(); // unbind scene shader
     this->fb.unbind();
- 
 
-    // Render the framebuffer
+
+    glActiveTexture(GL_TEXTURE0);
+
+    bool firstIteration = true;
+
+    for(int i= 0; i < 10; i++) {
+        this->blurFb1.bind();
+        glClearColor(0,0,0,0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        this->blurShader.bind();
+        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "u_texture"), 0);
+        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "horizontal"), 1);
+        glBindTexture(GL_TEXTURE_2D, firstIteration ? fb.getRenderTarget(1):blurFb2.getRenderTarget(0));
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        this->blurShader.unbind();
+        this->blurFb1.unbind();
+
+        this->blurFb2.bind();
+        glClearColor(0,0,0,0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        this->blurShader.bind();
+        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "u_texture"), 0);
+        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "horizontal"), 0);
+        glBindTexture(GL_TEXTURE_2D, blurFb1.getRenderTarget(0));
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        this->blurShader.unbind();
+        this->blurFb2.unbind();
+
+        firstIteration = false;
+    }
+
+    // Render to the screen;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glEnable(GL_BLEND);
     fbs.bind();
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fb.getTexture());
+    glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(0));
     glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_texture"), 0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, blurFb2.getRenderTarget(0));
+    glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_brightTexture"), 1);
+    glActiveTexture(GL_TEXTURE0);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     fbs.unbind();
 

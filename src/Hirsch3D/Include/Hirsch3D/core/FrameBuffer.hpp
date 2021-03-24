@@ -16,21 +16,26 @@ namespace h3d
     class FrameBuffer {
 
     public:
-        void load(glm::vec2 size);
+        void load(glm::vec2 size, unsigned int components);
         void bind();
         void unbind();
         virtual ~FrameBuffer();
         glm::vec2 getSize() const;
         bool hasLoaded() const;
         GLuint getTexture() const;
+        GLuint getDepthBuffer() const;
+        GLuint getBrightColorBuffer() const;
+        GLuint getRenderTarget(unsigned int target);
         void render();
     private:
         GLuint id;
-        GLuint tex[2];
+        GLuint* tex;
         bool loaded = false;
         glm::vec2 size;
         h3d::VertexBuffer* vertices;
+        unsigned int amountOfComponents;
         h3d::IndexBuffer* indices;
+        unsigned int attachments[5] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4};
     };
 } // namespace h3d
 

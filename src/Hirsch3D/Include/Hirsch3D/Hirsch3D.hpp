@@ -74,6 +74,8 @@ namespace h3d {
          * @param o A pointer to the object to be rendered
          */
         void renderObject(const h3d::Object* o) const;
+
+        void renderQuad() const;
     };
 
     class Hirsch3D {
