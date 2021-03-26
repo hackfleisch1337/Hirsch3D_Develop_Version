@@ -30,17 +30,23 @@ in vec2 texCoord;
 uniform sampler2D u_texture;
 
 uniform sampler2D u_brightTexture;
+uniform bool u_blur;
+uniform float u_blurBrightness;
 
 void main() {
     
     const float gamma = 2.2;
     
     vec4 tColor = texture2D(u_texture, texCoord);
-    vec4 bColor = texture2D(u_brightTexture, texCoord);
+    
+    if(u_blur) {
+        vec4 bColor = texture2D(u_brightTexture, texCoord);
 
-    tColor += bColor*3;
+        tColor += bColor*u_blurBrightness;
+    }
+    
 
-    if(tColor.a < 0.1) discard;
+    
 
     
     gl_FragColor = tColor;

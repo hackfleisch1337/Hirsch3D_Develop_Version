@@ -22,10 +22,6 @@ void h3d::FrameBuffer::load(glm::vec2 size, unsigned int components) {
     }
     
 
-
-
-
-
     glBindTexture(GL_TEXTURE_2D, tex[components]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, size.x, size.y, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

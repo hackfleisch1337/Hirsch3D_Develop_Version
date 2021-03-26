@@ -139,6 +139,18 @@ namespace h3d
          */
         h3d::CubeMap* getCubeMap();
 
+
+        /**
+         * Enables/Disables a bloom effect for the bright parts on the screen.
+         * WARNING: This will have an extreme effect on the performance and could cause lags.
+         * 
+         * @param b Enable/Disable
+         * @param amount The number of executions of the Gaussian Blur. The higher this value, the stronger
+         *               the blur effect but it has a higher effect on the performance
+         * 
+         */
+        void setBloom(bool b, uint32_t amount, float brightness=2.5);
+
         float ambient;
     protected:
         h3d::Shader shader;
@@ -152,17 +164,20 @@ namespace h3d
         h3d::FrameBuffer fb;
         h3d::Shader fbs;
         
-        
+    private:    
         h3d::Shader blurShader;
         h3d::FrameBuffer blurFb1;
         h3d::FrameBuffer blurFb2;
-    private:
+    
         bool transparency = false;
         h3d::CubeMap* cubemap = nullptr;
         h3d::Shader cubemapshader;
         h3d::Object cube;
 
-        
+        bool bloom = false;
+        uint32_t amountOfGaussianBlur = 10;
+        float bloomBrightness = 2.5;
+
 
         void loadUniformLocations();
 

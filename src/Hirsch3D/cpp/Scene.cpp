@@ -117,6 +117,15 @@ void h3d::Scene::addSpotLight(h3d::SpotLight* l) {
         throw h3d::Exception("Maximum amount of lights already reached");
     }
 }
+
+
+void h3d::Scene::setBloom(bool b, uint32_t amount, float brightness) {
+    this->bloom = b;
+    this->amountOfGaussianBlur = amount;
+    this->bloomBrightness = brightness;
+}
+
+
 /**
  * @param r The h3d::Renderer r object
  *
@@ -376,39 +385,44 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         }
     }
     
-    this->shader.unbind(); // unbind scene shader
+    this->shader.unbind(); // unbind scene shader //
     this->fb.unbind();
 
 
     glActiveTexture(GL_TEXTURE0);
 
+
+    // Gaussian blur //
     bool firstIteration = true;
+    if(bloom) {
+        for(int i= 0; i < amountOfGaussianBlur; i++) {
+            this->blurFb1.bind();
+            glClearColor(0,0,0,0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            this->blurShader.bind();
+            glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "u_texture"), 0);
+            glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "horizontal"), 1);
+            glBindTexture(GL_TEXTURE_2D, firstIteration ? fb.getRenderTarget(1):blurFb2.getRenderTarget(0));
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+            this->blurShader.unbind();
+            this->blurFb1.unbind();
 
-    for(int i= 0; i < 10; i++) {
-        this->blurFb1.bind();
-        glClearColor(0,0,0,0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        this->blurShader.bind();
-        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "u_texture"), 0);
-        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "horizontal"), 1);
-        glBindTexture(GL_TEXTURE_2D, firstIteration ? fb.getRenderTarget(1):blurFb2.getRenderTarget(0));
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        this->blurShader.unbind();
-        this->blurFb1.unbind();
+            this->blurFb2.bind();
+            glClearColor(0,0,0,0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            this->blurShader.bind();
+            glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "u_texture"), 0);
+            glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "horizontal"), 0);
+            glBindTexture(GL_TEXTURE_2D, blurFb1.getRenderTarget(0));
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+            this->blurShader.unbind();
+            this->blurFb2.unbind();
 
-        this->blurFb2.bind();
-        glClearColor(0,0,0,0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        this->blurShader.bind();
-        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "u_texture"), 0);
-        glUniform1i(glGetUniformLocation(blurShader.getShaderId(), "horizontal"), 0);
-        glBindTexture(GL_TEXTURE_2D, blurFb1.getRenderTarget(0));
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        this->blurShader.unbind();
-        this->blurFb2.unbind();
-
-        firstIteration = false;
+            firstIteration = false;
+        }
     }
+    
+
 
     // Render to the screen;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -420,6 +434,8 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, blurFb2.getRenderTarget(0));
     glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_brightTexture"), 1);
+    glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_blur"), bloom);
+    glUniform1f(glGetUniformLocation(fbs.getShaderId(), "u_blurBrightness"), bloomBrightness);
     glActiveTexture(GL_TEXTURE0);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     fbs.unbind();
