@@ -151,6 +151,10 @@ namespace h3d
          */
         void setBloom(bool b, uint32_t amount, float brightness=2.5);
 
+
+        void showCubeMap(bool b);
+
+        
         float ambient;
     protected:
         h3d::Shader shader;
@@ -178,6 +182,8 @@ namespace h3d
         uint32_t amountOfGaussianBlur = 10;
         float bloomBrightness = 2.5;
 
+        bool isCubeMapShown = true;
+        
 
         void loadUniformLocations();
 

@@ -108,6 +108,7 @@ in vec3 gf_B;
 void main() {
     
     vec4 f_color = vec4(0.0);
+
     mat3 tbn = mat3(gf_T, gf_B, v_normal);
 
     if(isSamplerSet != 1) {
@@ -128,10 +129,11 @@ void main() {
 
     vec3 view = normalize(-v_position);
     vec3 normal = normalize(v_normal);
+
     if(isNormalSet == 1) {
-        vec3 uv_normal = vec3(texture(u_normalmap, v_uv));
-        uv_normal = normalize(uv_normal * 2.0 - 1.0);
-        normal =  normalize(mat3(v_model) * uv_normal + v_normal);
+        vec3 uv_normal = texture(u_normalmap, v_uv).rgb;
+        uv_normal = uv_normal * 2.0 - 1.0;
+        normal =  normalize(tbn*uv_normal);
     }
 
 

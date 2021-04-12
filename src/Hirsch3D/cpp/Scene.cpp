@@ -41,6 +41,11 @@ void h3d::Scene::load(h3d::Camera* camera, glm::vec2 size, float ambient) {
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
 
+
+void h3d::Scene::showCubeMap(bool b) {
+    this->isCubeMapShown = b;
+}
+
 void h3d::Scene::loadUniformLocations() {
 
     #define H3D_UL(x) glGetUniformLocation(this->shader.getShaderId(), x)
@@ -143,7 +148,7 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if(this->cubemap != nullptr) {
+    if(this->cubemap != nullptr && isCubeMapShown) {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
        
