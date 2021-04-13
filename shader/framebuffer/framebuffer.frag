@@ -35,7 +35,7 @@ uniform float u_blurBrightness;
 
 void main() {
     
-    const float gamma = 2.2;
+    const float gamma = 1.0;
     
     vec4 tColor = texture2D(u_texture, texCoord);
     
@@ -45,9 +45,13 @@ void main() {
         tColor += bColor*u_blurBrightness;
     }
     
+    float exposure = 1.0;
+    vec3 hdrColor = tColor.rgb;
+  
+    vec3 mapped = vec3(1.0) - exp(-hdrColor * exposure);
+    // gamma correction 
+    mapped = pow(mapped, vec3(1.0 / gamma));
 
     
-
-    
-    gl_FragColor = tColor;
+    gl_FragColor = vec4(mapped, 1.0);
 }
