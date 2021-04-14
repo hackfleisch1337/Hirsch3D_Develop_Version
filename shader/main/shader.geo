@@ -35,6 +35,7 @@ in mat4 vg_model[];
 in vec3 vg_Vertex_Pos[];
 in vec3 vg_cameraPos[];
 in vec3 vg_rawNormal[];
+in vec4 vg_LightSpaceFragPos[];
 
 out vec3 gf_T;
 out vec3 gf_B;
@@ -45,6 +46,7 @@ out mat4 v_model;
 out vec3 v_vertex_pos;
 out vec3 v_camera_pos;
 out vec3 v_rawNormal;
+out vec4 v_lightSpaceFragPos;
 
 vec3 GetTangent(vec3 A, vec3 B, vec3 C,  vec2 Auv, vec2 Buv, vec2 Cuv)
 {
@@ -77,6 +79,7 @@ void main(void)
         v_position = vg_Pos[i];
         v_model = vg_model[i];
         v_vertex_pos = vg_Vertex_Pos[i];
+        v_lightSpaceFragPos = vg_LightSpaceFragPos[i];
         v_camera_pos = vg_cameraPos[i];
         v_rawNormal = vg_rawNormal[i];
 

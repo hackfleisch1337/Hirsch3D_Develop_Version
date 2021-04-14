@@ -40,6 +40,9 @@ uniform mat4 u_view;
 uniform mat4 u_modelViewProj; // = proj * view * model
 uniform mat4 u_modelView; // = view * model
 uniform mat4 u_invModelView;
+
+uniform mat4 u_lightspace;
+
 /*
 out vec2 v_uv;
 out vec3 v_normal;
@@ -53,6 +56,7 @@ out mat4 vg_model;
 out vec3 vg_Vertex_Pos;
 out vec3 vg_cameraPos;
 out vec3 vg_rawNormal;
+out vec4 vg_LightSpaceFragPos;
 
 void main() {
 
@@ -60,10 +64,12 @@ void main() {
 
     vg_TexCoord = uv;
     vg_N = mat3(u_model) * in_normal;
-    vg_Pos = vec3(u_modelView  * vec4(position, 1.0));
+    vg_Pos = vec3(u_modelView * vec4(position, 1.0));
     vg_model = u_model;
-    vg_Vertex_Pos = vec3(u_model  * vec4(position, 1.0));
-    vec4 worldpos = u_model * vec4(position,1.0);
+    vec3 fpos = vec3(u_model * vec4(position, 1.0));
+    vg_Vertex_Pos = fpos;;
+    vec4 worldpos = u_model * vec4(position, 1.0);
     vg_cameraPos = worldpos.xyz - c_position;//vec3(u_view * vec4(0.0,0.0,0.0,1.0));
     vg_rawNormal = in_normal;
+    vg_LightSpaceFragPos = u_lightspace * vec4(fpos, 1.0);
 }

@@ -30,6 +30,7 @@
 #include "Object.hpp"
 #include "../Hirsch3D.hpp"
 #include "Camera.hpp"
+#include "DepthBuffer.hpp"
 
 
 namespace h3d
@@ -169,6 +170,9 @@ namespace h3d
         h3d::Shader fbs;
         
     private:    
+        h3d::DepthBuffer db;
+        h3d::Shader shadowmapshader;
+        
         h3d::Shader blurShader;
         h3d::FrameBuffer blurFb1;
         h3d::FrameBuffer blurFb2;

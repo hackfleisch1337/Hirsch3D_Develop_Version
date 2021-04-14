@@ -37,6 +37,7 @@ in mat4 v_model;
 in vec3 v_vertex_pos;
 in vec3 v_camera_pos;
 in vec3 v_rawNormal;
+in vec4 v_lightSpaceFragPos;
 
 uniform vec4 u_color;
 
@@ -102,8 +103,22 @@ uniform DirectionalLight dlights[MAX_LIGHTS];
 uniform PointLight plights[MAX_LIGHTS];
 uniform SpotLight slights[MAX_LIGHTS];
 
+uniform sampler2D u_shadowMap;
+
 in vec3 gf_T;
 in vec3 gf_B;
+
+
+float CalculateShadow(vec4 fragPosLightSpace) {
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5;
+    float closestDepth = texture2D(u_shadowMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+    float bias = max(0.05 * (1.0 - dot(v_normal, vec3(0,0,1))), 0.005);
+
+    float shadow = currentDepth-bias > closestDepth  ? 1.0 : 0.0;
+    return shadow;
+}
 
 void main() {
     
@@ -251,18 +266,25 @@ void main() {
         transparentcy = f_color.a;
     }
 
+    float shadow = CalculateShadow(v_lightSpaceFragPos);
+
     vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
     
+    vec4 colorWithoutShadow = vec4(0,0,0,1);
+
     if(u_isCubeMapSet == 1 && u_solidColor != 1) {
 
         vec4 reflectedColor = texture(u_cubemap, reflect(v_camera_pos, normalize(normal)));
         vec4 refractedColor = texture(u_cubemap, refract(v_camera_pos, normalize(normal), 1.0/u_refractionIndex));
         vec4 envColor = mix(reflectedColor, refractedColor, u_reflection);
 
-        color = mix(envColor,out_color, u_solidColor);
+        colorWithoutShadow = mix(envColor,out_color, u_solidColor);
     } else {
-        color = out_color;
+        colorWithoutShadow = out_color;
     }
+
+    color = vec4(vec3(colorWithoutShadow * (1.0 - (shadow/2))), 1.0);
+
     //else color = u_color;
     float brightness = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));
     if(brightness > 1.0)

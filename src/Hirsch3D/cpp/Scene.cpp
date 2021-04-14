@@ -16,6 +16,8 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
     this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
     this->blurShader.load("shader/blur/blur.vert", "shader/blur/blur.frag");
+    db.load({1280,720}, {1024,1024});
+    shadowmapshader.load("shader/depthmap/depthmap.vert", "shader/depthmap/depthmap.frag");
     loadUniformLocations();
 
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
@@ -37,6 +39,9 @@ void h3d::Scene::load(h3d::Camera* camera, glm::vec2 size, float ambient) {
     this->cubemapshader.load("shader/cubemap/cube.vert", "shader/cubemap/cube.frag", "nogeometryshader");
     this->fbs.load("shader/framebuffer/framebuffer.vert", "shader/framebuffer/framebuffer.frag");
     this->blurShader.load("shader/blur/blur.vert", "shader/blur/blur.frag");
+
+    db.load({1280,720}, {1024,1024});
+    shadowmapshader.load("shader/depthmap/depthmap.vert", "shader/depthmap/depthmap.frag");
     loadUniformLocations();
     std::cout << GREEN << "[Ok] Loaded scene" << RESET_CLR << std::endl;
 }
@@ -144,6 +149,31 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         return;
     }
 
+
+    // Render shadow map
+    glViewport(0,0,db.getShadowSize().x, db.getShadowSize().y);
+    db.bind();
+    
+    glClear(GL_DEPTH_BUFFER_BIT);
+    shadowmapshader.bind();
+    float near_plane = 1.0f, far_plane = 100.5f;
+    glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+    glm::mat4 lightView = glm::lookAt(glm::vec3(0.0f,0.0f,1.0f), 
+                                  glm::vec3( 0.0f, 0.0f,  0.0f), 
+                                  glm::vec3( 0.0f, 1.0f,  0.0f));
+    glm::mat4 lightSpace = lightProjection * lightView;
+    glUniformMatrix4fv(glGetUniformLocation(shadowmapshader.getShaderId(), "lightSpace"), 1, GL_FALSE, &lightSpace[0][0]);
+    for(int i = 0; i < this->objects.size(); i++) {
+        glm::mat4 dbmodel = objects.at(i)->getMatrix();
+        glUniformMatrix4fv(glGetUniformLocation(shadowmapshader.getShaderId(), "u_model"), 1, GL_FALSE, &dbmodel[0][0]);
+        r.renderObject(objects.at(i));
+    }
+    
+    shadowmapshader.unbind();
+    db.unbind();
+
+
+    glViewport(0,0, this->size.x, this->size.y);
     this->fb.bind();
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -182,8 +212,16 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     glUniform1i(amountOfSlights, this->slights.size());
     
     glUniform1i(u_transparency, this->transparency ? 1:0);
+    
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, db.getTexture());
+    glUniform1i(glGetUniformLocation(shaderId, "u_shadowMap"), 5);
+
+    glUniformMatrix4fv(glGetUniformLocation(shaderId, "u_lightspace"), 1, GL_FALSE, &lightSpace[0][0]);
+    
 
     
+
     if(this->cubemap != nullptr) {
         this->cubemap->bind();
         glUniform1i(u_isCubeMapSet, 1);
@@ -385,11 +423,16 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         if(currentObject->getRoughnessMap() != nullptr) {
             currentObject->getRoughnessMap()->unbind();
         }
-        if(this->cubemap != nullptr) {
-            this->cubemap->unbind();
-        }
+        
     }
+    if(this->cubemap != nullptr) {
+        this->cubemap->unbind();
+    }
+
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, 0);
     
+
     this->shader.unbind(); // unbind scene shader //
     this->fb.unbind();
 
