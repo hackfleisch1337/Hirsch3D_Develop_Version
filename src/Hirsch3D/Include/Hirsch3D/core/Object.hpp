@@ -192,6 +192,12 @@ namespace h3d
          * @returns the visibility of an object
          */
         bool isVisible();
+
+        void setShadowMode(bool castShadow, bool catchShadow);
+
+        
+        bool castShadow = true;
+        bool catchShadow = true;
     protected:
         glm::vec3 position;
         glm::mat4 modelMatrix;
@@ -208,6 +214,8 @@ namespace h3d
         h3d::Material material;
         bool isTransparent = false;
         bool draw = true;
+        // Shadow
+        
     };
 
 

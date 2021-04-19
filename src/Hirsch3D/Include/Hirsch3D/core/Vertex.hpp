@@ -53,7 +53,7 @@ namespace h3d
         float nz;
     };
 
-    #define H3D_QUAD_VERTICES(width, height) { {-width, -height, 0.0,  0.0,  0.0,  0,0,0}, \
+    #define H3D_QUAD_VERTICES(width, height) { {-width, -height, 0.0,  0.0,  0.0,  0,0,1}, \
         {width, -height,  0.0,  1.0,  0.0,  0,0,1}, \
         {width,  height,  0.0,  1.0,  1.0,  0,0,1}, \
         {-width,  height, 0.0,  0.0,  1.0,  0,0,1}}

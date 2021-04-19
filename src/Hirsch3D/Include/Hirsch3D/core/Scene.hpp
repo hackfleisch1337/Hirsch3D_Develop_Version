@@ -224,6 +224,7 @@ namespace h3d
         uint32_t u_texture;
         uint32_t isSamplerSet;
         uint32_t u_position;
+        uint32_t catchesShadow;
 
 
     };

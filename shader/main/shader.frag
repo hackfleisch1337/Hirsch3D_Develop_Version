@@ -105,18 +105,33 @@ uniform SpotLight slights[MAX_LIGHTS];
 
 uniform sampler2D u_shadowMap;
 
+uniform int catchesShadow;
+
 in vec3 gf_T;
 in vec3 gf_B;
 
 
-float CalculateShadow(vec4 fragPosLightSpace) {
+float CalculateShadowDirectionalLight(vec4 fragPosLightSpace, sampler2D shadow_map) {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
-    float closestDepth = texture2D(u_shadowMap, projCoords.xy).r;
+    float closestDepth = texture2D(shadow_map, projCoords.xy).r;
     float currentDepth = projCoords.z;
-    float bias = max(0.05 * (1.0 - dot(v_normal, vec3(0,0,1))), 0.005);
+    float bias = max(0.05 * (1.0 - dot(v_normal, vec3(0.0,0.0,1.0))), 0.005);
 
-    float shadow = currentDepth-bias > closestDepth  ? 1.0 : 0.0;
+    //float shadow = currentDepth-bias > closestDepth  ? 1.0 : 0.0;
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadow_map, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadow_map, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
     return shadow;
 }
 
@@ -266,11 +281,13 @@ void main() {
         transparentcy = f_color.a;
     }
 
-    float shadow = CalculateShadow(v_lightSpaceFragPos);
+    float shadow = 0.0;
+    if(catchesShadow == 1)
+        shadow = CalculateShadowDirectionalLight(v_lightSpaceFragPos, u_shadowMap);
 
-    vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity) + u_emmisive, transparentcy);
+    vec4 out_color = vec4(u_ambient * ambient + (deffuse * Kd) + (specular * specIntensity), transparentcy);
     
-    vec4 colorWithoutShadow = vec4(0,0,0,1);
+    out_color = vec4(out_color.rgb*(1-shadow) + u_emmisive, out_color.a);
 
     if(u_isCubeMapSet == 1 && u_solidColor != 1) {
 
@@ -278,12 +295,12 @@ void main() {
         vec4 refractedColor = texture(u_cubemap, refract(v_camera_pos, normalize(normal), 1.0/u_refractionIndex));
         vec4 envColor = mix(reflectedColor, refractedColor, u_reflection);
 
-        colorWithoutShadow = mix(envColor,out_color, u_solidColor);
+        color = mix(envColor,out_color, u_solidColor);
     } else {
-        colorWithoutShadow = out_color;
+        color = out_color;
     }
 
-    color = vec4(vec3(colorWithoutShadow * (1.0 - (shadow/2))), 1.0);
+    
 
     //else color = u_color;
     float brightness = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));

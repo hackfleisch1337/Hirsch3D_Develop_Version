@@ -99,6 +99,11 @@ void h3d::Object::setRotation(glm::vec3 r) {
     this->rotate(z,{0,0,1});
 }
 
+void h3d::Object::setShadowMode(bool castShadow, bool catchShadow) {
+    this->castShadow = castShadow;
+    this->catchShadow = catchShadow;
+}
+
 void h3d::Sprite::load(h3d::Texture* t, float x, float y, float w, float h) {
 
     float width, height;
