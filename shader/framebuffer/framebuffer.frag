@@ -1,5 +1,5 @@
 /**
- * Hirsch3D Renderengine v.0.9.7
+ * Hirsch3D Renderengine v.0.10.1
  * For more informations see README.md
  * or read the documentation in the doc folder
  * GitHub Repository: https://github.com/hackfleisch1337/Hirsch3D_Release_v1.0
@@ -32,10 +32,11 @@ uniform sampler2D u_texture;
 uniform sampler2D u_brightTexture;
 uniform bool u_blur;
 uniform float u_blurBrightness;
-
+uniform float u_gamma;
+uniform float u_exposure;
 void main() {
     
-    const float gamma = 1.0;
+    float gamma = u_gamma;
     
     vec4 tColor = texture2D(u_texture, texCoord);
     
@@ -45,7 +46,7 @@ void main() {
         tColor += bColor*u_blurBrightness;
     }
     
-    float exposure = 1.0;
+    float exposure = u_exposure;
     vec3 hdrColor = tColor.rgb;
   
     vec3 mapped = vec3(1.0) - exp(-hdrColor * exposure);

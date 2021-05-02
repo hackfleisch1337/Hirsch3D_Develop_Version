@@ -61,13 +61,13 @@ bool h3d::Hirsch3D::init(std::string title, uint16_t width, uint16_t height, uin
     uint32_t sdl_flags = SDL_WINDOW_OPENGL;
 
     if (flags != 0x00) {
-        if((~HIRSCH3D_FULLSCREEN ) | flags == 0xFF) {
+        if(flags | HIRSCH3D_FULLSCREEN == HIRSCH3D_FULLSCREEN) {
             sdl_flags = sdl_flags | SDL_WINDOW_FULLSCREEN;
         }
-        if((~HIRSCH3D_BORDERLESS ) | flags == 0xFF) {
+        if(flags | HIRSCH3D_BORDERLESS == HIRSCH3D_BORDERLESS) {
             sdl_flags = sdl_flags | SDL_WINDOW_BORDERLESS;
         }
-        if((~HIRSCH3D_MINIMIZED ) | flags == 0xFF) {
+        if(flags | HIRSCH3D_MINIMIZED == HIRSCH3D_MINIMIZED) {
             sdl_flags = sdl_flags | SDL_WINDOW_MINIMIZED;
         }
     }

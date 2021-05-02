@@ -61,7 +61,13 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* te
     this->load(l_vertices.data(), c.Vertices.size(), c.Indices.data(), c.Indices.size(), color, texture, nm, r);
 }
 
+void h3d::Object::scale(float s) {
+    this->modelMatrix = glm::scale(this->modelMatrix, {s,s,s});
+}
 
+void h3d::Object::scale(glm::vec3 s) {
+    this->modelMatrix = glm::scale(this->modelMatrix, s);
+}
 
 void h3d::Object::move(glm::vec3 d) {
     glm::vec3 newPosition = this->position + d;

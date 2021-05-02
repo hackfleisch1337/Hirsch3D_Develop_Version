@@ -1,5 +1,5 @@
 /**
- * Hirsch3D Renderengine v.0.9.7
+ * Hirsch3D Renderengine v.0.10.1
  * For more informations see README.md
  * or read the documentation in the doc folder
  * GitHub Repository: https://github.com/hackfleisch1337/Hirsch3D_Release_v1.0
@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 
-#define HIRSCH3D_VERSION "0.9.10"
+#define HIRSCH3D_VERSION "0.10.1"
 #define YELLOW "\033[93m"
 #define RED "\033[91m"
 #define GREEN "\033[92m"
@@ -102,7 +102,7 @@ namespace h3d {
          */
         void setSize(uint16_t width, uint16_t height);
     public:
-        #define HIRSCH3D_NOFLAG     0x00
+        #define HIRSCH3D_NULL     0x00
         #define HIRSCH3D_FULLSCREEN 0x01
         #define HIRSCH3D_BORDERLESS 0x02
         #define HIRSCH3D_MINIMIZED  0x04

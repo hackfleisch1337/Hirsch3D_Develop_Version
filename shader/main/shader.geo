@@ -1,5 +1,5 @@
 /**
- * Hirsch3D Renderengine v.0.9.7
+ * Hirsch3D Renderengine v.0.10.1
  * For more informations see README.md
  * or read the documentation in the doc folder
  * GitHub Repository: https://github.com/hackfleisch1337/Hirsch3D_Release_v1.0
@@ -35,7 +35,10 @@ in mat4 vg_model[];
 in vec3 vg_Vertex_Pos[];
 in vec3 vg_cameraPos[];
 in vec3 vg_rawNormal[];
-in vec4 vg_LightSpaceFragPos[];
+in vec4 vg_LightSpaceFragPos0[];
+in vec4 vg_LightSpaceFragPos1[];
+in vec4 vg_LightSpaceFragPos2[];
+in vec4 vg_LightSpaceFragPos3[];
 
 out vec3 gf_T;
 out vec3 gf_B;
@@ -46,7 +49,11 @@ out mat4 v_model;
 out vec3 v_vertex_pos;
 out vec3 v_camera_pos;
 out vec3 v_rawNormal;
-out vec4 v_lightSpaceFragPos;
+
+out vec4 v_lightSpaceFragPos0;
+out vec4 v_lightSpaceFragPos1;
+out vec4 v_lightSpaceFragPos2;
+out vec4 v_lightSpaceFragPos3;
 
 vec3 GetTangent(vec3 A, vec3 B, vec3 C,  vec2 Auv, vec2 Buv, vec2 Cuv)
 {
@@ -79,7 +86,10 @@ void main(void)
         v_position = vg_Pos[i];
         v_model = vg_model[i];
         v_vertex_pos = vg_Vertex_Pos[i];
-        v_lightSpaceFragPos = vg_LightSpaceFragPos[i];
+        v_lightSpaceFragPos0 = vg_LightSpaceFragPos0[i];
+        v_lightSpaceFragPos1 = vg_LightSpaceFragPos1[i];
+        v_lightSpaceFragPos2 = vg_LightSpaceFragPos2[i];
+        v_lightSpaceFragPos3 = vg_LightSpaceFragPos3[i];
         v_camera_pos = vg_cameraPos[i];
         v_rawNormal = vg_rawNormal[i];
 

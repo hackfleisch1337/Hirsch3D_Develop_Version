@@ -1,5 +1,5 @@
 /**
- * Hirsch3D Renderengine v.0.9.7
+ * Hirsch3D Renderengine v.0.10.1
  * For more informations see README.md
  * or read the documentation in the doc folder
  * GitHub Repository: https://github.com/hackfleisch1337/Hirsch3D_Release_v1.0
@@ -41,7 +41,10 @@ uniform mat4 u_modelViewProj; // = proj * view * model
 uniform mat4 u_modelView; // = view * model
 uniform mat4 u_invModelView;
 
-uniform mat4 u_lightspace;
+uniform mat4 u_lightspace0;
+uniform mat4 u_lightspace1;
+uniform mat4 u_lightspace2;
+uniform mat4 u_lightspace3;
 
 /*
 out vec2 v_uv;
@@ -56,7 +59,11 @@ out mat4 vg_model;
 out vec3 vg_Vertex_Pos;
 out vec3 vg_cameraPos;
 out vec3 vg_rawNormal;
-out vec4 vg_LightSpaceFragPos;
+
+out vec4 vg_LightSpaceFragPos0;
+out vec4 vg_LightSpaceFragPos1;
+out vec4 vg_LightSpaceFragPos2;
+out vec4 vg_LightSpaceFragPos3;
 
 void main() {
 
@@ -71,5 +78,8 @@ void main() {
     vec4 worldpos = u_model * vec4(position, 1.0);
     vg_cameraPos = worldpos.xyz - c_position;//vec3(u_view * vec4(0.0,0.0,0.0,1.0));
     vg_rawNormal = in_normal;
-    vg_LightSpaceFragPos = u_lightspace * vec4(fpos, 1.0);
+    vg_LightSpaceFragPos0 = u_lightspace0 * vec4(fpos, 1.0);
+    vg_LightSpaceFragPos1 = u_lightspace1 * vec4(fpos, 1.0);
+    vg_LightSpaceFragPos2 = u_lightspace2 * vec4(fpos, 1.0);
+    vg_LightSpaceFragPos3 = u_lightspace3 * vec4(fpos, 1.0);
 }
