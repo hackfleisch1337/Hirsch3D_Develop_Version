@@ -39,6 +39,7 @@ in vec4 vg_LightSpaceFragPos0[];
 in vec4 vg_LightSpaceFragPos1[];
 in vec4 vg_LightSpaceFragPos2[];
 in vec4 vg_LightSpaceFragPos3[];
+in vec4 vg_positionRelativeToCamera[];
 
 out vec3 gf_T;
 out vec3 gf_B;
@@ -54,6 +55,8 @@ out vec4 v_lightSpaceFragPos0;
 out vec4 v_lightSpaceFragPos1;
 out vec4 v_lightSpaceFragPos2;
 out vec4 v_lightSpaceFragPos3;
+
+out vec4 v_positionRelativeToCamera;
 
 vec3 GetTangent(vec3 A, vec3 B, vec3 C,  vec2 Auv, vec2 Buv, vec2 Cuv)
 {
@@ -92,6 +95,7 @@ void main(void)
         v_lightSpaceFragPos3 = vg_LightSpaceFragPos3[i];
         v_camera_pos = vg_cameraPos[i];
         v_rawNormal = vg_rawNormal[i];
+        v_positionRelativeToCamera = vg_positionRelativeToCamera[i];
 
         gl_Position = gl_in[i].gl_Position;
         EmitVertex();

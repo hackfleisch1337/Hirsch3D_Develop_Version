@@ -65,6 +65,8 @@ out vec4 vg_LightSpaceFragPos1;
 out vec4 vg_LightSpaceFragPos2;
 out vec4 vg_LightSpaceFragPos3;
 
+out vec4 vg_positionRelativeToCamera;
+
 void main() {
 
     gl_Position = u_modelViewProj * vec4(position, 1.0);
@@ -82,4 +84,5 @@ void main() {
     vg_LightSpaceFragPos1 = u_lightspace1 * vec4(fpos, 1.0);
     vg_LightSpaceFragPos2 = u_lightspace2 * vec4(fpos, 1.0);
     vg_LightSpaceFragPos3 = u_lightspace3 * vec4(fpos, 1.0);
+    vg_positionRelativeToCamera = u_view * worldpos;
 }

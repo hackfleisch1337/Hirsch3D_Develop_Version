@@ -180,6 +180,8 @@ namespace h3d
 
         void scale(glm::vec3 s);
 
+        glm::vec3 getScale();
+
         /**
          * The objects color
          */
@@ -204,6 +206,7 @@ namespace h3d
         bool catchShadow = true;
     protected:
         glm::vec3 position;
+        glm::vec3 scaleVector = glm::vec3(1);
         glm::mat4 modelMatrix;
         glm::vec3 rotationVector;
         h3d::VertexBuffer* vertices;

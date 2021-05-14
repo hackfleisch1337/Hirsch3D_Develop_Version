@@ -63,10 +63,16 @@ void h3d::Object::loadByPath(std::string path, glm::vec4 color, h3d::Texture* te
 
 void h3d::Object::scale(float s) {
     this->modelMatrix = glm::scale(this->modelMatrix, {s,s,s});
+    scaleVector = glm::vec3(s);
 }
 
 void h3d::Object::scale(glm::vec3 s) {
     this->modelMatrix = glm::scale(this->modelMatrix, s);
+    scaleVector = s;
+}
+
+glm::vec3 h3d::Object::getScale() {
+    return scaleVector;
 }
 
 void h3d::Object::move(glm::vec3 d) {
@@ -88,12 +94,14 @@ void h3d::Object::setPosition(glm::vec3 pos) {
         this->rotationVector = glm::vec3(0.0f);
         this->moveInLineOfSight(pos);
         this->setRotation(currentRotation);
+        this->scale(scaleVector);
         this->position = pos;
 }
 
 void h3d::Object::rotate(float degree, glm::vec3 direction) {
     this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(degree), glm::normalize(direction));
     this->rotationVector += glm::normalize(direction) * degree;
+    
 }
 
 void h3d::Object::setRotation(glm::vec3 r) {

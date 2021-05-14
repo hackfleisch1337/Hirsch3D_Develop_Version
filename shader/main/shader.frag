@@ -121,6 +121,7 @@ uniform int catchesShadow;
 in vec3 gf_T;
 in vec3 gf_B;
 
+in vec4 v_positionRelativeToCamera;
 
 float CalculateShadowDirectionalLight(vec4 fragPosLightSpace, sampler2D shadow_map, vec3 lightDir) {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -311,23 +312,28 @@ void main() {
     
     out_color = vec4(out_color.rgb + u_emmisive, out_color.a);
 
+    float distToCam = length(v_positionRelativeToCamera.xyz);
+    float visibility = exp(-pow((distToCam*0.0), 0.0));
+    visibility = clamp(visibility, 0.0, 1.0);
+    
     if(u_isCubeMapSet == 1 && u_solidColor != 1) {
 
         vec4 reflectedColor = texture(u_cubemap, reflect(v_camera_pos, normalize(normal)));
         vec4 refractedColor = texture(u_cubemap, refract(v_camera_pos, normalize(normal), 1.0/u_refractionIndex));
         vec4 envColor = mix(reflectedColor, refractedColor, u_reflection);
 
-        color = mix(envColor,out_color, u_solidColor);
-    } else {
-        color = out_color;
+        out_color = mix(envColor,out_color, u_solidColor);
     }
 
-    
+    float brightness = dot(out_color.rgb, vec3(0.2126, 0.7152, 0.0722));
+    vec4 outcolorwithoutfog = out_color;
+    //out_color = mix(vec4(0.3,0.3,0.3, 1.0), out_color, visibility);
 
+    color = out_color;
     //else color = u_color;
-    float brightness = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));
+    
     if(brightness > 1.0)
-        bright_color = color;
+        bright_color = outcolorwithoutfog;
     else
         bright_color = vec4(0.0, 0.0, 0.0, 1.0);
         
