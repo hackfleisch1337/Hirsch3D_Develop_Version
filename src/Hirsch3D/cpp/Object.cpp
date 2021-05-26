@@ -180,3 +180,11 @@ bool h3d::Object::isVisible() {
 void h3d::Object::setReflectionCubeMap(h3d::CubeMap* cubemap) {
     this->reflectionCubeMap = cubemap;
 }
+
+void h3d::Object::setMetallicMap(h3d::MetallicMap* m) {
+    this->mmap = m;
+}
+
+h3d::MetallicMap* h3d::Object::getMetallicMap() {
+    return this->mmap;
+}

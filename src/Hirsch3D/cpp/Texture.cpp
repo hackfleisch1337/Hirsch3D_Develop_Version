@@ -70,6 +70,17 @@ void h3d::RoughnessMap::unbind() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+
+void h3d::MetallicMap::bind() {
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, this->buffer);
+}
+
+void h3d::MetallicMap::unbind() {
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void h3d::CubeMap::bind() {
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->buffer);

@@ -221,9 +221,12 @@ namespace h3d
         uint32_t isNormalSet;
         uint32_t u_roughnessmap;
         uint32_t isRoughnessSet;
+        uint32_t u_isMetallicSet;
+        uint32_t u_metallicMap;
 
         uint32_t u_kD;
         uint32_t u_specIntensity;
+        uint32_t u_metallic;
         uint32_t u_shininess;
         uint32_t u_specColor;
         uint32_t u_emmisive;

@@ -204,6 +204,10 @@ namespace h3d
 
         void setReflectionCubeMap(h3d::CubeMap* cubemap);
         
+        void setMetallicMap(h3d::MetallicMap* m);
+
+        h3d::MetallicMap* getMetallicMap();
+
         bool castShadow = true;
         bool catchShadow = true;
     protected:
@@ -219,6 +223,7 @@ namespace h3d
         uint32_t amountOfIndices;
         h3d::Texture* texture;
         h3d::NormalMap* nmap;
+        h3d::MetallicMap* mmap = nullptr;
         h3d::RoughnessMap* rm;
         h3d::Material material;
         h3d::CubeMap* reflectionCubeMap = nullptr;

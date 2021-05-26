@@ -28,6 +28,9 @@
 
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec4 bright_color;
+layout(location = 2) out vec4 out_roughness;
+layout(location = 3) out vec4 out_normals;
+layout(location = 4) out vec4 out_metallic;
 
 
 in vec2 v_uv;
@@ -61,6 +64,10 @@ uniform float u_specIntensity;
 uniform float u_kD;
 uniform vec3 u_specColor;
 uniform vec3 u_emmisive;
+uniform float u_metallic;
+
+uniform int u_isMetallicSet;
+uniform sampler2D u_metallicMap;
 
 uniform int u_transparency;
 
@@ -330,6 +337,12 @@ void main() {
     //out_color = mix(vec4(0.3,0.3,0.3, 1.0), out_color, visibility);
 
     color = out_color;
+    out_normals = vec4(normal, 1.0);
+    out_roughness = vec4(vec3(shininess/255.0), 1.0);
+    if(u_isMetallicSet == 1) {
+        out_metallic = vec4(vec3(texture2D(u_metallicMap, v_uv)), 1.0);
+    } else out_metallic = vec4(vec3(u_metallic), 1.0);
+    
     //else color = u_color;
     
     if(brightness > 1.0)

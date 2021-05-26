@@ -123,6 +123,12 @@ namespace h3d
         void unbind() override;
     };
 
+    class MetallicMap: public Texture {
+    public:
+        void bind() override;
+        void unbind() override;
+    };
+
     class CubeMap: public Texture {
     public:
         void bind() override;

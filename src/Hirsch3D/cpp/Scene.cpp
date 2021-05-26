@@ -7,7 +7,7 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->isLoaded = true;
     this->cubemap = nullptr;
     this->size = size;
-    this->fb.load(size, 2);
+    this->fb.load(size, 5);
     this->blurFb1.load(size, 1);
     this->blurFb2.load(size, 1);
     h3d::Vertex3 cube_v[] = H3D_CUBE_VERTICES(1,1,1);
@@ -58,11 +58,14 @@ void h3d::Scene::loadUniformLocations() {
     isNormalSet = H3D_UL("isNormalSet");
     u_roughnessmap = H3D_UL("u_roughnessmap");
     isRoughnessSet = H3D_UL("isRoughnessSet");
+    u_isMetallicSet = H3D_UL("u_isMetallicSet");
+    u_metallicMap = H3D_UL("u_metallicMap");
 
     u_kD = H3D_UL("u_kD");
     u_specIntensity = H3D_UL("u_specIntensity");
     u_shininess = H3D_UL("u_shininess");
     u_specColor = H3D_UL("u_specColor");
+    u_metallic = H3D_UL("u_metallic");
     u_emmisive = H3D_UL("u_emmisive");
     u_reflection = H3D_UL("u_reflection");
     u_refractionIndex = H3D_UL("u_refractionIndex");
@@ -376,6 +379,8 @@ void h3d::Scene::render(const h3d::Renderer &r) {
 
         glUniform1f(u_refractionIndex, currentObject->getMaterial().refractionIndex);
         glUniform1f(u_solidColor, currentObject->getMaterial().solidColor);
+        glUniform1f(u_metallic, currentObject->getMaterial().metallic);
+
 
         if(currentObject->getNormalMap() != nullptr) {
             glUniform1i(isNormalSet, 1);
@@ -391,6 +396,14 @@ void h3d::Scene::render(const h3d::Renderer &r) {
             glUniform1i(u_roughnessmap, 2);
         } else {
             glUniform1i(isRoughnessSet, 0);
+        }
+
+        if(currentObject->getMetallicMap() != nullptr) {
+            glUniform1i(u_isMetallicSet, 1);
+            currentObject->getMetallicMap()->bind();
+            glUniform1i(u_metallicMap, 4);
+        } else {
+            glUniform1i(u_isMetallicSet, 0);
         }
 
         // Set uniforms
@@ -442,6 +455,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         }
         if(currentObject->getRoughnessMap() != nullptr) {
             currentObject->getRoughnessMap()->unbind();
+        }
+        if(currentObject->getMetallicMap() != nullptr) {
+            currentObject->getMetallicMap()->unbind();
         }
         if(currentObject->getReflectionCubeMap() != nullptr) {
             currentObject->getReflectionCubeMap()->unbind();

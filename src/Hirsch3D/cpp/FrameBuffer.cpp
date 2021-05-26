@@ -2,7 +2,7 @@
 #include <iostream>
 
 void h3d::FrameBuffer::load(glm::vec2 size, unsigned int components) {
-    if(components > 5) {
+    if(components > 6) {
         return;
     }
     this->size = size;
@@ -23,7 +23,7 @@ void h3d::FrameBuffer::load(glm::vec2 size, unsigned int components) {
     
 
     glBindTexture(GL_TEXTURE_2D, tex[components]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, size.x, size.y, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -36,7 +36,7 @@ void h3d::FrameBuffer::load(glm::vec2 size, unsigned int components) {
     
 
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, tex[components], 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex[components], 0);
     glDrawBuffers(components, attachments);
     this->unbind();
 
@@ -53,6 +53,7 @@ void h3d::FrameBuffer::unbind() {
 h3d::FrameBuffer::~FrameBuffer() {
     glDeleteTextures(this->amountOfComponents,tex);
     glDeleteFramebuffers(1, &id);
+    delete[] tex;
 }
 
 glm::vec2 h3d::FrameBuffer::getSize() const {
