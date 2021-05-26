@@ -152,6 +152,7 @@ namespace h3d
          */
         void setBloom(bool b, uint32_t amount, float brightness=2.5);
 
+        void renderToCubeMap(h3d::CubeMap* cubemap);
 
         void showCubeMap(bool b);
 

@@ -26,7 +26,6 @@ namespace h3d
         GLuint getDepthBuffer() const;
         GLuint getBrightColorBuffer() const;
         GLuint getRenderTarget(unsigned int target);
-        void render();
     private:
         GLuint id;
         GLuint* tex;

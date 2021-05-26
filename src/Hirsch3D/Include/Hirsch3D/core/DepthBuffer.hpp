@@ -29,6 +29,11 @@ namespace h3d
         glm::vec2 shadowSize;
 
     };
+
+    class CubeDepthBuffer: public h3d::DepthBuffer {
+        
+    };
+
 } // namespace h3d
 
 

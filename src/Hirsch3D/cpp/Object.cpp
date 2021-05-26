@@ -176,3 +176,7 @@ void h3d::Object::setVisible(bool v) {
 bool h3d::Object::isVisible() {
     return this->draw;
 }
+
+void h3d::Object::setReflectionCubeMap(h3d::CubeMap* cubemap) {
+    this->reflectionCubeMap = cubemap;
+}

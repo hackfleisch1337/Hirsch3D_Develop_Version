@@ -82,7 +82,3 @@ GLuint h3d::FrameBuffer::getRenderTarget(unsigned int target) {
     }
     return this->tex[target];
 }
-
-void h3d::FrameBuffer::render() {
- 
-}

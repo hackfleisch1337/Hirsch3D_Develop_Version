@@ -151,6 +151,7 @@ namespace h3d
         glm::vec3 getRotation() {return this->rotationVector;}
         h3d::NormalMap* getNormalMap() {return this->nmap;}
         h3d::RoughnessMap* getRoughnessMap() {return this->rm;}
+        h3d::CubeMap* getReflectionCubeMap() {return this->reflectionCubeMap;}
         /**
          * @returns the material
          */
@@ -201,6 +202,7 @@ namespace h3d
 
         void setShadowMode(bool castShadow, bool catchShadow);
 
+        void setReflectionCubeMap(h3d::CubeMap* cubemap);
         
         bool castShadow = true;
         bool catchShadow = true;
@@ -219,6 +221,7 @@ namespace h3d
         h3d::NormalMap* nmap;
         h3d::RoughnessMap* rm;
         h3d::Material material;
+        h3d::CubeMap* reflectionCubeMap = nullptr;
         bool isTransparent = false;
         bool draw = true;
         // Shadow

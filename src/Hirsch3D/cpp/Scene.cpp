@@ -406,6 +406,12 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         if(currentObject->getTexture() != nullptr)
             currentObject->getTexture()->bind();
 
+        // Binds Reflection Cube Map if available
+        if(currentObject->getReflectionCubeMap() != nullptr) {
+            currentObject->getReflectionCubeMap()->bind();
+        } else {
+            this->cubemap->bind();
+        }
 
         // Sets Texture Uniform
         if(currentObject->getTexture() != nullptr) {
@@ -436,6 +442,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         }
         if(currentObject->getRoughnessMap() != nullptr) {
             currentObject->getRoughnessMap()->unbind();
+        }
+        if(currentObject->getReflectionCubeMap() != nullptr) {
+            currentObject->getReflectionCubeMap()->unbind();
         }
         
     }
@@ -585,4 +594,13 @@ float h3d::Scene::getExposure() {
 
 h3d::Scene::~Scene() {
 
+}
+
+
+void h3d::Scene::renderToCubeMap(h3d::CubeMap* cubemap) {
+    // ...
+    
+    for(int i = 0; i < 6; i++) {
+
+    }
 }
