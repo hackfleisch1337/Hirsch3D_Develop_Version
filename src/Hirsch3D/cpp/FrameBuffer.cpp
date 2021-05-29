@@ -2,7 +2,7 @@
 #include <iostream>
 
 void h3d::FrameBuffer::load(glm::vec2 size, unsigned int components) {
-    if(components > 6) {
+    if(components > 7) {
         return;
     }
     this->size = size;

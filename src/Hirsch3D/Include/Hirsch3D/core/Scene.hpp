@@ -162,6 +162,11 @@ namespace h3d
         float getGamma();
         float getExposure();
         
+        void enableSSR(bool ssr);
+
+        bool isSSRenabled();
+
+
         float ambient;
     protected:
         h3d::Shader shader;
@@ -197,6 +202,7 @@ namespace h3d
 
         bool isCubeMapShown = true;
         
+        bool ssr = false;
 
         void loadUniformLocations();
 

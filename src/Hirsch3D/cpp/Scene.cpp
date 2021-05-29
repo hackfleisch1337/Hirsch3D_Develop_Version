@@ -7,7 +7,7 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->isLoaded = true;
     this->cubemap = nullptr;
     this->size = size;
-    this->fb.load(size, 5);
+    this->fb.load(size, 6);
     this->blurFb1.load(size, 1);
     this->blurFb2.load(size, 1);
     h3d::Vertex3 cube_v[] = H3D_CUBE_VERTICES(1,1,1);
@@ -525,6 +525,38 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     glUniform1f(glGetUniformLocation(fbs.getShaderId(), "u_blurBrightness"), bloomBrightness);
     glUniform1f(glGetUniformLocation(fbs.getShaderId(), "u_gamma"), this->gamma);
     glUniform1f(glGetUniformLocation(fbs.getShaderId(), "u_exposure"), this->exposure);
+    if(this->ssr) {
+        glUniform1i(glGetUniformLocation(fbs.getShaderId(), "ssrenabled"), 1);
+
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(2));
+        glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_roughness"), 2);
+
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(3));
+        glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_normal"), 3);
+
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(5));
+        glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_depth"), 4);
+
+        glActiveTexture(GL_TEXTURE5);
+        glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(4));
+        glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_metallic"), 5);
+
+        glm::mat4 cview = this->camera->getView();
+        glm::mat4 invView = glm::inverse(cview);
+        glm::mat4 cproj = this->camera->getProj();
+        glm::mat4 invProj = glm::inverse(cproj);
+        glUniformMatrix4fv(glGetUniformLocation(fbs.getShaderId(), "view"), 1, GL_FALSE, &cview[0][0]);
+        glUniformMatrix4fv(glGetUniformLocation(fbs.getShaderId(), "invView"), 1, GL_FALSE, &invView[0][0]);
+
+        glUniformMatrix4fv(glGetUniformLocation(fbs.getShaderId(), "projection"), 1, GL_FALSE, &cproj[0][0]);
+        glUniformMatrix4fv(glGetUniformLocation(fbs.getShaderId(), "invprojection"), 1, GL_FALSE, &invProj[0][0]);
+
+    } else {
+        glUniform1i(glGetUniformLocation(fbs.getShaderId(), "ssrenabled"), 0);
+    }
     glActiveTexture(GL_TEXTURE0);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     fbs.unbind();
@@ -542,6 +574,14 @@ void h3d::Scene::setCubeMap(h3d::CubeMap* c) {
 
 h3d::CubeMap* h3d::Scene::getCubeMap() {
     return this->cubemap;
+}
+
+void h3d::Scene::enableSSR(bool ssr) {
+    this->ssr = ssr;
+}
+
+bool h3d::Scene::isSSRenabled() {
+    return this->ssr;
 }
 
 void h3d::Scene2D::load2D(float screenWidth, float screenHeight) {
