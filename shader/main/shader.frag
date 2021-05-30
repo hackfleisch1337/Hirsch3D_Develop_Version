@@ -340,7 +340,7 @@ void main() {
     color = out_color;
     out_normals = vec4(normal, 1.0);
     out_roughness = vec4(vec3(shininess), 1.0);
-    out_pos = vec4(v_positionRelativeToCamera);
+    out_pos = vec4(v_position,1.0);
     if(u_isMetallicSet == 1) {
         out_metallic = vec4(vec3(texture2D(u_metallicMap, v_uv)), 1.0);
     } else out_metallic = vec4(vec3(u_metallic), 1.0);

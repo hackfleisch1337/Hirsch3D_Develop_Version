@@ -119,14 +119,14 @@ vec4 getSSR() {
     roughness /= 200.0;
 
     vec3 jitt = mix(vec3(hash(worldpos)), vec3(0.0), roughness);
-    vec2 uv  = vec2( RayCast(jitt + reflected* max(minRayStep, -viewPos.z), hit, dDepth) );
-    if (uv.x > 1.0 || uv.x < 0.0) {
+    vec4 uv  =  RayCast(jitt + reflected* max(minRayStep, -viewPos.z), hit, dDepth) ;
+    /*if (uv.x > 1.0 || uv.x < 0.0) {
         return vec4(0,0,0,0);
     }
 
     if (uv.y > 1.0 || uv.y < 0.0) {
         return vec4(0,0,0,0);
-    }
+    }*/
 
     vec2 dCoords = smoothstep(0.2, 0.6, abs(vec2(0.5, 0.5) - uv.xy));
  
@@ -137,7 +137,7 @@ vec4 getSSR() {
                 screenEdgefactor * 
                 -reflected.z;
 
-    vec4 res = texture(u_texture, uv) * clamp(ReflectionMultiplier, 0.0, 0.9);
+    vec4 res = texture(u_texture, uv.xy) * clamp(ReflectionMultiplier, 0.0, 0.9) * vec4(Fresnel,1.0);
     return res;
 }
 
@@ -206,6 +206,7 @@ vec4 RayCast(vec3 dir, inout vec3 hitcoord, out float dDepth) {
         dDepth = hitcoord.z - depth;
         if((dir.z - dDepth) < 1.2) {
             if(dDepth <= 0.0) {
+                //vec4 Result = vec4(BinarySearch(dir, hitcoord, dDepth), 1.0);
                 vec4 Result = vec4(BinarySearch(dir, hitcoord, dDepth), 1.0);
                 return Result;
             }

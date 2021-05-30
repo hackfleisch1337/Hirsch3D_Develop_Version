@@ -509,6 +509,9 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         }
     }
     
+    // Tone Mapping
+    
+        
 
 
     // Render to the screen;
