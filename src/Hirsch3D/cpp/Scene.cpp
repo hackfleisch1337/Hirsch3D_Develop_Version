@@ -10,6 +10,10 @@ void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc
     this->fb.load(size, 6);
     this->blurFb1.load(size, 1);
     this->blurFb2.load(size, 1);
+
+    tonemappingShader.load("shader/tonemapping/shader.vert", "shader/tonemapping/shader.frag", "nogeometryshader");
+    this->tmfb.load(size, 1);;
+
     h3d::Vertex3 cube_v[] = H3D_CUBE_VERTICES(1,1,1);
     uint32_t cube_i[] = H3D_CUBE_INDICES;
     this->cube.load(cube_v, 8, cube_i, 36, {0,1,0,1}, nullptr, nullptr, nullptr);
@@ -510,8 +514,29 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     }
     
     // Tone Mapping
+
+    glEnable(GL_BLEND);
+
+    this->tmfb.bind();
+    tonemappingShader.bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(0));
+    glUniform1i(glGetUniformLocation(tonemappingShader.getShaderId(), "u_texture"), 0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, blurFb2.getRenderTarget(0));
+    glUniform1i(glGetUniformLocation(tonemappingShader.getShaderId(), "u_brightTexture"), 1);
+    glUniform1i(glGetUniformLocation(tonemappingShader.getShaderId(), "u_blur"), bloom);
+    glUniform1f(glGetUniformLocation(tonemappingShader.getShaderId(), "u_blurBrightness"), bloomBrightness);
+    glUniform1f(glGetUniformLocation(tonemappingShader.getShaderId(), "u_gamma"), this->gamma);
+    glUniform1f(glGetUniformLocation(tonemappingShader.getShaderId(), "u_exposure"), this->exposure);
+
+    glActiveTexture(GL_TEXTURE0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     
-        
+    tonemappingShader.unbind();
+    this->tmfb.unbind();
+
 
 
     // Render to the screen;
@@ -519,15 +544,8 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     glEnable(GL_BLEND);
     fbs.bind();
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(0));
+    glBindTexture(GL_TEXTURE_2D, tmfb.getRenderTarget(0));
     glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_texture"), 0);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, blurFb2.getRenderTarget(0));
-    glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_brightTexture"), 1);
-    glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_blur"), bloom);
-    glUniform1f(glGetUniformLocation(fbs.getShaderId(), "u_blurBrightness"), bloomBrightness);
-    glUniform1f(glGetUniformLocation(fbs.getShaderId(), "u_gamma"), this->gamma);
-    glUniform1f(glGetUniformLocation(fbs.getShaderId(), "u_exposure"), this->exposure);
     if(this->ssr) {
         glUniform1i(glGetUniformLocation(fbs.getShaderId(), "ssrenabled"), 1);
 

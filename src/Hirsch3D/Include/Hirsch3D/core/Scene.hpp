@@ -190,6 +190,9 @@ namespace h3d
         h3d::Shader blurShader;
         h3d::FrameBuffer blurFb1;
         h3d::FrameBuffer blurFb2;
+
+        h3d::Shader tonemappingShader;
+        h3d::FrameBuffer tmfb;
     
         bool transparency = false;
         h3d::CubeMap* cubemap = nullptr;

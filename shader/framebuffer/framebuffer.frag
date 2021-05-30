@@ -29,13 +29,6 @@
 in vec2 texCoord;
 uniform sampler2D u_texture;        // Last frame
 
-uniform sampler2D u_brightTexture;
-uniform bool u_blur;
-uniform float u_blurBrightness;
-uniform float u_gamma;
-uniform float u_exposure;
-
-
 // Screen Space Reflection
 uniform int ssrenabled;
 uniform sampler2D u_metallic;   // metallic
@@ -66,22 +59,9 @@ const float reflectionSpecularFalloffExponent = 3.0;
 
 void main() {
     
-    float gamma = u_gamma;
-    
-    vec4 tColor = texture2D(u_texture, texCoord);
-    
-    if(u_blur) {
-        vec4 bColor = texture2D(u_brightTexture, texCoord);
-
-        tColor += bColor*u_blurBrightness;
-    }
-    
-    float exposure = u_exposure;
-    vec3 hdrColor = tColor.rgb;
   
-    vec3 mapped = vec3(1.0) - exp(-hdrColor * exposure);
+    vec3 mapped = texture(u_texture, texCoord).rgb;
     // gamma correction 
-    mapped = pow(mapped, vec3(1.0 / gamma));
     if(ssrenabled == 1) {
         vec4 ssrcolor = getSSR();
         mapped = mix(vec3(mapped), vec3(ssrcolor), ssrcolor.a);
