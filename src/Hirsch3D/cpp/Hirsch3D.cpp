@@ -165,6 +165,7 @@ void h3d::Hirsch3D::start() {
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
             if(!this->showTitle && this->loaded) {
                 this->render(this->renderer, (float)delta/1000.0f);
             }
@@ -236,13 +237,41 @@ void h3d::Renderer::renderObject(const h3d::Object* o) const{
     o->getVertexBuffer()->unbind();
 }
 
-void h3d::Renderer::renderQuad() const{
-    glBegin(GL_TRIANGLES);
-    glVertex2f(0,0);
-    glVertex2f(1,0);
-    glVertex2f(1,1);
-    glVertex2f(0,0);
-    glVertex2f(0,1);
-    glVertex2f(1,1);
+
+void h3d::Renderer::drawLine(glm::vec2 p1, glm::vec2 p2, glm::vec4 color) const{
+    glBegin(GL_LINES);
+    glColor3f(color.r,color.g,color.b);
+    glVertex2f(p1.x, p1.y);
+    glVertex2f(p2.x, p2.y);
+    glEnd();
+}
+
+void h3d::Renderer::drawRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) const{
+    glBegin(GL_LINES);
+    glColor3f(color.r,color.g,color.b);
+    
+    glVertex2f(pos.x, pos.y);
+    glVertex2f(pos.x+size.x, pos.y);
+    glVertex2f(pos.x+size.x, pos.y);
+    glVertex2f(pos.x+size.x, pos.y+size.y);
+    glVertex2f(pos.x+size.x, pos.y+size.y);
+    glVertex2f(pos.x, pos.y+size.y);
+    glVertex2f(pos.x, pos.y+size.y);
+    glVertex2f(pos.x, pos.y);
+
+    glEnd();
+}
+
+void h3d::Renderer::fillRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) const{
+    glBegin(GL_TRIANGLE_STRIP);
+    glColor3f(color.r,color.g,color.b);
+
+    glVertex2f(pos.x, pos.y);
+    glVertex2f(pos.x+size.x, pos.y);
+    glVertex2f(pos.x+size.x, pos.y+size.y);
+    glVertex2f(pos.x, pos.y);
+    glVertex2f(pos.x, pos.y + size.y);
+    glVertex2f(pos.x+size.x, pos.y+size.y);
+
     glEnd();
 }

@@ -75,7 +75,12 @@ namespace h3d {
          */
         void renderObject(const h3d::Object* o) const;
 
-        void renderQuad() const;
+        void drawLine(glm::vec2 p1, glm::vec2 p2, glm::vec4 color) const;
+        void drawRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) const;
+        void fillRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) const;
+
+    private:
+        glm::vec4 color = glm::vec4(1,1,1,1);
     };
 
     class Hirsch3D {

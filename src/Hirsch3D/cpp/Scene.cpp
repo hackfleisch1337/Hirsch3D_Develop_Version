@@ -548,6 +548,8 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     glUniform1i(glGetUniformLocation(fbs.getShaderId(), "u_texture"), 0);
     if(this->ssr) {
         glUniform1i(glGetUniformLocation(fbs.getShaderId(), "ssrenabled"), 1);
+        glm::vec3 cp = this->camera->getPosition();
+        glUniform3f(glGetUniformLocation(fbs.getShaderId(), "camera_pos"), cp.x, cp.y, cp.z);
 
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, fb.getRenderTarget(2));

@@ -36,6 +36,8 @@ uniform sampler2D u_depth;      // viewspace position (not depth)
 uniform sampler2D u_normal;     // worldspace normals
 uniform sampler2D u_roughness;  // roughness
 
+uniform vec3 camera_pos;
+
 uniform mat4 invView;
 uniform mat4 projection;
 uniform mat4 invprojection;
@@ -44,45 +46,46 @@ uniform mat4 view;
 vec4 getSSR();
 vec3 PositionFromDepth(float depth);
 
-vec4 RayCast(vec3 dir, inout vec3 hitcoord, out float dDepth);
+
 vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth);
-vec3 hash(vec3 a);
+vec4 RayCast(vec3 dir, inout vec3 hitcoord, out float dDepth);
 vec3 fresnelSchlick(float cosTheta, vec3 F0);
+vec3 hash(vec3 a);
 
 const float rayStep = 0.1;
 const float minRayStep = 0.1;
-const float maxSteps = 35;
+const float maxSteps = 30;
 const float searchDist = 10;
-const int numBinarySearchSteps = 7;
+const int numBinarySearchSteps = 5;
 const float reflectionSpecularFalloffExponent = 3.0;
 
 
 void main() {
     
   
-    vec3 mapped = texture(u_texture, texCoord).rgb;
-    // gamma correction 
+    vec3 framecolor = texture(u_texture, texCoord).rgb;
+
     if(ssrenabled == 1) {
         vec4 ssrcolor = getSSR();
-        mapped = mix(vec3(mapped), vec3(ssrcolor), ssrcolor.a);
+        framecolor = mix(vec3(framecolor), vec3(ssrcolor), ssrcolor.a);
     }
     
     
-    gl_FragColor = vec4(mapped, 1.0);
+    gl_FragColor = vec4(framecolor, 1.0);
 }
 
 vec4 getSSR() {
 
-    float Metallic = texture(u_metallic, texCoord).r;
+    float Metallic = texture2D(u_metallic, texCoord).r;
 
     if(Metallic < 0.01) {
         return vec4(0,0,0,0.0);
     }
 
-    vec3 viewNormal = vec3(texture(u_normal, texCoord) * invView);
-    vec3 viewPos = texture(u_depth, texCoord).xyz;
-    vec3 albedo = texture(u_texture, texCoord).rgb;
-
+    vec3 viewNormal = vec3(texture2D(u_normal, texCoord) * invView);
+    vec3 viewPos = texture2D(u_depth, texCoord).xyz;
+    vec3 albedo = texture2D(u_texture, texCoord).rgb;
+    vec3 worldpos = vec3(vec4(viewPos, 1.0) * invView);
     vec3 F0 = vec3(0.04); 
     F0      = mix(F0, albedo, Metallic);
     vec3 Fresnel = fresnelSchlick(max(dot(normalize(viewNormal), normalize(viewPos)), 0.0), F0);
@@ -93,13 +96,16 @@ vec4 getSSR() {
     vec3 hit = viewPos;
     float dDepth;
 
-    vec3 worldpos = vec3(vec4(viewPos, 1.0) * invView);
+    
 
-    float roughness = texture(u_roughness, texCoord).r;
+    float roughness = texture2D(u_roughness, texCoord).r;
     roughness /= 200.0;
 
     vec3 jitt = mix(vec3(hash(worldpos)), vec3(0.0), roughness);
-    vec4 uv  =  RayCast(jitt + reflected* max(minRayStep, -viewPos.z), hit, dDepth) ;
+    //vec4 uv  =  RayCast(jitt + reflected* max(minRayStep, -viewPos.z), hit, dDepth) ;
+
+    vec4 uv = RayCast((vec3(jitt) + reflected * max(minRayStep, -viewPos.z)), hit, dDepth);
+
     /*if (uv.x > 1.0 || uv.x < 0.0) {
         return vec4(0,0,0,0);
     }
@@ -178,8 +184,8 @@ vec4 RayCast(vec3 dir, inout vec3 hitcoord, out float dDepth) {
         projectedCoord = projection * vec4(hitcoord, 1.0);
         projectedCoord.xy /= projectedCoord.w;
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
-        depth = texture(u_depth, texCoord).r;
-        if(depth < 1000.0) {
+        depth = texture(u_depth, projectedCoord.xy).z;
+        if(depth > 1000.0) {
             continue;
         }
 
