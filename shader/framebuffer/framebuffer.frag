@@ -61,8 +61,8 @@ const float reflectionSpecularFalloffExponent = 3.0;
 
 
 void main() {
-    
-  
+
+
     vec3 framecolor = texture(u_texture, texCoord).rgb;
 
     if(ssrenabled == 1) {

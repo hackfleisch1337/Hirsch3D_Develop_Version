@@ -48,6 +48,14 @@ namespace h3d
      */
     class Scene {
     public:
+
+        #define H3D_RENDERMODE_COLOR 0x00
+        #define H3D_RENDERMODE_NORMAL 0x01
+        #define H3D_RENDERMODE_POSITION 0x02
+        #define H3D_RENDERMODE_BLOOM 0x03
+        #define H3D_RENDERMODE_ROUGHNESS 0x04
+        #define H3D_RENDERMODE_METALLIC 0x05
+
         /**
          * Inititalizes the scene
          * 
@@ -166,6 +174,9 @@ namespace h3d
 
         bool isSSRenabled();
 
+        void setRendermode(uint8_t rendermode);
+
+        uint8_t getRendermode();
 
         float ambient;
     protected:
@@ -180,6 +191,8 @@ namespace h3d
         h3d::FrameBuffer fb;
         h3d::Shader fbs;
         
+        uint8_t rendermode = H3D_RENDERMODE_COLOR;
+
         float gamma = 1.0f;
         float exposure = 1.0f;
 
@@ -247,6 +260,7 @@ namespace h3d
         uint32_t u_position;
         uint32_t catchesShadow;
 
+        uint32_t u_rendermode;
 
     };
 

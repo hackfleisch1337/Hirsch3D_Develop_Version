@@ -47,6 +47,8 @@ in vec4 v_lightSpaceFragPos1;
 in vec4 v_lightSpaceFragPos2;
 in vec4 v_lightSpaceFragPos3;
 
+uniform int rendermode;
+
 uniform vec4 u_color;
 
 uniform sampler2D u_texture;        // Texture 0
@@ -321,7 +323,7 @@ void main() {
     out_color = vec4(out_color.rgb + u_emmisive, out_color.a);
 
     float distToCam = length(v_positionRelativeToCamera.xyz);
-    float visibility = exp(-pow((distToCam*0.0), 0.0));
+    float visibility = exp(-pow((distToCam*0.1), 20));
     visibility = clamp(visibility, 0.0, 1.0);
     
     if(u_isCubeMapSet == 1 && u_solidColor != 1) {
@@ -337,19 +339,32 @@ void main() {
     vec4 outcolorwithoutfog = out_color;
     //out_color = mix(vec4(0.3,0.3,0.3, 1.0), out_color, visibility);
 
-    color = out_color;
+    
+
+   
     out_normals = vec4(normal, 1.0);
     out_roughness = vec4(vec3(shininess), 1.0);
     out_pos = vec4(v_position,1.0);
     if(u_isMetallicSet == 1) {
         out_metallic = vec4(vec3(texture2D(u_metallicMap, v_uv)), 1.0);
     } else out_metallic = vec4(vec3(u_metallic), 1.0);
-    
-    //else color = u_color;
-    
-    if(brightness > 1.0)
+
+    if(brightness >= 0.9)
         bright_color = outcolorwithoutfog;
     else
         bright_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+    switch (rendermode) {
+        case 0: color = out_color; break;
+        case 1: color = vec4(normal, 1.0); break;
+        case 2: color = vec4(v_position,1.0); break;
+        case 3: color = bright_color; break;
+        case 4: color = out_roughness; break;
+        case 5: color = out_metallic; break;
+        default: color = out_color; break;
+    }
+    //else color = u_color;
+    
+    
         
 }

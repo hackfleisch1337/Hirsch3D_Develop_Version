@@ -78,6 +78,8 @@ void h3d::Scene::loadUniformLocations() {
     isSamplerSet = H3D_UL("isSamplerSet");
     u_position = H3D_UL("u_position");
     catchesShadow = H3D_UL("catchesShadow");
+
+    u_rendermode = H3D_UL("rendermode");
 }
 
 /**
@@ -205,6 +207,8 @@ void h3d::Scene::render(const h3d::Renderer &r) {
     this->shader.bind(); // bind scene shader
 
     GLuint shaderId = this->shader.getShaderId();
+
+    glUniform1i(u_rendermode, rendermode);
 
     // uniform float u_ambient
     int u_ambientUniformLocation = glGetUniformLocation(shaderId, "u_ambient");
@@ -673,6 +677,14 @@ float h3d::Scene::getExposure() {
 
 h3d::Scene::~Scene() {
 
+}
+
+void h3d::Scene::setRendermode(uint8_t rendermode) {
+    this->rendermode = rendermode;
+}
+
+uint8_t h3d::Scene::getRendermode() {
+    return this->rendermode;
 }
 
 

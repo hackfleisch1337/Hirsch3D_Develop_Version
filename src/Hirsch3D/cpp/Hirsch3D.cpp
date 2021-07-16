@@ -239,16 +239,19 @@ void h3d::Renderer::renderObject(const h3d::Object* o) const{
 
 
 void h3d::Renderer::drawLine(glm::vec2 p1, glm::vec2 p2, glm::vec4 color) const{
+    glEnable(GL_BLEND);
     glBegin(GL_LINES);
-    glColor3f(color.r,color.g,color.b);
+    glColor4f(color.r,color.g,color.b, color.a);
     glVertex2f(p1.x, p1.y);
     glVertex2f(p2.x, p2.y);
     glEnd();
+    glDisable(GL_BLEND);
 }
 
 void h3d::Renderer::drawRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) const{
+    glEnable(GL_BLEND);
     glBegin(GL_LINES);
-    glColor3f(color.r,color.g,color.b);
+    glColor4f(color.r,color.g,color.b, color.a);
     
     glVertex2f(pos.x, pos.y);
     glVertex2f(pos.x+size.x, pos.y);
@@ -260,11 +263,13 @@ void h3d::Renderer::drawRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) con
     glVertex2f(pos.x, pos.y);
 
     glEnd();
+    glDisable(GL_BLEND);
 }
 
 void h3d::Renderer::fillRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) const{
+    glEnable(GL_BLEND);
     glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(color.r,color.g,color.b);
+    glColor4f(color.r,color.g,color.b, color.a);
 
     glVertex2f(pos.x, pos.y);
     glVertex2f(pos.x+size.x, pos.y);
@@ -274,4 +279,5 @@ void h3d::Renderer::fillRect(glm::vec2 pos, glm::vec2 size, glm::vec4 color) con
     glVertex2f(pos.x+size.x, pos.y+size.y);
 
     glEnd();
+    glDisable(GL_BLEND);
 }
