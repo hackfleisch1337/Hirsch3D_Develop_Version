@@ -26,6 +26,8 @@
 
 #version 330 core
 
+layout(location = 0) out vec4 out_color;
+
 in vec2 texCoord;
 uniform sampler2D u_texture;        // Last frame
 
@@ -71,7 +73,7 @@ void main() {
     }
     
     
-    gl_FragColor = vec4(framecolor, 1.0);
+    out_color = vec4(framecolor, 1.0);
 }
 
 vec4 getSSR() {

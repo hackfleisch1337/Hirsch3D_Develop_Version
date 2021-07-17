@@ -2,6 +2,7 @@
 
 void h3d::Scene::load(std::string vertexShaderSrc, std::string fragmentShaderSrc, std::string geometryShaderSrc,h3d::Camera* camera, glm::vec2 size, float ambient) {
     this->shader.load(vertexShaderSrc, fragmentShaderSrc, geometryShaderSrc);
+    this->finalshader.load("shader/final/final.vert", "shader/final/final.frag");
     this->camera = camera;
     this->ambient = ambient;
     this->isLoaded = true;
@@ -136,6 +137,7 @@ void h3d::Scene::setBloom(bool b, uint32_t amount, float brightness) {
  *
  */
 void h3d::Scene::render(const h3d::Renderer &r) {
+    
     //std::cout << "RENDER" << std::endl;
     if(!this->isLoaded) {
         throw h3d::Exception("Can not render uninitialized Scene");
@@ -452,9 +454,13 @@ void h3d::Scene::render(const h3d::Renderer &r) {
         glm::vec3 p = currentObject->getPosition();
         glUniform3f(u_position, p.x, p.y, p.z);
 
+        if(this->wireframe)
+            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
         r.renderObject(currentObject); // finally renders the object
-
+        
+        if(this->wireframe)
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
         if(currentObject->getTexture() != nullptr)
             currentObject->getTexture()->unbind(); // unbind texture if used
@@ -544,7 +550,6 @@ void h3d::Scene::render(const h3d::Renderer &r) {
 
 
     // Render to the screen;
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glEnable(GL_BLEND);
     fbs.bind();
     glActiveTexture(GL_TEXTURE0);
@@ -689,9 +694,15 @@ uint8_t h3d::Scene::getRendermode() {
 
 
 void h3d::Scene::renderToCubeMap(h3d::CubeMap* cubemap) {
-    // ...
     
     for(int i = 0; i < 6; i++) {
-
+//      ...     TODO
     }
+}
+
+void h3d::Scene::enableWireframe(bool b) {
+    this->wireframe = b;
+}
+bool h3d::Scene::isWireframeEnabled() {
+    return this->wireframe;
 }

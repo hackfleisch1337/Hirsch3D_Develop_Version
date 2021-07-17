@@ -178,6 +178,9 @@ namespace h3d
 
         uint8_t getRendermode();
 
+        void enableWireframe(bool b);
+        bool isWireframeEnabled();
+
         float ambient;
     protected:
         h3d::Shader shader;
@@ -192,6 +195,7 @@ namespace h3d
         h3d::Shader fbs;
         
         uint8_t rendermode = H3D_RENDERMODE_COLOR;
+        bool wireframe = false;
 
         float gamma = 1.0f;
         float exposure = 1.0f;
@@ -211,6 +215,9 @@ namespace h3d
         h3d::CubeMap* cubemap = nullptr;
         h3d::Shader cubemapshader;
         h3d::Object cube;
+
+        h3d::Shader finalshader;
+
 
         bool bloom = false;
         uint32_t amountOfGaussianBlur = 10;
